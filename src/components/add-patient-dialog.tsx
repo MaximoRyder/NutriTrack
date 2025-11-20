@@ -22,15 +22,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
-const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address." }),
-});
-
-type FormValues = z.infer<typeof formSchema>;
 
 interface AddPatientDialogProps {
   isOpen: boolean;
@@ -44,6 +38,16 @@ export function AddPatientDialog({
   onPatientAdded,
 }: AddPatientDialogProps) {
   const { t } = useTranslation();
+
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email({ message: t("validation.emailInvalid") }),
+      }),
+    [t]
+  );
+
+  type FormValues = z.infer<typeof formSchema>;
   const { user: nutritionist } = useUser();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);

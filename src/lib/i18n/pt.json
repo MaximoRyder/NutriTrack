@@ -354,8 +354,9 @@
     "errorGeneric": "Ocorreu um erro inesperado. Por favor, tente novamente."
   },
   "patientDetail": {
-    "chat": "Conversa",
+    "chat": "Chat",
     "exportPdf": "Exportar PDF",
+    "exporting": "Exportando...",
     "weight": "Peso",
     "bmi": "IMC: {value}",
     "goal": "Meta",
@@ -556,9 +557,19 @@
     "sessionTypes": {
       "initial": "Consulta Inicial",
       "followup": "Acompanhamento",
-      "checkup": "Revisão",
+      "checkup": "Verificação",
       "online": "Online",
       "inperson": "Presencial"
     }
+  },
+  "validation": {
+    "required": "Obrigatório",
+    "nameRequired": "O nome é obrigatório",
+    "emailInvalid": "Por favor insira um endereço de e-mail válido",
+    "passwordMin": "A senha deve ter pelo menos 6 caracteres",
+    "roleRequired": "Você deve selecionar uma função",
+    "passwordsMatch": "As senhas devem coincidir",
+    "positiveNumber": "Deve ser um número positivo",
+    "urlInvalid": "Deve ser uma URL válida"
   }
 }

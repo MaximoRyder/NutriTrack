@@ -40,43 +40,6 @@ import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const profileSchema = z.object({
-  displayName: z.string().min(1, "Required"),
-  photoUrl: z.string().url().or(z.string().length(0)).optional(),
-});
-
-const patientSchema = z.object({
-  dateOfBirth: z.string().optional(),
-  heightCm: z.coerce.number().positive().optional(),
-  currentWeightKg: z.coerce.number().positive().optional(),
-  goalWeightKg: z.coerce.number().positive().optional(),
-  activityLevel: z
-    .enum(["sedentary", "light", "moderate", "active", "very_active"])
-    .optional(),
-  dietaryPreferences: z
-    .enum(["omnivore", "vegetarian", "vegan", "pescetarian"])
-    .optional(),
-  healthConditions: z.string().optional(),
-  bodyMeasurements: z
-    .object({
-      waist: z.coerce.number().positive().optional(),
-      hips: z.coerce.number().positive().optional(),
-      chest: z.coerce.number().positive().optional(),
-    })
-    .optional(),
-});
-
-const passwordSchema = z
-  .object({
-    currentPassword: z.string().min(6, "Min 6 chars"),
-    newPassword: z.string().min(6, "Min 6 chars"),
-    confirmPassword: z.string().min(6, "Min 6 chars"),
-  })
-  .refine((vals) => vals.newPassword === vals.confirmPassword, {
-    message: "Passwords must match",
-    path: ["confirmPassword"],
-  });
-
 export default function SettingsPage() {
   const { user, isUserLoading } = useUser();
   const {
@@ -89,6 +52,77 @@ export default function SettingsPage() {
 
   const [isAvatarDialogOpen, setAvatarDialogOpen] = React.useState(
     false as boolean
+  );
+
+  const profileSchema = useMemo(
+    () =>
+      z.object({
+        displayName: z.string().min(1, t("validation.required")),
+        photoUrl: z
+          .string()
+          .url(t("validation.urlInvalid"))
+          .or(z.string().length(0))
+          .optional(),
+      }),
+    [t]
+  );
+
+  const patientSchema = useMemo(
+    () =>
+      z.object({
+        dateOfBirth: z.string().optional(),
+        heightCm: z.coerce
+          .number()
+          .positive(t("validation.positiveNumber"))
+          .optional(),
+        currentWeightKg: z.coerce
+          .number()
+          .positive(t("validation.positiveNumber"))
+          .optional(),
+        goalWeightKg: z.coerce
+          .number()
+          .positive(t("validation.positiveNumber"))
+          .optional(),
+        activityLevel: z
+          .enum(["sedentary", "light", "moderate", "active", "very_active"])
+          .optional(),
+        dietaryPreferences: z
+          .enum(["omnivore", "vegetarian", "vegan", "pescetarian"])
+          .optional(),
+        healthConditions: z.string().optional(),
+        bodyMeasurements: z
+          .object({
+            waist: z.coerce
+              .number()
+              .positive(t("validation.positiveNumber"))
+              .optional(),
+            hips: z.coerce
+              .number()
+              .positive(t("validation.positiveNumber"))
+              .optional(),
+            chest: z.coerce
+              .number()
+              .positive(t("validation.positiveNumber"))
+              .optional(),
+          })
+          .optional(),
+      }),
+    [t]
+  );
+
+  const passwordSchema = useMemo(
+    () =>
+      z
+        .object({
+          currentPassword: z.string().min(6, t("validation.passwordMin")),
+          newPassword: z.string().min(6, t("validation.passwordMin")),
+          confirmPassword: z.string().min(6, t("validation.passwordMin")),
+        })
+        .refine((vals) => vals.newPassword === vals.confirmPassword, {
+          message: t("validation.passwordsMatch"),
+          path: ["confirmPassword"],
+        }),
+    [t]
   );
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({

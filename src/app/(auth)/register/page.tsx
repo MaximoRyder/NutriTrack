@@ -25,24 +25,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-const formSchema = z.object({
-  displayName: z.string().min(1, { message: "Name is required." }),
-  email: z.string().email({ message: "Please enter a valid email." }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters." }),
-  role: z.enum(["patient", "nutritionist"], {
-    required_error: "You must select a role.",
-  }),
-  invitationCode: z.string().optional(),
-});
-
 export default function RegisterPage() {
   const { t } = useTranslation();
+
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        displayName: z
+          .string()
+          .min(1, { message: t("validation.nameRequired") }),
+        email: z.string().email({ message: t("validation.emailInvalid") }),
+        password: z.string().min(6, { message: t("validation.passwordMin") }),
+        role: z.enum(["patient", "nutritionist"], {
+          required_error: t("validation.roleRequired"),
+        }),
+        invitationCode: z.string().optional(),
+      }),
+    [t]
+  );
   const router = useRouter();
   const { user, isUserLoading } = useUser();
   const [isProcessing, setIsProcessing] = useState(false);

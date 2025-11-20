@@ -115,6 +115,7 @@ export default function PatientDetailPage() {
   const [aiSuggestions, setAiSuggestions] =
     useState<GenerateMealPlanSuggestionsOutput | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
 
   // Profile
   const { profile: patient, isLoading: isLoadingPatient } =
@@ -163,6 +164,30 @@ export default function PatientDetailPage() {
       // You could show a toast message here
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const handleExportPdf = async () => {
+    if (!patient) return;
+    setIsExportingPdf(true);
+    try {
+      const response = await fetch(`/api/patients/${patientId}/export-pdf`);
+      if (!response.ok) throw new Error("Failed to generate PDF");
+
+      const html = await response.text();
+      const newWindow = window.open();
+      if (newWindow) {
+        newWindow.document.write(html);
+        newWindow.document.close();
+        // Wait a bit for content to load, then trigger print dialog
+        setTimeout(() => {
+          newWindow.print();
+        }, 250);
+      }
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+    } finally {
+      setIsExportingPdf(false);
     }
   };
 
@@ -222,9 +247,15 @@ export default function PatientDetailPage() {
               <MessageSquare className="mr-2 h-4 w-4" />{" "}
               {t("patientDetail.chat")}
             </Button>
-            <Button className="flex-1 sm:flex-initial">
+            <Button
+              className="flex-1 sm:flex-initial"
+              onClick={handleExportPdf}
+              disabled={isExportingPdf}
+            >
               <FileText className="mr-2 h-4 w-4" />{" "}
-              {t("patientDetail.exportPdf")}
+              {isExportingPdf
+                ? t("patientDetail.exporting")
+                : t("patientDetail.exportPdf")}
             </Button>
           </div>
         </CardHeader>

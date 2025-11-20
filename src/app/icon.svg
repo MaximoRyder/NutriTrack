@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <!-- Background circle -->
+    <circle cx="50" cy="50" r="50" fill="#10b981" />
+
+    <!-- Apple shape -->
+    <path
+        d="M50 25 C35 25 25 35 25 50 C25 52 25 54 26 56 C28 68 38 75 50 75 C62 75 72 68 74 56 C75 54 75 52 75 50 C75 35 65 25 50 25 Z"
+        fill="#ffffff" />
+
+    <!-- Stem -->
+    <rect x="48" y="15" width="4" height="12" rx="2" fill="#065f46" />
+
+    <!-- Leaf -->
+    <ellipse cx="56" cy="20" rx="8" ry="4" fill="#059669" transform="rotate(-30 56 20)" />
+
+    <!-- Bite mark -->
+    <circle cx="68" cy="45" r="8" fill="#10b981" />
+</svg>

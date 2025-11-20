@@ -6,7 +6,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "NutriTrack Pro",
   description:
-    "The ultimate food journal for nutritionists and their patients.",
+    "Plataforma profesional de seguimiento nutricional. Monitorea comidas, progreso y mejora la comunicación entre nutricionistas y pacientes.",
+  icons: {
+    icon: [{ url: "/icon.svg?v=2", type: "image/svg+xml" }],
+  },
 };
 
 export default function RootLayout({

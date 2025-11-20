@@ -356,6 +356,7 @@
   "patientDetail": {
     "chat": "Chat",
     "exportPdf": "Export PDF",
+    "exporting": "Exporting...",
     "weight": "Weight",
     "bmi": "BMI: {value}",
     "goal": "Goal",
@@ -558,7 +559,17 @@
       "followup": "Follow-up",
       "checkup": "Check-up",
       "online": "Online",
-      "inperson": "In-Person"
+      "inperson": "In Person"
     }
+  },
+  "validation": {
+    "required": "Required",
+    "nameRequired": "Name is required",
+    "emailInvalid": "Please enter a valid email address",
+    "passwordMin": "Password must be at least 6 characters",
+    "roleRequired": "You must select a role",
+    "passwordsMatch": "Passwords must match",
+    "positiveNumber": "Must be a positive number",
+    "urlInvalid": "Must be a valid URL"
   }
 }
