@@ -46,4 +46,4 @@ firestore-debug.log
 
 
 # images
-./uploads
+/public/uploads
