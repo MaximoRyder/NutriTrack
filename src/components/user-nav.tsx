@@ -55,7 +55,7 @@ export function UserNav() {
             <Link href="/patients">
               <DropdownMenuItem>
                 <Users className="mr-2 h-4 w-4" />
-                <span>{t("sidebar.patients")}</span>
+                <span>{t("sidebar.myPatients")}</span>
               </DropdownMenuItem>
             </Link>
             <Link href="/settings">
