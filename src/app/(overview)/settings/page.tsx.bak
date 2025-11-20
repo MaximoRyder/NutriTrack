@@ -1,0 +1,621 @@
+'use client';
+
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card';
+import {
+  useFirestore,
+  useUser,
+  useDoc,
+  useMemoFirebase,
+  useAuth,
+  updateDocumentNonBlocking,
+} from '@/firebase';
+import { doc } from 'firebase/firestore';
+import type { UserProfile } from '@/lib/types';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { useEffect, useMemo } from 'react';
+import {
+  sendPasswordResetEmail,
+  updateProfile as updateAuthProfile,
+} from 'firebase/auth';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
+import { User as UserIcon } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n/i18n-provider';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+
+const profileFormSchema = z.object({
+  displayName: z.string().min(1, 'Display name is required.'),
+});
+
+const personalDataFormSchema = z.object({
+  dateOfBirth: z.string().optional(),
+  heightCm: z.coerce.number().positive().optional(),
+  currentWeightKg: z.coerce.number().positive().optional(),
+  goalWeightKg: z.coerce.number().positive().optional(),
+  activityLevel: z
+    .enum(['sedentary', 'light', 'moderate', 'active', 'very_active'])
+    .optional(),
+  dietaryPreferences: z
+    .enum(['omnivore', 'vegetarian', 'vegan', 'pescetarian'])
+    .optional(),
+  healthConditions: z.string().optional(),
+  bodyMeasurements: z
+    .object({
+      waist: z.coerce.number().positive().optional(),
+      hips: z.coerce.number().positive().optional(),
+      chest: z.coerce.number().positive().optional(),
+    })
+    .optional(),
+});
+
+export default function SettingsPage() {
+  const { user, isUserLoading } = useUser();
+  const firestore = useFirestore();
+  const auth = useAuth();
+  const { toast } = useToast();
+  const { t } = useTranslation();
+
+  const userDocRef = useMemoFirebase(
+    () => (user ? doc(firestore, 'users', user.uid) : null),
+    [user, firestore]
+  );
+
+  const {
+    data: userProfile,
+    isLoading: isProfileLoading,
+    error,
+  } = useDoc<UserProfile>(userDocRef);
+
+  const nutritionistDocRef = useMemoFirebase(
+    () =>
+      userProfile?.assignedNutritionistId
+        ? doc(firestore, 'users', userProfile.assignedNutritionistId)
+        : null,
+    [userProfile, firestore]
+  );
+  const { data: nutritionistProfile, isLoading: isNutritionistLoading } =
+    useDoc<UserProfile>(nutritionistDocRef);
+
+  const profileForm = useForm<z.infer<typeof profileFormSchema>>({
+    resolver: zodResolver(profileFormSchema),
+    values: {
+      displayName: userProfile?.displayName || '',
+    },
+  });
+
+  const personalDataForm = useForm<z.infer<typeof personalDataFormSchema>>({
+    resolver: zodResolver(personalDataFormSchema),
+    values: {
+      dateOfBirth: userProfile?.dateOfBirth,
+      heightCm: userProfile?.heightCm,
+      currentWeightKg: userProfile?.currentWeightKg,
+      goalWeightKg: userProfile?.goalWeightKg,
+      bodyMeasurements: userProfile?.bodyMeasurements,
+      activityLevel: userProfile?.activityLevel,
+      dietaryPreferences: userProfile?.dietaryPreferences,
+      healthConditions: userProfile?.healthConditions,
+    },
+  });
+
+  useEffect(() => {
+    if (userProfile) {
+      profileForm.reset({ displayName: userProfile.displayName });
+      personalDataForm.reset({
+        dateOfBirth: userProfile.dateOfBirth,
+        heightCm: userProfile.heightCm,
+        currentWeightKg: userProfile.currentWeightKg,
+        goalWeightKg: userProfile.goalWeightKg,
+        bodyMeasurements: userProfile.bodyMeasurements,
+        activityLevel: userProfile.activityLevel,
+        dietaryPreferences: userProfile.dietaryPreferences,
+        healthConditions: userProfile.healthConditions,
+      });
+    }
+  }, [userProfile, profileForm, personalDataForm]);
+
+  const onProfileSubmit = async (values: z.infer<typeof profileFormSchema>) => {
+    if (!user || !userDocRef) return;
+
+    if (auth.currentUser) {
+      updateAuthProfile(auth.currentUser, { displayName: values.displayName }).catch(
+        (e) => {
+          console.warn('Could not update auth profile, this can happen on re-auth:', e);
+        }
+      );
+    }
+
+    updateDocumentNonBlocking(userDocRef, { displayName: values.displayName });
+    toast({ title: t('settings.success'), description: t('settings.profileUpdated') });
+  };
+
+  const onPersonalDataSubmit = (
+    values: z.infer<typeof personalDataFormSchema>
+  ) => {
+    if (!userDocRef) return;
+
+    const updateData: any = {};
+    if (values.dateOfBirth) updateData.dateOfBirth = values.dateOfBirth;
+    if (values.heightCm) updateData.heightCm = values.heightCm;
+    if (values.currentWeightKg) updateData.currentWeightKg = values.currentWeightKg;
+    if (values.goalWeightKg) updateData.goalWeightKg = values.goalWeightKg;
+    if (values.activityLevel) updateData.activityLevel = values.activityLevel;
+    if (values.dietaryPreferences)
+      updateData.dietaryPreferences = values.dietaryPreferences;
+    if (values.healthConditions !== undefined)
+      updateData.healthConditions = values.healthConditions;
+    if (values.bodyMeasurements) {
+      updateData.bodyMeasurements = {
+        waist: values.bodyMeasurements.waist || null,
+        hips: values.bodyMeasurements.hips || null,
+        chest: values.bodyMeasurements.chest || null,
+      };
+    }
+
+    updateDocumentNonBlocking(userDocRef, updateData);
+    toast({
+      title: t('settings.success'),
+      description: t('settings.personalDataUpdated'),
+    });
+  };
+
+  const handlePasswordReset = async () => {
+    if (!user?.email) return;
+    try {
+      await sendPasswordResetEmail(auth, user.email);
+      toast({
+        title: t('settings.resetEmailSent'),
+        description: t('settings.resetEmailDesc'),
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        variant: 'destructive',
+        title: t('settings.error'),
+        description: t('settings.resetError'),
+      });
+    }
+  };
+
+  const calculatedBMI = useMemo(() => {
+    if (userProfile?.currentWeightKg && userProfile?.heightCm) {
+      const heightInMeters = userProfile.heightCm / 100;
+      return (
+        userProfile.currentWeightKg / (heightInMeters * heightInMeters)
+      ).toFixed(1);
+    }
+    return null;
+  }, [userProfile]);
+
+  const isLoading = isUserLoading || isProfileLoading;
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold tracking-tight">{t('settings.title')}</h2>
+        <p className="text-muted-foreground">{t('settings.description')}</p>
+      </div>
+
+      {isLoading ? (
+        <Skeleton className="w-full h-96" />
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('settings.profile')}</CardTitle>
+                <CardDescription>{t('settings.profileDesc')}</CardDescription>
+              </CardHeader>
+              <Form {...profileForm}>
+                <form onSubmit={profileForm.handleSubmit(onProfileSubmit)}>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center space-x-4">
+                      <Avatar className="h-20 w-20">
+                        <AvatarImage
+                          src={userProfile?.photoUrl || user?.photoURL || ''}
+                          alt="User Avatar"
+                        />
+                        <AvatarFallback>
+                          {userProfile?.displayName?.charAt(0).toUpperCase() || 'P'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <Button type="button" variant="outline" disabled>
+                        {t('settings.uploadPhoto')}
+                      </Button>
+                    </div>
+                    <FormField
+                      control={profileForm.control}
+                      name="displayName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('settings.displayName')}</FormLabel>
+                          <FormControl>
+                            <Input {...field} value={field.value ?? ''} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="space-y-1">
+                      <Label htmlFor="email">{t('settings.email')}</Label>
+                      <Input
+                        id="email"
+                        value={userProfile?.email || ''}
+                        readOnly
+                        disabled
+                      />
+                    </div>
+                  </CardContent>
+                  <CardFooter className="border-t px-6 py-4">
+                    <Button type="submit" disabled={profileForm.formState.isSubmitting}>
+                      {t('settings.save')}
+                    </Button>
+                  </CardFooter>
+                </form>
+              </Form>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('settings.security')}</CardTitle>
+                <CardDescription>{t('settings.securityDesc')}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button variant="outline" onClick={handlePasswordReset}>
+                  {t('settings.resetPassword')}
+                </Button>
+              </CardContent>
+            </Card>
+
+            {userProfile?.role === 'nutritionist' && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t('settings.myPatients')}</CardTitle>
+                  <CardDescription>{t('settings.myPatientsDesc')}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-sm text-muted-foreground space-x-2">
+                    <span>{t('settings.invitationCode', { code: '' })}</span>
+                    <Badge variant="secondary">{userProfile.invitationCode}</Badge>
+                  </div>
+                </CardContent>
+                <CardFooter className="border-t px-6 py-4">
+                  <Button asChild>
+                    <Link href="/patients">{t('settings.goToDashboard')}</Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            )}
+            {userProfile?.role === 'patient' && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t('settings.myNutritionist')}</CardTitle>
+                  <CardDescription>
+                    {t('settings.myNutritionistDesc')}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {isNutritionistLoading ? (
+                    <Skeleton className="h-10 w-1/2" />
+                  ) : nutritionistProfile ? (
+                    <div className="flex items-center gap-4">
+                      <Avatar>
+                        <AvatarImage src={nutritionistProfile.photoUrl} />
+                        <AvatarFallback>
+                          <UserIcon className="h-5 w-5" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <p className="font-medium">{nutritionistProfile.displayName}</p>
+                    </div>
+                  ) : (
+                    <div className="text-sm text-muted-foreground">
+                      {t('settings.noNutritionist')}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {userProfile?.role === 'patient' && (
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t('settings.personalData')}</CardTitle>
+                  <CardDescription>{t('settings.personalDataDesc')}</CardDescription>
+                </CardHeader>
+                <Form {...personalDataForm}>
+                  <form onSubmit={personalDataForm.handleSubmit(onPersonalDataSubmit)}>
+                    <CardContent className="space-y-4">
+                      <FormField
+                        control={personalDataForm.control}
+                        name="dateOfBirth"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('settings.dateOfBirth')}</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} value={field.value || ''} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <FormField
+                          control={personalDataForm.control}
+                          name="heightCm"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t('settings.height')}</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  placeholder="170"
+                                  {...field}
+                                  value={field.value || ''}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={personalDataForm.control}
+                          name="currentWeightKg"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t('settings.currentWeight')}</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  placeholder="75"
+                                  {...field}
+                                  value={field.value || ''}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <FormField
+                        control={personalDataForm.control}
+                        name="goalWeightKg"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('settings.goalWeight')}</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                placeholder="68"
+                                {...field}
+                                value={field.value || ''}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      {calculatedBMI && (
+                        <div className="space-y-1">
+                          <Label>{t('settings.calculatedBmi')}</Label>
+                          <div className="text-sm font-medium">{calculatedBMI}</div>
+                        </div>
+                      )}
+                      <div>
+                        <Label className="mb-2 block">
+                          {t('settings.bodyMeasurements')}
+                        </Label>
+                        <div className="grid grid-cols-3 gap-4">
+                          <FormField
+                            control={personalDataForm.control}
+                            name="bodyMeasurements.chest"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-xs text-muted-foreground">
+                                  {t('settings.chest')}
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    type="number"
+                                    placeholder="90"
+                                    {...field}
+                                    value={field.value || ''}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={personalDataForm.control}
+                            name="bodyMeasurements.waist"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-xs text-muted-foreground">
+                                  {t('settings.waist')}
+                                </FormLabel>
+
+                                <FormControl>
+                                  <Input
+                                    type="number"
+                                    placeholder="80"
+                                    {...field}
+                                    value={field.value || ''}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={personalDataForm.control}
+                            name="bodyMeasurements.hips"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-xs text-muted-foreground">
+                                  {t('settings.hips')}
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    type="number"
+                                    placeholder="95"
+                                    {...field}
+                                    value={field.value || ''}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                      <FormField
+                        control={personalDataForm.control}
+                        name="activityLevel"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('settings.activityLevel')}</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue
+                                    placeholder={t('settings.selectActivityLevel')}
+                                  />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="sedentary">
+                                  {t('settings.activityLevels.sedentary')}
+                                </SelectItem>
+                                <SelectItem value="light">
+                                  {t('settings.activityLevels.light')}
+                                </SelectItem>
+                                <SelectItem value="moderate">
+                                  {t('settings.activityLevels.moderate')}
+                                </SelectItem>
+                                <SelectItem value="active">
+                                  {t('settings.activityLevels.active')}
+                                </SelectItem>
+                                <SelectItem value="very_active">
+                                  {t('settings.activityLevels.very_active')}
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={personalDataForm.control}
+                        name="dietaryPreferences"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('settings.dietaryPreferences')}</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue
+                                    placeholder={t(
+                                      'settings.selectDietaryPreferences'
+                                    )}
+                                  />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="omnivore">
+                                  {t(
+                                    'settings.dietaryPreferencesOptions.omnivore'
+                                  )}
+                                </SelectItem>
+                                <SelectItem value="vegetarian">
+                                  {t(
+                                    'settings.dietaryPreferencesOptions.vegetarian'
+                                  )}
+                                </SelectItem>
+                                <SelectItem value="vegan">
+                                  {t('settings.dietaryPreferencesOptions.vegan')}
+                                </SelectItem>
+                                <SelectItem value="pescetarian">
+                                  {t(
+                                    'settings.dietaryPreferencesOptions.pescetarian'
+                                  )}
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={personalDataForm.control}
+                        name="healthConditions"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('settings.healthConditions')}</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder={t(
+                                  'settings.healthConditionsPlaceholder'
+                                )}
+                                {...field}
+                                value={field.value || ''}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </CardContent>
+                    <CardFooter className="border-t px-6 py-4">
+                      <Button
+                        type="submit"
+                        disabled={personalDataForm.formState.isSubmitting}
+                      >
+                        {t('settings.savePersonalData')}
+                      </Button>
+                    </CardFooter>
+                  </form>
+                </Form>
+              </Card>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+    

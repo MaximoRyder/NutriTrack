@@ -1,0 +1,11 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Rules are wide open for development.
+    // ANYONE can read, write, and delete ANY data.
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

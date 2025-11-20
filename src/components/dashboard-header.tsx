@@ -1,0 +1,18 @@
+"use client";
+
+import { useUser } from "@/lib/data-hooks";
+import { LanguageSwitcher } from "./language-switcher";
+import { NotificationBell } from "./notification-bell";
+import { UserNav } from "./user-nav";
+
+export function DashboardHeader() {
+  const { user } = useUser();
+
+  return (
+    <div className="ml-auto flex items-center gap-4">
+      <LanguageSwitcher />
+      {user && <NotificationBell />}
+      <UserNav />
+    </div>
+  );
+}

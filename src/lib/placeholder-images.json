@@ -1,0 +1,28 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "A vibrant and healthy salad bowl.",
+      "imageUrl": "https://images.unsplash.com/photo-1606756790138-261d2b21cd75?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxoZWFsdGh5JTIwZm9vZHxlbnwwfHx8fDE3NjMzNzAxODd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "healthy food"
+    },
+    {
+      "id": "feature-logging",
+      "description": "A person taking a picture of their food with a smartphone.",
+      "imageUrl": "https://images.unsplash.com/photo-1684675124739-bef0072d108a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwaG9uZSUyMGZvb2R8ZW58MHx8fHwxNzYzMzI1OTE3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "phone food"
+    },
+    {
+      "id": "feature-feedback",
+      "description": "A close-up of a person typing on a laptop, representing a nutritionist giving feedback.",
+      "imageUrl": "https://images.unsplash.com/photo-1484807352052-23338990c6c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxsYXB0b3AlMjB0eXBpbmd8ZW58MHx8fHwxNzYzMzMzNjQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "laptop typing"
+    },
+    {
+      "id": "feature-progress",
+      "description": "A person smiling while looking at a chart on a tablet.",
+      "imageUrl": "https://images.unsplash.com/photo-1748609379330-db65f1354c6e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dGFibGV0JTIwY2hhcnR8ZW58MHx8fHwxNzYzMzY5MTYzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "tablet chart"
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Represents a user of the NutriTrack Pro application. Can be either a patient, nutritionist, or administrator.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["patient", "nutritionist", "admin"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "photoUrl": { "type": "string", "format": "uri" },
+        "dateOfBirth": { "type": "string", "format": "date" },
+        "assignedNutritionistId": { "type": "string", "description": "Reference to Nutritionist User ID. Only for patients." },
+        "goalWeightKg": { "type": "number" },
+        "currentWeightKg": { "type": "number" },
+        "heightCm": { "type": "number" },
+        "activityLevel": { "type": "string", "enum": ["sedentary", "light", "moderate", "active", "very_active"] },
+        "dietaryPreferences": { "type": "string", "enum": ["omnivore", "vegetarian", "vegan", "pescetarian"] },
+        "healthConditions": { "type": "string", "description": "A text field for allergies, intolerances, or medical conditions." },
+        "bodyMeasurements": {
+          "type": "object",
+          "properties": {
+            "waist": { "type": "number" },
+            "hips": { "type": "number" },
+            "chest": { "type": "number" }
+          }
+        },
+        "subscriptionStatus": { "type": "string", "enum": ["active", "inactive", "trial", "pending"] },
+        "invitationCode": { "type": "string" },
+        "specialty": { "type": "string" }
+      },
+      "required": ["email", "displayName", "role", "createdAt"]
+    },
+    "Meal": {
+      "title": "Meal",
+      "description": "Represents a meal logged by a patient.",
+      "type": "object",
+      "properties": {
+        "mealType": { "type": "string", "enum": ["breakfast", "lunch", "snack", "dinner", "other"] },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "photoUrl": { "type": "string", "format": "uri" },
+        "portionSize": { "type": "string" }
+      },
+      "required": ["mealType", "name", "timestamp", "photoUrl"]
+    },
+    "WeightLog": {
+      "title": "WeightLog",
+      "description": "A patient's weight log entry.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "format": "date-time" },
+        "weightKg": { "type": "number" }
+      },
+      "required": ["date", "weightKg"]
+    },
+    "WaterLog": {
+      "title": "WaterLog",
+      "description": "A patient's daily water intake log.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "format": "date-time" },
+        "quantityMl": { "type": "number" }
+      },
+      "required": ["date", "quantityMl"]
+    },
+    "MealPlan": {
+      "title": "MealPlan",
+      "description": "A meal plan assigned to a patient by a nutritionist.",
+      "type": "object",
+      "properties": {
+        "authorNutritionistId": { "type": "string" },
+        "title": { "type": "string" },
+        "startDate": { "type": "string", "format": "date-time" },
+        "planData": { "type": "string", "description": "JSON string representing the plan structure." }
+      },
+      "required": ["authorNutritionistId", "title", "startDate", "planData"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "A comment on a meal, from either the patient or nutritionist.",
+      "type": "object",
+      "properties": {
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorId", "authorName", "text", "timestamp"]
+    },
+    "Snippet": {
+      "title": "Snippet",
+      "description": "A quick response snippet saved by a nutritionist.",
+      "type": "object",
+      "properties": {
+        "shortcut": { "type": "string" },
+        "text": { "type": "string" }
+      },
+      "required": ["shortcut", "text"]
+    }
+  },
+  "auth": {
+    "providers": ["password", "google.com"]
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores all user data. The 'role' field dictates their permissions and what subcollections they might have."
+    },
+    "users/{userId}/meals/{mealId}": {
+      "schema": { "$ref": "#/entities/Meal" },
+      "description": "Stores meal logs for a specific patient. Only accessible by the patient and their assigned nutritionist."
+    },
+    "users/{userId}/weightLogs/{logId}": {
+      "schema": { "$ref": "#/entities/WeightLog" },
+      "description": "Stores weight logs for a patient."
+    },
+    "users/{userId}/waterLogs/{logId}": {
+      "schema": { "$ref": "#/entities/WaterLog" },
+      "description": "Stores daily water intake for a patient."
+    },
+    "users/{userId}/mealPlans/{planId}": {
+      "schema": { "$ref": "#/entities/MealPlan" },
+      "description": "Stores meal plans assigned to a patient."
+    },
+    "users/{userId}/meals/{mealId}/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/Comment" },
+      "description": "Stores comments on a specific meal. Accessible by the patient and their assigned nutritionist."
+    },
+    "users/{userId}/snippets/{snippetId}": {
+      "schema": { "$ref": "#/entities/Snippet" },
+      "description": "Stores quick response snippets for a nutritionist. Only accessible by that nutritionist."
+    }
+  }
+}

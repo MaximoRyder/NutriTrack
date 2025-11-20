@@ -1,0 +1,455 @@
+
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card';
+import {
+  useFirestore,
+  useUser,
+  useDoc,
+  useMemoFirebase,
+  updateDocumentNonBlocking,
+} from '@/firebase';
+import { doc } from 'firebase/firestore';
+import type { UserProfile, UserRole } from '@/lib/types';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { useEffect, useMemo } from 'react';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { useTranslation } from '@/lib/i18n/i18n-provider';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useParams, useRouter } from 'next/navigation';
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
+
+const profileFormSchema = z.object({
+  displayName: z.string().min(1, 'Display name is required.'),
+  email: z.string().email(),
+  role: z.enum(['patient', 'nutritionist', 'admin']),
+  subscriptionStatus: z.enum(['active', 'inactive', 'trial', 'pending']).optional(),
+  invitationCode: z.string().optional(),
+  dateOfBirth: z.string().optional(),
+  heightCm: z.coerce.number().positive().optional(),
+  currentWeightKg: z.coerce.number().positive().optional(),
+  goalWeightKg: z.coerce.number().positive().optional(),
+  activityLevel: z
+    .enum(['sedentary', 'light', 'moderate', 'active', 'very_active'])
+    .optional(),
+  dietaryPreferences: z
+    .enum(['omnivore', 'vegetarian', 'vegan', 'pescetarian'])
+    .optional(),
+  healthConditions: z.string().optional(),
+  bodyMeasurements: z
+    .object({
+      waist: z.coerce.number().positive().optional(),
+      hips: z.coerce.number().positive().optional(),
+      chest: z.coerce.number().positive().optional(),
+    })
+    .optional(),
+});
+
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
+
+export default function AdminUserDetailPage() {
+  const params = useParams();
+  const userId = params.userId as string;
+  const { t } = useTranslation();
+  const firestore = useFirestore();
+  const { user: adminUser } = useUser();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const userDocRef = useMemoFirebase(
+    () => doc(firestore, 'users', userId),
+    [firestore, userId]
+  );
+  
+  const { data: userProfile, isLoading: isProfileLoading } =
+    useDoc<UserProfile>(userDocRef);
+
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
+  });
+
+  useEffect(() => {
+    if (userProfile) {
+      form.reset({
+        displayName: userProfile.displayName,
+        email: userProfile.email,
+        role: userProfile.role,
+        subscriptionStatus: userProfile.subscriptionStatus,
+        invitationCode: userProfile.invitationCode,
+        dateOfBirth: userProfile.dateOfBirth,
+        heightCm: userProfile.heightCm,
+        currentWeightKg: userProfile.currentWeightKg,
+        goalWeightKg: userProfile.goalWeightKg,
+        activityLevel: userProfile.activityLevel,
+        dietaryPreferences: userProfile.dietaryPreferences,
+        healthConditions: userProfile.healthConditions,
+        bodyMeasurements: userProfile.bodyMeasurements,
+      });
+    }
+  }, [userProfile, form]);
+
+  if (adminUser?.uid === userId) {
+    router.push('/settings');
+    return null;
+  }
+
+  const onSubmit = (values: ProfileFormValues) => {
+    updateDocumentNonBlocking(userDocRef, values);
+    toast({
+      title: t('admin.userUpdated'),
+      description: t('admin.userUpdatedDesc', { email: values.email }),
+    });
+  };
+
+  if (isProfileLoading) {
+    return <Skeleton className="h-[500px] w-full" />;
+  }
+
+  if (!userProfile) {
+    return (
+      <Card>
+        <CardContent className="pt-6">
+          <p>{t('patientDetail.notFound')}</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+       <div>
+        <h2 className="text-2xl font-bold tracking-tight">{t('admin.editUser')}</h2>
+        <p className="text-muted-foreground">{userProfile.displayName} ({userProfile.email})</p>
+      </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('admin.profileInfo')}</CardTitle>
+              <CardDescription>{t('admin.profileInfoDesc')}</CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="displayName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('settings.displayName')}</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('settings.email')}</FormLabel>
+                      <FormControl>
+                        <Input {...field} disabled />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="role"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t('admin.table.role')}</FormLabel>
+                       <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder={t('admin.selectRole')} />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="patient">{t('roles.patient')}</SelectItem>
+                                <SelectItem value="nutritionist">{t('roles.nutritionist')}</SelectItem>
+                                <SelectItem value="admin">{t('roles.admin')}</SelectItem>
+                            </SelectContent>
+                       </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 {form.watch('role') === 'nutritionist' && (
+                    <>
+                    <FormField
+                    control={form.control}
+                    name="subscriptionStatus"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>{t('admin.table.status')}</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder={t('admin.selectStatus')} />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="active">{t('admin.status.active')}</SelectItem>
+                                    <SelectItem value="inactive">{t('admin.status.inactive')}</SelectItem>
+                                    <SelectItem value="pending">{t('admin.status.pending')}</SelectItem>
+                                    <SelectItem value="trial">{t('admin.status.trial')}</SelectItem>
+                                </SelectContent>
+                        </Select>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="invitationCode"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>{t('settings.invitationCodeLabel')}</FormLabel>
+                        <FormControl>
+                            <div className="flex items-center gap-2">
+                               <Input {...field} value={field.value || ''} />
+                               <Badge variant="secondary">{field.value}</Badge>
+                            </div>
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    </>
+                )}
+            </CardContent>
+          </Card>
+           {form.watch('role') === 'patient' && (
+            <Card className="mt-6">
+                <CardHeader>
+                    <CardTitle>{t('settings.personalData')}</CardTitle>
+                    <CardDescription>{t('admin.personalDataDesc')}</CardDescription>
+                </CardHeader>
+                 <CardContent className="space-y-4">
+                      <FormField
+                        control={form.control}
+                        name="dateOfBirth"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('settings.dateOfBirth')}</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} value={field.value || ''} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <FormField
+                          control={form.control}
+                          name="heightCm"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t('settings.height')}</FormLabel>
+                              <FormControl>
+                                <Input type="number" placeholder="170" {...field} value={field.value || ''}/>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="currentWeightKg"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t('settings.currentWeight')}</FormLabel>
+                              <FormControl>
+                                <Input type="number" placeholder="75" {...field} value={field.value || ''} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="goalWeightKg"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t('settings.goalWeight')}</FormLabel>
+                              <FormControl>
+                                <Input type="number" placeholder="68" {...field} value={field.value || ''}/>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div>
+                        <Label className="mb-2 block">
+                          {t('settings.bodyMeasurements')}
+                        </Label>
+                        <div className="grid grid-cols-3 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="bodyMeasurements.chest"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-xs text-muted-foreground">
+                                  {t('settings.chest')}
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    type="number"
+                                    placeholder="90"
+                                    {...field}
+                                    value={field.value || ''}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="bodyMeasurements.waist"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-xs text-muted-foreground">
+                                  {t('settings.waist')}
+                                </FormLabel>
+
+                                <FormControl>
+                                  <Input
+                                    type="number"
+                                    placeholder="80"
+                                    {...field}
+                                    value={field.value || ''}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="bodyMeasurements.hips"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-xs text-muted-foreground">
+                                  {t('settings.hips')}
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    type="number"
+                                    placeholder="95"
+                                    {...field}
+                                    value={field.value || ''}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                      <FormField
+                        control={form.control}
+                        name="activityLevel"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('settings.activityLevel')}</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={t('settings.selectActivityLevel')}/>
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="sedentary">{t('settings.activityLevels.sedentary')}</SelectItem>
+                                <SelectItem value="light">{t('settings.activityLevels.light')}</SelectItem>
+                                <SelectItem value="moderate">{t('settings.activityLevels.moderate')}</SelectItem>
+                                <SelectItem value="active">{t('settings.activityLevels.active')}</SelectItem>
+                                <SelectItem value="very_active">{t('settings.activityLevels.very_active')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="dietaryPreferences"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('settings.dietaryPreferences')}</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder={t('settings.selectDietaryPreferences')}/>
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="omnivore">{t('settings.dietaryPreferencesOptions.omnivore')}</SelectItem>
+                                <SelectItem value="vegetarian">{t('settings.dietaryPreferencesOptions.vegetarian')}</SelectItem>
+                                <SelectItem value="vegan">{t('settings.dietaryPreferencesOptions.vegan')}</SelectItem>
+                                <SelectItem value="pescetarian">{t('settings.dietaryPreferencesOptions.pescetarian')}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="healthConditions"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('settings.healthConditions')}</FormLabel>
+                            <FormControl>
+                              <Textarea placeholder={t('settings.healthConditionsPlaceholder')} {...field} value={field.value || ''}/>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </CardContent>
+            </Card>
+           )}
+
+          <CardFooter className="mt-6 border-t px-6 py-4">
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+            >
+              {t('settings.save')}
+            </Button>
+          </CardFooter>
+        </form>
+      </Form>
+    </div>
+  );
+}

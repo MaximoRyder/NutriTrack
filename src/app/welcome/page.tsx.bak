@@ -1,0 +1,184 @@
+
+
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useTranslation } from '@/lib/i18n/i18n-provider';
+import { useFirestore, useUser } from '@/firebase';
+import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { Logo } from '@/components/logo';
+
+const formSchema = z.object({
+  invitationCode: z.string().optional(),
+  goalWeightKg: z.coerce.number().positive('Goal weight must be positive.'),
+  heightCm: z.coerce.number().positive('Height must be positive.'),
+});
+
+export default function WelcomePage() {
+  const { t } = useTranslation();
+  const firestore = useFirestore();
+  const { user } = useUser();
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      invitationCode: '',
+      goalWeightKg: undefined,
+      heightCm: undefined,
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!user) return;
+    setIsSubmitting(true);
+
+    let nutritionistId: string | null = null;
+
+    try {
+      // If an invitation code is provided, find the nutritionist
+      if (values.invitationCode) {
+        const nutritionistsRef = collection(firestore, 'users');
+        const q = query(
+          nutritionistsRef,
+          where('invitationCode', '==', values.invitationCode),
+          where('role', '==', 'nutritionist')
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          toast({
+            variant: 'destructive',
+            title: t('welcome.errorTitle'),
+            description: t('welcome.errorMessage'),
+          });
+          setIsSubmitting(false);
+          return;
+        }
+
+        const nutritionistDoc = querySnapshot.docs[0];
+        nutritionistId = nutritionistDoc.id;
+      }
+      
+      // Prepare user data to be updated
+      const userDocRef = doc(firestore, 'users', user.uid);
+      const userData: any = {
+        goalWeightKg: values.goalWeightKg,
+        heightCm: values.heightCm,
+        role: 'patient', // Ensure their role is set to patient
+      };
+
+      if (nutritionistId) {
+        userData.assignedNutritionistId = nutritionistId;
+      }
+
+      // Update the patient's document
+      await updateDoc(userDocRef, userData);
+
+      // Redirect to the dashboard after successful setup
+      router.push('/overview');
+
+    } catch (error) {
+      console.error('Error in welcome page setup:', error);
+      toast({
+        variant: 'destructive',
+        title: t('welcome.genericErrorTitle'),
+        description: t('welcome.genericError'),
+      });
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+      <div className="absolute top-4 left-4">
+        <Logo textClassName="text-foreground" />
+      </div>
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold">{t('welcome.title')}</CardTitle>
+          <CardDescription>{t('welcome.description')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="invitationCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {t('welcome.invitationCode')} <span className="text-muted-foreground text-xs">(Optional)</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={t('welcome.invitationCodePlaceholder')}
+                        {...field}
+                        value={field.value ?? ''}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="goalWeightKg"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('welcome.goalWeight')}</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="65" {...field} value={field.value ?? ''} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="heightCm"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('welcome.height')}</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="170" {...field} value={field.value ?? ''} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? t('welcome.saving') : t('welcome.submit')}
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
