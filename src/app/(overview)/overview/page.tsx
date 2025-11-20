@@ -322,13 +322,13 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium leading-none">
                   {t("dashboard.totalPatients")}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground">
                   {isLoadingPatients ? (
                     <Skeleton className="h-5 w-5" />
                   ) : (
                     patients?.length || 0
                   )}
-                </p>
+                </div>
               </div>
             </div>
           </CardContent>

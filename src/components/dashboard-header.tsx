@@ -9,7 +9,7 @@ export function DashboardHeader() {
   const { user } = useUser();
 
   return (
-    <div className="ml-auto flex items-center gap-4">
+    <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
       <LanguageSwitcher />
       {user && <NotificationBell />}
       <UserNav />

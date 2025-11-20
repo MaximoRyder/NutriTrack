@@ -6,7 +6,6 @@ import {
 } from "@/ai/flows/generate-meal-plan-suggestions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Card,
   CardContent,
@@ -14,14 +13,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Progress } from "@/components/ui/progress";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
 import {
   addComment,
   useComments,
@@ -30,21 +30,22 @@ import {
   useWeightLogs,
 } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
-import { Comment, Meal, WeightLog } from "@/lib/types";
-import { format, formatDistanceToNow } from "date-fns";
+import { Comment, WeightLog } from "@/lib/types";
+import { formatDistanceToNow } from "date-fns";
 import {
-  Bot,
-  Droplets,
   FileText,
   MessageSquare,
   Scale,
   Target,
+  Droplets,
+  Bot,
   UploadCloud,
 } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { format } from "date-fns";
 
 const weightChartConfig = {
   weight: { label: "Weight (kg)", color: "hsl(var(--primary))" },
@@ -73,34 +74,38 @@ function CommentSection({ mealId }: { mealId: string }) {
         comments.map((comment: Comment) => (
           <div
             key={comment.id}
-            className="flex items-start gap-3 rounded-lg bg-secondary p-3"
+            className="flex items-start gap-2 sm:gap-3 rounded-lg bg-secondary p-2 sm:p-3"
           >
-            <Avatar className="h-8 w-8 border">
+            <Avatar className="h-7 w-7 sm:h-8 sm:w-8 border">
               <AvatarFallback>
                 {comment.authorName ? comment.authorName.charAt(0) : "U"}
               </AvatarFallback>
             </Avatar>
             <div className="w-full">
-              <p className="text-sm">
+              <p className="text-xs sm:text-sm">
                 <span className="font-semibold">{comment.authorName}</span>{" "}
-                <span className="text-xs text-muted-foreground ml-2">
+                <span className="text-xs text-muted-foreground ml-1 sm:ml-2">
                   {formatDistanceToNow(new Date(comment.timestamp), {
                     addSuffix: true,
                   })}
                 </span>
               </p>
-              <p className="text-sm text-foreground/80">{comment.text}</p>
+              <p className="text-xs sm:text-sm text-foreground/80">
+                {comment.text}
+              </p>
             </div>
           </div>
         ))}
-      <div className="flex gap-2 pt-2">
+      <div className="flex flex-col sm:flex-row gap-2 pt-2">
         <Textarea
           placeholder={t("patientDetail.leaveComment")}
-          className="h-16"
+          className="h-16 text-sm flex-1"
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
         />
-        <Button onClick={handleAddComment}>{t("patientDetail.send")}</Button>
+        <Button onClick={handleAddComment} size="sm" className="sm:self-start">
+          {t("patientDetail.send")}
+        </Button>
       </div>
     </div>
   );
@@ -195,7 +200,7 @@ export default function PatientDetailPage() {
     return (
       <div className="space-y-6">
         <Skeleton className="h-28 w-full" />
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
           <Skeleton className="h-28 w-full" />
           <Skeleton className="h-28 w-full" />
           <Skeleton className="h-28 w-full" />
@@ -225,52 +230,62 @@ export default function PatientDetailPage() {
   const hydrationProgress = 50;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <Card>
-        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center gap-4 space-y-0">
-          <Avatar className="h-16 w-16">
-            {/* photoUrl may not be present after migration */}
-            <AvatarImage
-              src={(patient as any).photoUrl || ""}
-              alt={patient.displayName}
-            />
-            <AvatarFallback>
-              {patient.displayName ? patient.displayName.charAt(0) : "P"}
-            </AvatarFallback>
-          </Avatar>
-          <div className="grid gap-1">
-            <CardTitle className="text-2xl">{patient.displayName}</CardTitle>
-            <CardDescription>{patient.email}</CardDescription>
-          </div>
-          <div className="flex sm:ml-auto gap-2 w-full sm:w-auto">
-            <Button variant="outline" className="flex-1 sm:flex-initial">
-              <MessageSquare className="mr-2 h-4 w-4" />{" "}
-              {t("patientDetail.chat")}
-            </Button>
-            <Button
-              className="flex-1 sm:flex-initial"
-              onClick={handleExportPdf}
-              disabled={isExportingPdf}
-            >
-              <FileText className="mr-2 h-4 w-4" />{" "}
-              {isExportingPdf
-                ? t("patientDetail.exporting")
-                : t("patientDetail.exportPdf")}
-            </Button>
+        <CardHeader className="p-4 sm:p-6">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-start gap-3">
+              <Avatar className="h-12 w-12 sm:h-14 sm:w-14 shrink-0">
+                {/* photoUrl may not be present after migration */}
+                <AvatarImage
+                  src={(patient as any).photoUrl || ""}
+                  alt={patient.displayName}
+                />
+                <AvatarFallback>
+                  {patient.displayName ? patient.displayName.charAt(0) : "P"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <CardTitle className="text-base sm:text-xl truncate">
+                  {patient.displayName}
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm truncate">
+                  {patient.email}
+                </CardDescription>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button variant="outline" size="sm" className="w-full sm:flex-1">
+                <MessageSquare className="mr-2 h-4 w-4" />
+                {t("patientDetail.chat")}
+              </Button>
+              <Button
+                size="sm"
+                className="w-full sm:flex-1"
+                onClick={handleExportPdf}
+                disabled={isExportingPdf}
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                {isExportingPdf
+                  ? t("patientDetail.exporting")
+                  : t("patientDetail.exportPdf")}
+              </Button>
+            </div>
           </div>
         </CardHeader>
       </Card>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {/* SECCIÓN 1: STATS CARDS */}
+      <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">
               {t("patientDetail.weight")}
             </CardTitle>
-            <Scale className="h-4 w-4 text-muted-foreground" />
+            <Scale className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="p-4 pt-0">
+            <div className="text-lg sm:text-xl font-bold">
               {patient.currentWeightKg || t("general.na")} kg
             </div>
             <p className="text-xs text-muted-foreground">
@@ -279,14 +294,14 @@ export default function PatientDetailPage() {
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">
               {t("patientDetail.goal")}
             </CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+            <Target className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="p-4 pt-0">
+            <div className="text-lg sm:text-xl font-bold">
               {patient.goalWeightKg || t("general.na")} kg
             </div>
             {patient.currentWeightKg && patient.goalWeightKg && (
@@ -301,49 +316,52 @@ export default function PatientDetailPage() {
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">
               {t("patientDetail.hydration")}
             </CardTitle>
-            <Droplets className="h-4 w-4 text-muted-foreground" />
+            <Droplets className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{1500} ml</div>
+          <CardContent className="p-4 pt-0">
+            <div className="text-lg sm:text-xl font-bold">{1500} ml</div>
             <Progress value={hydrationProgress} className="mt-2 h-2" />
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
+            <CardTitle className="text-xs sm:text-sm font-medium">
               {t("patientDetail.activityLevel")}
             </CardTitle>
-            <Scale className="h-4 w-4 text-muted-foreground" />
+            <Scale className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold capitalize">
+          <CardContent className="p-4 pt-0">
+            <div className="text-base sm:text-lg font-bold capitalize truncate">
               {patient.activityLevel
                 ? t(`settings.activityLevels.${patient.activityLevel}`)
                 : t("general.na")}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground hidden sm:block">
               {t("patientDetail.activityLevelDesc")}
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>{t("patientDetail.weightProgress")}</CardTitle>
-            <CardDescription>
+      {/* SECCIÓN 2: CHART Y AI */}
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Card className="lg:col-span-2 overflow-hidden">
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg">
+              {t("patientDetail.weightProgress")}
+            </CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               {t("patientDetail.weightProgressDesc")}
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-2 sm:p-4 lg:p-6 pt-0">
             <ChartContainer
               config={weightChartConfig}
-              className="h-[250px] w-full"
+              className="h-[200px] sm:h-[250px] w-full"
             >
               <LineChart data={weightChartData}>
                 <CartesianGrid vertical={false} />
@@ -352,6 +370,7 @@ export default function PatientDetailPage() {
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
+                  tick={{ fontSize: 10 }}
                   tickFormatter={(val) => format(new Date(val), "MMM d")}
                 />
                 <YAxis domain={["dataMin - 2", "dataMax + 2"]} hide />
@@ -371,15 +390,16 @@ export default function PatientDetailPage() {
           </CardContent>
         </Card>
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Bot className="h-5 w-5" /> {t("patientDetail.aiSuggestions")}
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Bot className="h-4 w-4 sm:h-5 sm:w-5" />{" "}
+              {t("patientDetail.aiSuggestions")}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-xs sm:text-sm">
               {t("patientDetail.aiSuggestionsDesc")}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 p-4 sm:p-6 pt-0">
             <Button onClick={handleGenerateSuggestions} disabled={isGenerating}>
               {isGenerating
                 ? t("patientDetail.generating")
@@ -406,73 +426,82 @@ export default function PatientDetailPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* SECCIÓN 3: MEAL LOG */}
       <Card>
-        <CardHeader>
-          <CardTitle>{t("patientDetail.recentMealLog")}</CardTitle>
-          <CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-base sm:text-lg">
+            {t("patientDetail.recentMealLog")}
+          </CardTitle>
+          <CardDescription className="text-xs sm:text-sm">
             {t("patientDetail.recentMealLogDesc", {
               date: date ? format(date, "PPP") : "",
             })}
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid md:grid-cols-3 gap-6">
-          <div className="w-full">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              className="rounded-md border w-full"
-            />
-          </div>
-          <div className="md:col-span-2 space-y-4">
-            {isLoadingMeals && (
-              <div className="space-y-4">
-                <Skeleton className="h-40 w-full" />
-                <Skeleton className="h-40 w-full" />
-              </div>
-            )}
-            {!isLoadingMeals && meals && meals.length > 0
-              ? (meals as Meal[]).map((meal) => (
-                  <div key={meal.id} className="p-4 border rounded-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                      <div className="md:col-span-1 relative h-40 w-full overflow-hidden rounded-md">
-                        <Image
-                          src={meal.photoUrl}
-                          alt={meal.name}
-                          fill
-                          className="object-cover"
-                          data-ai-hint="healthy food"
-                        />
-                      </div>
-                      <div className="md:col-span-2 space-y-2">
-                        <div className="flex justify-between items-start">
+        <CardContent className="space-y-4 p-4 sm:p-6 pt-0">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="w-full lg:w-auto lg:shrink-0">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                className="rounded-md border w-full max-w-full"
+              />
+            </div>
+            <div className="flex-1 space-y-3 min-w-0">
+              {isLoadingMeals && (
+                <div className="space-y-4">
+                  <Skeleton className="h-40 w-full" />
+                  <Skeleton className="h-40 w-full" />
+                </div>
+              )}
+              {!isLoadingMeals && meals && meals.length > 0
+                ? (meals as Meal[]).map((meal) => (
+                    <div
+                      key={meal.id}
+                      className="border rounded-lg overflow-hidden"
+                    >
+                      <div className="flex flex-col sm:flex-row">
+                        <div className="relative h-40 sm:h-32 sm:w-32 md:w-40 md:h-40 shrink-0">
+                          <Image
+                            src={meal.photoUrl}
+                            alt={meal.name}
+                            fill
+                            className="object-cover"
+                            data-ai-hint="healthy food"
+                          />
+                        </div>
+                        <div className="flex-1 p-3 sm:p-4 space-y-2 min-w-0">
                           <div>
-                            <p className="font-semibold text-lg">{meal.name}</p>
-                            <p className="text-sm text-muted-foreground capitalize">
+                            <p className="font-semibold text-sm sm:text-base">
+                              {meal.name}
+                            </p>
+                            <p className="text-xs text-muted-foreground capitalize">
                               {t(`addMeal.${meal.mealType}` as any)} -{" "}
                               {format(new Date(meal.timestamp), "p")}
                             </p>
                           </div>
+                          {meal.description && (
+                            <p className="text-xs sm:text-sm text-muted-foreground/80">
+                              {meal.description}
+                            </p>
+                          )}
+                          <CommentSection mealId={meal.id} />
                         </div>
-                        {meal.description && (
-                          <p className="text-sm text-muted-foreground/80">
-                            {meal.description}
-                          </p>
-                        )}
                       </div>
                     </div>
-                    <CommentSection mealId={meal.id} />
-                  </div>
-                ))
-              : !isLoadingMeals && (
-                  <div className="flex flex-col items-center justify-center text-center text-muted-foreground py-10 border-2 border-dashed rounded-lg">
-                    <UploadCloud className="h-12 w-12 mb-4" />
-                    <p>{t("journal.noMeals")}</p>
-                    <p className="text-sm mt-1">
-                      {t("patientDetail.selectDate")}
-                    </p>
-                  </div>
-                )}
+                  ))
+                : !isLoadingMeals && (
+                    <div className="flex flex-col items-center justify-center text-center text-muted-foreground py-10 border-2 border-dashed rounded-lg">
+                      <UploadCloud className="h-12 w-12 mb-4" />
+                      <p>{t("journal.noMeals")}</p>
+                      <p className="text-sm mt-1">
+                        {t("patientDetail.selectDate")}
+                      </p>
+                    </div>
+                  )}
+            </div>
           </div>
         </CardContent>
       </Card>

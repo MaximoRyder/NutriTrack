@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
-import { CreditCard, LogOut, Settings, Shield, User } from "lucide-react";
+import { BarChart3, LogOut, Settings, Shield, User, Users } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -43,16 +43,22 @@ export function UserNav() {
       case "nutritionist":
         return (
           <>
-            <Link href="/settings">
+            <Link href="/overview">
               <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>{t("userNav.profile")}</span>
+                <BarChart3 className="mr-2 h-4 w-4" />
+                <span>{t("sidebar.overview")}</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link href="/patients">
+              <DropdownMenuItem>
+                <Users className="mr-2 h-4 w-4" />
+                <span>{t("sidebar.patients")}</span>
               </DropdownMenuItem>
             </Link>
             <Link href="/settings">
               <DropdownMenuItem>
-                <CreditCard className="mr-2 h-4 w-4" />
-                <span>{t("userNav.billing")}</span>
+                <User className="mr-2 h-4 w-4" />
+                <span>{t("userNav.profile")}</span>
               </DropdownMenuItem>
             </Link>
             <Link href="/settings">
