@@ -472,17 +472,19 @@ export default function DashboardPage() {
             </Table>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("dashboard.weightProgress")}</CardTitle>
-            <CardDescription>
+        <Card className="overflow-hidden">
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-base sm:text-lg">
+              {t("dashboard.weightProgress")}
+            </CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               {t("dashboard.weightProgressDesc")}
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-2 sm:p-4 lg:p-6 pt-0">
             <ChartContainer
               config={weightChartConfig}
-              className="h-[200px] w-full"
+              className="h-[200px] sm:h-[250px] w-full"
             >
               <BarChart accessibilityLayer data={weightChartData}>
                 <CartesianGrid vertical={false} />
@@ -491,6 +493,7 @@ export default function DashboardPage() {
                   tickLine={false}
                   tickMargin={10}
                   axisLine={false}
+                  tick={{ fontSize: 10 }}
                   tickFormatter={(value) =>
                     new Date(value).toLocaleDateString("en-US", {
                       month: "short",

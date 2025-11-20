@@ -64,6 +64,11 @@ export default function DashboardLayout({
     );
   }
 
+  // Bloquear acceso si no hay usuario
+  if (!user) {
+    return null; // El useEffect redirigirá
+  }
+
   // Prevent rendering children if the profile is for a pending nutritionist
   // and they are trying to access a page other than overview or settings.
   // This is a simple client-side guard.

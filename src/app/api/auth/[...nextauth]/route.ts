@@ -1,33 +1,38 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import connectDB from '@/lib/mongodb';
-import { User } from '@/lib/models';
-import bcrypt from 'bcryptjs';
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import connectDB from "@/lib/mongodb";
+import { User } from "@/lib/models";
+import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Email y contraseña requeridos');
+          throw new Error("Email y contraseña requeridos");
         }
 
         await connectDB();
-        const user = await User.findOne({ email: credentials.email.toLowerCase() });
+        const user = await User.findOne({
+          email: credentials.email.toLowerCase(),
+        });
 
         if (!user) {
-          throw new Error('Usuario no encontrado');
+          throw new Error("Usuario no encontrado");
         }
 
-        const isValid = await bcrypt.compare(credentials.password, user.password);
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
 
         if (!isValid) {
-          throw new Error('Contraseña incorrecta');
+          throw new Error("Contraseña incorrecta");
         }
 
         return {
@@ -56,10 +61,17 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: '/login',
+    signIn: "/login",
+    signOut: "/",
   },
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 días
+  },
+  events: {
+    async signOut() {
+      // Callback cuando el usuario cierra sesión
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

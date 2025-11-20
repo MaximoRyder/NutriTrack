@@ -16,17 +16,20 @@ import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { BarChart3, LogOut, Settings, Shield, User, Users } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export function UserNav() {
   const { t } = useTranslation();
   const { user } = useUser();
   const { profile: userProfile } = useUserProfile((user as any)?.id);
-  const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut({ redirect: false });
-    router.push("/");
+    // Limpiar cualquier dato local
+    if (typeof window !== "undefined") {
+      localStorage.clear();
+      sessionStorage.clear();
+    }
+    // Cerrar sesión con NextAuth
+    await signOut({ callbackUrl: "/", redirect: true });
   };
 
   const renderMenuItems = () => {
