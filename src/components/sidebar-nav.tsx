@@ -4,6 +4,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
@@ -27,6 +28,12 @@ export function SidebarNav() {
     (user as any)?.id
   );
   const { t } = useTranslation();
+  const { setOpenMobile } = useSidebar();
+
+  const handleLinkClick = () => {
+    // Cerrar sidebar en móvil al hacer clic en un enlace
+    setOpenMobile(false);
+  };
 
   const patientNav = [
     { name: t("sidebar.overview"), href: "/overview", icon: LayoutDashboard },
@@ -66,51 +73,45 @@ export function SidebarNav() {
   const isLoading = isUserLoading || isProfileLoading;
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex-1">
-        <SidebarMenu>
-          {isLoading
-            ? Array.from({ length: 4 }).map((_, index) => (
-                <SidebarMenuItem key={index}>
-                  <SidebarMenuButton>
-                    <div className="h-5 w-5 bg-gray-200 rounded animate-pulse" />
-                    <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))
-            : navItems.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <Link href={item.href} passHref>
-                    <SidebarMenuButton
-                      isActive={
-                        pathname.startsWith(item.href) &&
-                        (item.href !== "/overview" || pathname === "/overview")
-                      }
-                      tooltip={item.name}
-                    >
-                      <item.icon />
-                      <span>{item.name}</span>
-                    </SidebarMenuButton>
-                  </Link>
-                </SidebarMenuItem>
-              ))}
-        </SidebarMenu>
-      </div>
-      <div className="mt-auto">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <Link href="/settings" passHref>
-              <SidebarMenuButton
-                isActive={pathname.startsWith("/settings")}
-                tooltip={t("sidebar.settings")}
-              >
-                <Settings />
-                <span>{t("sidebar.settings")}</span>
+    <SidebarMenu>
+      {isLoading
+        ? Array.from({ length: 5 }).map((_, index) => (
+            <SidebarMenuItem key={index}>
+              <SidebarMenuButton>
+                <div className="h-5 w-5 bg-gray-200 rounded animate-pulse" />
+                <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
               </SidebarMenuButton>
-            </Link>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </div>
-    </div>
+            </SidebarMenuItem>
+          ))
+        : navItems.map((item) => (
+            <SidebarMenuItem key={item.name}>
+              <Link href={item.href} passHref onClick={handleLinkClick}>
+                <SidebarMenuButton
+                  isActive={
+                    pathname.startsWith(item.href) &&
+                    (item.href !== "/overview" || pathname === "/overview")
+                  }
+                  tooltip={item.name}
+                >
+                  <item.icon />
+                  <span>{item.name}</span>
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+          ))}
+      {!isLoading && (
+        <SidebarMenuItem className="mt-4">
+          <Link href="/settings" passHref onClick={handleLinkClick}>
+            <SidebarMenuButton
+              isActive={pathname.startsWith("/settings")}
+              tooltip={t("sidebar.settings")}
+            >
+              <Settings />
+              <span>{t("sidebar.settings")}</span>
+            </SidebarMenuButton>
+          </Link>
+        </SidebarMenuItem>
+      )}
+    </SidebarMenu>
   );
 }
