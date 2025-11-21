@@ -1,6 +1,7 @@
 "use client";
 
 import { AddMealDialog } from "@/components/add-meal-dialog";
+import { MealDetailDialog } from "@/components/meal-detail-dialog";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -45,6 +46,7 @@ export default function JournalPage() {
   const [isAddMealDialogOpen, setAddMealDialogOpen] = useState(false);
   const [mealToEdit, setMealToEdit] = useState<Meal | null>(null);
   const [mealToDelete, setMealToDelete] = useState<Meal | null>(null);
+  const [selectedMeal, setSelectedMeal] = useState<Meal | null>(null);
 
   // Get the appropriate date-fns locale
   const dateLocale = locale === 'es' ? es : locale === 'pt' ? pt : enUS;
@@ -187,8 +189,8 @@ export default function JournalPage() {
             ? selectedMeals.map((meal) => (
                 <Card
                   key={meal.id}
-                  className="cursor-pointer"
-                  onClick={() => router.push(`/journal/${meal.id}`)}
+                  className="cursor-pointer hover:bg-accent/50 transition-colors"
+                  onClick={() => setSelectedMeal(meal)}
                 >
                   <CardContent className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
                     <div className="md:col-span-1 relative h-40 w-full overflow-hidden rounded-md">
@@ -262,6 +264,13 @@ export default function JournalPage() {
               )}
         </div>
       </div>
+
+      {/* Meal Detail Dialog */}
+      <MealDetailDialog
+        meal={selectedMeal}
+        open={!!selectedMeal}
+        onOpenChange={(open) => !open && setSelectedMeal(null)}
+      />
     </>
   );
 }

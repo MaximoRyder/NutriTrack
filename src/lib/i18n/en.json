@@ -525,7 +525,8 @@
     "na": "N/A",
     "back": "Back",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "comments": "Comments"
   },
   "quickLog": {
     "title": "Quick Log",

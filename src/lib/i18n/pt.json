@@ -525,7 +525,8 @@
     "na": "N/D",
     "back": "Voltar",
     "save": "Salvar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "comments": "Comentários"
   },
   "quickLog": {
     "title": "Registro Rápido",
