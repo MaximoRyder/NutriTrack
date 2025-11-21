@@ -1,22 +1,23 @@
 "use client";
 
 import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    useSidebar,
 } from "@/components/ui/sidebar";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import {
-  AreaChart,
-  BookCopy,
-  Calendar,
-  LayoutDashboard,
-  Settings,
-  Shield,
-  Stethoscope,
-  Users,
+    Activity,
+    AreaChart,
+    BookCopy,
+    Calendar,
+    LayoutDashboard,
+    Settings,
+    Shield,
+    Stethoscope,
+    Users
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -38,6 +39,7 @@ export function SidebarNav() {
   const patientNav = [
     { name: t("sidebar.overview"), href: "/overview", icon: LayoutDashboard },
     { name: t("sidebar.foodJournal"), href: "/journal", icon: Calendar },
+    { name: t("sidebar.activityLog"), href: "/activities", icon: Activity },
     { name: t("sidebar.myProgress"), href: "/progress", icon: AreaChart },
     { name: t("sidebar.mealPlan"), href: "/plan", icon: BookCopy },
     {

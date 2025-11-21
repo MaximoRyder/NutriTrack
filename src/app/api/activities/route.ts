@@ -69,3 +69,53 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
+    
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ error: 'id requerido' }, { status: 400 });
+    
+    const body = await request.json();
+    await connectDB();
+    
+    const updated = await ActivityLog.findOneAndUpdate(
+      { _id: id, userId: (session.user as any).id },
+      { $set: { ...body, date: new Date(body.date) } },
+      { new: true }
+    );
+    
+    if (!updated) return NextResponse.json({ error: 'No encontrado' }, { status: 404 });
+    
+    return NextResponse.json({ success: true });
+  } catch (e:any) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
+    
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ error: 'id requerido' }, { status: 400 });
+    
+    await connectDB();
+    
+    const deleted = await ActivityLog.findOneAndDelete({
+      _id: id,
+      userId: (session.user as any).id
+    });
+    
+    if (!deleted) return NextResponse.json({ error: 'No encontrado' }, { status: 404 });
+    
+    return NextResponse.json({ success: true });
+  } catch (e:any) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
