@@ -1,51 +1,52 @@
 "use client";
 
 import {
-  generateMealPlanSuggestions,
-  GenerateMealPlanSuggestionsOutput,
+    generateMealPlanSuggestions,
+    GenerateMealPlanSuggestionsOutput,
 } from "@/ai/flows/generate-meal-plan-suggestions";
+import { QuickLogCard } from "@/components/quick-log-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
-import { Progress } from "@/components/ui/progress";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 import { Calendar } from "@/components/ui/calendar";
 import {
-  addComment,
-  useComments,
-  usePatientMealsByDate,
-  useUserProfile,
-  useWeightLogs,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import {
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/components/ui/chart";
+import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
+import {
+    addComment,
+    useComments,
+    usePatientMealsByDate,
+    useUserProfile,
+    useWaterLogs,
+    useWeightLogs,
 } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
-import { Comment, WeightLog } from "@/lib/types";
-import { formatDistanceToNow } from "date-fns";
+import { Comment, Meal, WeightLog } from "@/lib/types";
+import { format, formatDistanceToNow } from "date-fns";
 import {
-  FileText,
-  MessageSquare,
-  Scale,
-  Target,
-  Droplets,
-  Bot,
-  UploadCloud,
+    Bot,
+    Droplets,
+    FileText,
+    MessageSquare,
+    Scale,
+    Target,
+    UploadCloud,
 } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { format } from "date-fns";
 
 const weightChartConfig = {
   weight: { label: "Weight (kg)", color: "hsl(var(--primary))" },
@@ -136,6 +137,11 @@ export default function PatientDetailPage() {
   const { weightLogs, isLoading: isLoadingWeightLogs } =
     useWeightLogs(patientId);
 
+  // Water logs (for stats card)
+  const { waterLogs } = useWaterLogs(patientId, new Date()); // Always show today's water in stats? Or selected date? Let's use today for "Current Status"
+  const totalWaterToday = waterLogs?.reduce((acc: any, log: any) => acc + log.quantityMl, 0) || 0;
+  const hydrationProgress = Math.min((totalWaterToday / 2000) * 100, 100);
+
   const weightChartData = useMemo(() => {
     if (!weightLogs) return [];
     return (weightLogs as WeightLog[]).map((log) => ({
@@ -150,7 +156,7 @@ export default function PatientDetailPage() {
     setAiSuggestions(null);
     try {
       const patientFoodLog =
-        meals?.map((m) => m.name).join(", ") ||
+        meals?.map((m: Meal) => m.name).join(", ") ||
         t("patientDetail.noRecentMeals");
       const patientGoals = `Goal weight: ${
         patient.goalWeightKg
@@ -225,9 +231,6 @@ export default function PatientDetailPage() {
     patient.currentWeightKg && patient.heightCm
       ? (patient.currentWeightKg / (patient.heightCm / 100) ** 2).toFixed(1)
       : t("general.na");
-
-  // This is a placeholder as WaterLog is not fully implemented yet
-  const hydrationProgress = 50;
 
   return (
     <div className="space-y-4">
@@ -323,7 +326,7 @@ export default function PatientDetailPage() {
             <Droplets className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="p-4 pt-0">
-            <div className="text-lg sm:text-xl font-bold">{1500} ml</div>
+            <div className="text-lg sm:text-xl font-bold">{totalWaterToday} ml</div>
             <Progress value={hydrationProgress} className="mt-2 h-2" />
           </CardContent>
         </Card>
@@ -347,8 +350,8 @@ export default function PatientDetailPage() {
         </Card>
       </div>
 
-      {/* SECCIÓN 2: CHART Y AI */}
-      <div className="grid gap-4 lg:grid-cols-3">
+      {/* SECCIÓN 2: CHART, QUICK LOG, AI */}
+      <div className="grid gap-4 lg:grid-cols-4">
         <Card className="lg:col-span-2 overflow-hidden">
           <CardHeader className="p-4 sm:p-6">
             <CardTitle className="text-base sm:text-lg">
@@ -389,7 +392,12 @@ export default function PatientDetailPage() {
             </ChartContainer>
           </CardContent>
         </Card>
-        <Card>
+        
+        <div className="lg:col-span-1">
+          <QuickLogCard patientId={patientId} />
+        </div>
+
+        <Card className="lg:col-span-1">
           <CardHeader className="p-4 sm:p-6">
             <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
               <Bot className="h-4 w-4 sm:h-5 sm:w-5" />{" "}
@@ -400,7 +408,7 @@ export default function PatientDetailPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 p-4 sm:p-6 pt-0">
-            <Button onClick={handleGenerateSuggestions} disabled={isGenerating}>
+            <Button onClick={handleGenerateSuggestions} disabled={isGenerating} className="w-full">
               {isGenerating
                 ? t("patientDetail.generating")
                 : t("patientDetail.generate")}

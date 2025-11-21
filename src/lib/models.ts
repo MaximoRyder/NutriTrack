@@ -171,6 +171,25 @@ const WaterLogSchema = new Schema<IWaterLog>({
 export const WaterLog =
   models.WaterLog || model<IWaterLog>("WaterLog", WaterLogSchema);
 
+export interface IActivityLog extends Document {
+  userId: mongoose.Types.ObjectId;
+  activityType: string;
+  durationMinutes: number;
+  intensity?: "low" | "medium" | "high";
+  date: Date;
+}
+
+const ActivityLogSchema = new Schema<IActivityLog>({
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  activityType: { type: String, required: true },
+  durationMinutes: { type: Number, required: true },
+  intensity: { type: String, enum: ["low", "medium", "high"] },
+  date: { type: Date, required: true },
+});
+
+export const ActivityLog =
+  models.ActivityLog || model<IActivityLog>("ActivityLog", ActivityLogSchema);
+
 export interface IMealPlan extends Document {
   userId: mongoose.Types.ObjectId;
   authorNutritionistId: mongoose.Types.ObjectId;

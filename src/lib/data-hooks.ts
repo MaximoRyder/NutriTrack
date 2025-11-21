@@ -157,6 +157,70 @@ export async function addWeightLog(payload: {
   return res.json();
 }
 
+// Water logs
+export function useWaterLogs(userId: string | undefined, date: Date | undefined) {
+  const start = date ? new Date(date) : null;
+  const end = date ? new Date(date) : null;
+  if (start) start.setHours(0, 0, 0, 0);
+  if (end) end.setHours(23, 59, 59, 999);
+  
+  const shouldFetch = !!userId && !!date;
+  const { data, error, mutate } = useSWR(
+    shouldFetch 
+      ? `/api/waterlogs?userId=${userId}&startDate=${start!.toISOString()}&endDate=${end!.toISOString()}` 
+      : null,
+    fetcher
+  );
+  return { waterLogs: data || [], isLoading: shouldFetch && !data && !error, error, mutate };
+}
+
+export async function addWaterLog(payload: {
+  date: string;
+  quantityMl: number;
+  userId: string;
+}) {
+  const res = await fetch("/api/waterlogs", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+// Activity logs
+export function useActivityLogs(userId: string | undefined, date: Date | undefined) {
+  const start = date ? new Date(date) : null;
+  const end = date ? new Date(date) : null;
+  if (start) start.setHours(0, 0, 0, 0);
+  if (end) end.setHours(23, 59, 59, 999);
+
+  const shouldFetch = !!userId && !!date;
+  const { data, error, mutate } = useSWR(
+    shouldFetch
+      ? `/api/activities?userId=${userId}&startDate=${start!.toISOString()}&endDate=${end!.toISOString()}`
+      : null,
+    fetcher
+  );
+  return { activityLogs: data || [], isLoading: shouldFetch && !data && !error, error, mutate };
+}
+
+export async function addActivityLog(payload: {
+  date: string;
+  activityType: string;
+  durationMinutes: number;
+  intensity?: string;
+  userId: string;
+}) {
+  const res = await fetch("/api/activities", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
 // List patients for nutritionist
 export function usePatients() {
   const { user } = useUser();

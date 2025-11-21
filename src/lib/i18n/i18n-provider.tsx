@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import en from './en.json';
 import es from './es.json';
 import pt from './pt.json';
@@ -10,7 +10,7 @@ type Locale = 'en' | 'es' | 'pt';
 interface I18nContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-  t: (key: string) => string;
+  t: (key: string, params?: any) => string;
 }
 
 const translations: Record<Locale, any> = { en, es, pt };
@@ -27,7 +27,7 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const t = (key: string): string => {
+  const t = (key: string, params?: any): string => {
     const keys = key.split('.');
     let result = translations[locale];
     for (const k of keys) {

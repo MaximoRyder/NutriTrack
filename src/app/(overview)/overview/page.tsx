@@ -1,43 +1,44 @@
 "use client";
 
 import { AddMealDialog } from "@/components/add-meal-dialog";
+import { QuickLogCard } from "@/components/quick-log-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table";
-import { usePatients, useUser, useUserProfile } from "@/lib/data-hooks";
+import { usePatients, useUser, useUserProfile, useWaterLogs } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { Meal } from "@/lib/types";
 import { format } from "date-fns";
 import {
-  ArrowUpRight,
-  BookOpen,
-  Droplets,
-  PlusCircle,
-  Scale,
-  Stethoscope,
-  Users,
-  Utensils,
+    ArrowUpRight,
+    BookOpen,
+    Droplets,
+    PlusCircle,
+    Scale,
+    Stethoscope,
+    Users,
+    Utensils,
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -77,6 +78,11 @@ export default function DashboardPage() {
       : null,
     fetcher
   );
+
+  // Water logs
+  const { waterLogs } = useWaterLogs((user as any)?.id, new Date());
+  const totalWaterToday = waterLogs?.reduce((acc: any, log: any) => acc + log.quantityMl, 0) || 0;
+  const hydrationProgress = Math.min((totalWaterToday / 2000) * 100, 100);
 
   // Nutritionist queries
   const { patients, isLoading: isLoadingPatients } = usePatients();
@@ -265,7 +271,7 @@ export default function DashboardPage() {
                     </TableRow>
                   ))
                 ) : patients && patients.length > 0 ? (
-                  patients.slice(0, 5).map((patient) => (
+                  patients.slice(0, 5).map((patient: any) => (
                     <TableRow key={patient.id}>
                       <TableCell>
                         <Link
@@ -372,11 +378,11 @@ export default function DashboardPage() {
             <Droplets className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1500 ml</div>
+            <div className="text-2xl font-bold">{totalWaterToday} ml</div>
             <p className="text-xs text-muted-foreground">
               {t("dashboard.hydrationGoal", { value: 2000 })}
             </p>
-            <Progress value={75} className="mt-2 h-2" />
+            <Progress value={hydrationProgress} className="mt-2 h-2" />
           </CardContent>
         </Card>
         <Card>
@@ -409,6 +415,9 @@ export default function DashboardPage() {
         </Card>
       </div>
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="xl:col-span-1">
+          <QuickLogCard patientId={(user as any)?.id} />
+        </div>
         <Card className="xl:col-span-2">
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
@@ -472,7 +481,7 @@ export default function DashboardPage() {
             </Table>
           </CardContent>
         </Card>
-        <Card className="overflow-hidden">
+        <Card className="overflow-hidden xl:col-span-3">
           <CardHeader className="p-4 sm:p-6">
             <CardTitle className="text-base sm:text-lg">
               {t("dashboard.weightProgress")}

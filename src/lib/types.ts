@@ -65,6 +65,15 @@ export interface WaterLog {
   quantityMl: number;
 }
 
+export interface ActivityLog {
+  id: string;
+  userId: string;
+  activityType: string;
+  durationMinutes: number;
+  intensity?: "low" | "medium" | "high";
+  date: string; // ISO String
+}
+
 export interface MealPlan {
   id: string;
   userId: string; // The patient this is for

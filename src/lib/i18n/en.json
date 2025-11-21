@@ -522,7 +522,39 @@
   "general": {
     "loading": "Loading...",
     "na": "N/A",
-    "back": "Back"
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "quickLog": {
+    "title": "Quick Log",
+    "description": "Track your daily habits",
+    "water": "Water",
+    "activity": "Activity",
+    "noActivity": "No activity logged today",
+    "logActivity": "Log Activity",
+    "activityType": "Activity Type",
+    "duration": "Duration (minutes)",
+    "intensity": "Intensity",
+    "selectActivity": "Select activity",
+    "selectIntensity": "Select intensity",
+    "activities": {
+      "running": "Running",
+      "walking": "Walking",
+      "cycling": "Cycling",
+      "swimming": "Swimming",
+      "gym": "Gym / Weights",
+      "yoga": "Yoga",
+      "other": "Other"
+    },
+    "intensities": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "customActivity": "Activity Name",
+    "customActivityPlaceholder": "e.g., Boxing",
+    "time": "Time"
   },
   "nutritionist": {
     "title": "My Nutritionist",

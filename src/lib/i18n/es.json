@@ -522,7 +522,39 @@
   "general": {
     "loading": "Cargando...",
     "na": "N/D",
-    "back": "Volver"
+    "back": "Volver",
+    "save": "Guardar",
+    "cancel": "Cancelar"
+  },
+  "quickLog": {
+    "title": "Registro Rápido",
+    "description": "Registra tus hábitos diarios",
+    "water": "Agua",
+    "activity": "Actividad",
+    "noActivity": "No hay actividad registrada hoy",
+    "logActivity": "Registrar Actividad",
+    "activityType": "Tipo de Actividad",
+    "duration": "Duración (minutos)",
+    "intensity": "Intensidad",
+    "selectActivity": "Seleccionar actividad",
+    "selectIntensity": "Seleccionar intensidad",
+    "activities": {
+      "running": "Correr",
+      "walking": "Caminar",
+      "cycling": "Ciclismo",
+      "swimming": "Natación",
+      "gym": "Gimnasio / Pesas",
+      "yoga": "Yoga",
+      "other": "Otro"
+    },
+    "intensities": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "customActivity": "Nombre de la Actividad",
+    "customActivityPlaceholder": "Ej: Boxeo",
+    "time": "Hora"
   },
   "nutritionist": {
     "title": "Mi Nutricionista",
