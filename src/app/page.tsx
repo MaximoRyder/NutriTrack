@@ -64,19 +64,19 @@ export default function Home() {
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
-                  <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+                  <h1 className="font-headline text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
                     {t("home.hero.title")}
                   </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                  <p className="max-w-full sm:max-w-[600px] text-muted-foreground text-base sm:text-lg md:text-xl">
                     {t("home.hero.subtitle")}
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                <div className="flex flex-col gap-2 sm:flex-row items-start sm:items-center">
                   {user ? (
                     <Button
                       asChild
                       size="lg"
-                      className="bg-primary hover:bg-primary/90"
+                      className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
                     >
                       <Link href="/overview">
                         Go to Dashboard <ArrowRight className="ml-2 h-4 w-4" />
@@ -87,21 +87,26 @@ export default function Home() {
                       <Button
                         asChild
                         size="lg"
-                        className="bg-primary hover:bg-primary/90"
+                        className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
                       >
                         <Link href="/register">
                           {t("home.hero.ctaNutritionist")}{" "}
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>
-                      <Button asChild size="lg" variant="outline">
+                      <Button
+                        asChild
+                        size="lg"
+                        variant="outline"
+                        className="w-full sm:w-auto"
+                      >
                         <Link href="/login">{t("home.hero.ctaPatient")}</Link>
                       </Button>
                     </>
                   )}
                 </div>
               </div>
-              <div className="relative h-64 w-full overflow-hidden rounded-xl shadow-2xl lg:h-auto">
+              <div className="relative h-48 sm:h-64 w-full overflow-hidden rounded-xl shadow-2xl lg:h-auto">
                 {heroImage && (
                   <Image
                     src={heroImage.imageUrl}
@@ -115,8 +120,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Features Section */}
         <section
           id="features"
           className="w-full bg-secondary py-12 md:py-24 lg:py-32"
@@ -167,8 +170,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* For Nutritionists Section */}
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container mx-auto grid items-center gap-6 px-4 md:px-6 lg:grid-cols-2 lg:gap-10">
             <div className="space-y-4">
@@ -248,7 +249,10 @@ export default function Home() {
             </p>
           </div>
           <p className="text-center text-sm text-muted-foreground md:text-left">
-            {t("home.footer.copyright", { year: new Date().getFullYear() })}
+            {t("home.footer.copyright").replace(
+              "{year}",
+              String(new Date().getFullYear())
+            )}
           </p>
         </div>
       </footer>
