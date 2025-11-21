@@ -25,16 +25,22 @@ export function Header() {
               <DashboardHeader />
             ) : (
               <>
+                {/* Desktop: show Login (primary) and Register (ghost) buttons */}
+                <Button asChild size="sm" className="hidden sm:inline-flex">
+                  <Link href="/login">{t("header.login")}</Link>
+                </Button>
                 <Button
                   asChild
                   variant="ghost"
                   size="sm"
                   className="hidden sm:inline-flex"
                 >
-                  <Link href="/login">{t("header.login")}</Link>
-                </Button>
-                <Button asChild size="sm">
                   <Link href="/register">{t("header.signUp")}</Link>
+                </Button>
+
+                {/* Mobile: show a single 'Acceder' button that links to login (primary) */}
+                <Button asChild size="sm" className="inline-flex sm:hidden">
+                  <Link href="/login">{t("header.login")}</Link>
                 </Button>
               </>
             )}
