@@ -38,10 +38,22 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
         for (const fk of keys) {
           fallbackResult = fallbackResult?.[fk];
         }
-        return fallbackResult || key;
+        result = fallbackResult || key;
+        break;
       }
     }
-    return result || key;
+    
+    let finalResult = result || key;
+    
+    // Replace parameters in the string
+    if (params && typeof finalResult === 'string') {
+      Object.keys(params).forEach((paramKey) => {
+        const placeholder = `{${paramKey}}`;
+        finalResult = finalResult.replace(new RegExp(placeholder, 'g'), params[paramKey]);
+      });
+    }
+    
+    return finalResult;
   };
   
   const value = {

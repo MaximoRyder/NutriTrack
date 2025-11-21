@@ -557,6 +557,17 @@
     "customActivityPlaceholder": "e.g., Boxing",
     "time": "Time"
   },
+  "activities": {
+    "title": "Activities on {date}",
+    "description": "You logged {count} activity on this day.",
+    "description_plural": "You logged {count} activities on this day.",
+    "delete": {
+      "title": "Delete Activity",
+      "description": "This action cannot be undone. This will permanently delete the activity '{activityName}'.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    }
+  },
   "nutritionist": {
     "title": "My Nutritionist",
     "description": "Information about your assigned health professional.",

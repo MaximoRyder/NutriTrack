@@ -557,6 +557,17 @@
     "customActivityPlaceholder": "Ex: Boxe",
     "time": "Hora"
   },
+  "activities": {
+    "title": "Atividades de {date}",
+    "description": "Você registrou {count} atividade neste dia.",
+    "description_plural": "Você registrou {count} atividades neste dia.",
+    "delete": {
+      "title": "Excluir Atividade",
+      "description": "Esta ação não pode ser desfeita. Isso excluirá permanentemente o registro da atividade '{activityName}'.",
+      "cancel": "Cancelar",
+      "confirm": "Excluir"
+    }
+  },
   "nutritionist": {
     "title": "Meu Nutricionista",
     "description": "Informações sobre seu profissional de saúde atribuído.",

@@ -1,58 +1,85 @@
 "use client";
 
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useActivityLogs, useUser } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { format } from "date-fns";
+import { enUS, es, pt } from "date-fns/locale";
 import { Edit, Flame, MoreVertical, PlusCircle, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 export default function ActivitiesPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { user } = useUser();
   const userId = (user as any)?.id;
+
+  // Get the appropriate date-fns locale
+  const dateLocale = locale === 'es' ? es : locale === 'pt' ? pt : enUS;
+
+  // Helper function to translate activity type
+  const getActivityTypeTranslation = (activityType: string) => {
+    const activityMap: { [key: string]: string } = {
+      'Running': t('quickLog.activities.running'),
+      'Walking': t('quickLog.activities.walking'),
+      'Cycling': t('quickLog.activities.cycling'),
+      'Swimming': t('quickLog.activities.swimming'),
+      'Gym': t('quickLog.activities.gym'),
+      'Yoga': t('quickLog.activities.yoga'),
+    };
+    return activityMap[activityType] || activityType;
+  };
+
+  // Helper function to translate intensity
+  const getIntensityTranslation = (intensity: string) => {
+    const intensityMap: { [key: string]: string } = {
+      'low': t('quickLog.intensities.low'),
+      'medium': t('quickLog.intensities.medium'),
+      'high': t('quickLog.intensities.high'),
+    };
+    return intensityMap[intensity] || intensity;
+  };
 
   const {
     activityLogs,
@@ -95,7 +122,7 @@ export default function ActivitiesPage() {
     }
     setDuration(activity.durationMinutes.toString());
     setIntensity(activity.intensity || "medium");
-    setTime(format(new Date(activity.date), "HH:mm"));
+    setTime(format(new Date(activity.date), "HH:mm", { locale: dateLocale }));
     setIsAddDialogOpen(true);
   };
 
@@ -248,17 +275,17 @@ export default function ActivitiesPage() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("journal.delete.title")}</AlertDialogTitle>
+            <AlertDialogTitle>{t("activities.delete.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t("journal.delete.description", {
-                mealName: activityToDelete?.activityType || "",
+              {t("activities.delete.description", {
+                activityName: activityToDelete ? getActivityTypeTranslation(activityToDelete.activityType) : "",
               })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("journal.delete.cancel")}</AlertDialogCancel>
+            <AlertDialogCancel>{t("activities.delete.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteActivity}>
-              {t("journal.delete.confirm")}
+              {t("activities.delete.confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -272,6 +299,7 @@ export default function ActivitiesPage() {
                 mode="single"
                 selected={date}
                 onSelect={setDate}
+                locale={dateLocale}
                 className="w-full"
               />
             </CardContent>
@@ -282,13 +310,18 @@ export default function ActivitiesPage() {
             <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <CardTitle>
-                  {t("journal.title", {
-                    date: date ? format(date, "PPP") : t("general.na"),
+                  {t("activities.title", {
+                    date: date ? format(date, "PPP", { locale: dateLocale }) : t("general.na"),
                   })}
                 </CardTitle>
                 <CardDescription>
                   {activityLogs
-                    ? t("journal.description", { count: activityLogs.length })
+                    ? t(
+                        activityLogs.length === 1
+                          ? "activities.description"
+                          : "activities.description_plural",
+                        { count: activityLogs.length }
+                      )
                     : t("quickLog.noActivity")}
                 </CardDescription>
               </div>
@@ -320,9 +353,9 @@ export default function ActivitiesPage() {
                           <Flame className="h-6 w-6 text-primary" />
                         </div>
                         <div>
-                          <CardTitle className="text-lg">{activity.activityType}</CardTitle>
+                          <CardTitle className="text-lg">{getActivityTypeTranslation(activity.activityType)}</CardTitle>
                           <CardDescription className="capitalize">
-                            {activity.intensity} • {format(new Date(activity.date), "p")} •{" "}
+                            {getIntensityTranslation(activity.intensity)} • {format(new Date(activity.date), "p", { locale: dateLocale })} •{" "}
                             {activity.durationMinutes}m
                           </CardDescription>
                         </div>
