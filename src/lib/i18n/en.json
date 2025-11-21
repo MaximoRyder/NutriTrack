@@ -561,6 +561,8 @@
     "title": "Activities on {date}",
     "description": "You logged {count} activity on this day.",
     "description_plural": "You logged {count} activities on this day.",
+    "noActivities": "No activities logged for this day.",
+    "placeholder": "Select a day on the calendar to view your logged activities.",
     "delete": {
       "title": "Delete Activity",
       "description": "This action cannot be undone. This will permanently delete the activity '{activityName}'.",

@@ -315,14 +315,14 @@ export default function ActivitiesPage() {
                   })}
                 </CardTitle>
                 <CardDescription>
-                  {activityLogs
+                  {activityLogs && activityLogs.length > 0
                     ? t(
                         activityLogs.length === 1
                           ? "activities.description"
                           : "activities.description_plural",
                         { count: activityLogs.length }
                       )
-                    : t("quickLog.noActivity")}
+                    : t("activities.noActivities")}
                 </CardDescription>
               </div>
               <Button
@@ -389,8 +389,8 @@ export default function ActivitiesPage() {
               ))
             : !isLoadingActivities && (
                 <div className="text-center text-muted-foreground py-10">
-                  <p>{t("quickLog.noActivity")}</p>
-                  <p className="text-sm mt-2">{t("journal.placeholder")}</p>
+                  <p>{t("activities.noActivities")}</p>
+                  <p className="text-sm mt-2">{t("activities.placeholder")}</p>
                 </div>
               )}
         </div>

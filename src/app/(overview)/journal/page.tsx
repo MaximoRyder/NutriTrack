@@ -2,35 +2,36 @@
 
 import { AddMealDialog } from "@/components/add-meal-dialog";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { addMeal, useMealsByDate, useUser } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { Meal } from "@/lib/types";
 import { format } from "date-fns";
+import { enUS, es, pt } from "date-fns/locale";
 import { Edit, MoreVertical, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -38,12 +39,15 @@ import { useState } from "react";
 
 export default function JournalPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { user } = useUser();
   const router = useRouter();
   const [isAddMealDialogOpen, setAddMealDialogOpen] = useState(false);
   const [mealToEdit, setMealToEdit] = useState<Meal | null>(null);
   const [mealToDelete, setMealToDelete] = useState<Meal | null>(null);
+
+  // Get the appropriate date-fns locale
+  const dateLocale = locale === 'es' ? es : locale === 'pt' ? pt : enUS;
 
   const {
     meals: selectedMeals,
@@ -135,6 +139,7 @@ export default function JournalPage() {
                 mode="single"
                 selected={date}
                 onSelect={setDate}
+                locale={dateLocale}
                 className="w-full"
               />
             </CardContent>
@@ -146,12 +151,17 @@ export default function JournalPage() {
               <div>
                 <CardTitle>
                   {t("journal.title", {
-                    date: date ? format(date, "PPP") : t("general.na"),
+                    date: date ? format(date, "PPP", { locale: dateLocale }) : t("general.na"),
                   })}
                 </CardTitle>
                 <CardDescription>
-                  {selectedMeals
-                    ? t("journal.description", { count: selectedMeals.length })
+                  {selectedMeals && selectedMeals.length > 0
+                    ? t(
+                        selectedMeals.length === 1
+                          ? "journal.description"
+                          : "journal.description_plural",
+                        { count: selectedMeals.length }
+                      )
                     : t("journal.noMeals")}
                 </CardDescription>
               </div>
@@ -206,19 +216,26 @@ export default function JournalPage() {
                                 variant="ghost"
                                 size="icon"
                                 className="h-8 w-8"
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem
-                                onClick={() => handleOpenEditDialog(meal)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleOpenEditDialog(meal);
+                                }}
                               >
                                 <Edit className="mr-2 h-4 w-4" />
                                 <span>{t("journal.edit")}</span>
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                onClick={() => handleOpenDeleteDialog(meal)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleOpenDeleteDialog(meal);
+                                }}
                                 className="text-destructive"
                               >
                                 <Trash2 className="mr-2 h-4 w-4" />
@@ -235,8 +252,8 @@ export default function JournalPage() {
                       )}
                     </div>
                   </CardContent>
-                </Card>
-              ))
+                  </Card>
+                ))
             : !isLoadingMeals && (
                 <div className="text-center text-muted-foreground py-10">
                   <p>{t("journal.noMeals")}</p>
@@ -248,3 +265,4 @@ export default function JournalPage() {
     </>
   );
 }
+

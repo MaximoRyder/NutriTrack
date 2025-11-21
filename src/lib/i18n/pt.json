@@ -561,6 +561,8 @@
     "title": "Atividades de {date}",
     "description": "Você registrou {count} atividade neste dia.",
     "description_plural": "Você registrou {count} atividades neste dia.",
+    "noActivities": "Nenhuma atividade registrada para este dia.",
+    "placeholder": "Selecione um dia no calendário para ver suas atividades registradas.",
     "delete": {
       "title": "Excluir Atividade",
       "description": "Esta ação não pode ser desfeita. Isso excluirá permanentemente o registro da atividade '{activityName}'.",
