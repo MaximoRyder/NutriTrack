@@ -135,8 +135,14 @@ export function QuickLogCard({ patientId }: QuickLogCardProps) {
                           <Flame className="h-4 w-4 text-primary" />
                         </div>
                         <div>
-                          <p className="font-medium text-sm">{log.activityType}</p>
-                          <p className="text-xs text-muted-foreground capitalize">{log.intensity} • {format(new Date(log.date), "p")}</p>
+                          <p className="font-medium text-sm">
+                            {["Running", "Walking", "Cycling", "Swimming", "Gym", "Yoga"].includes(log.activityType)
+                              ? t(`quickLog.activities.${log.activityType.toLowerCase()}`)
+                              : log.activityType}
+                          </p>
+                          <p className="text-xs text-muted-foreground capitalize">
+                            {t(`quickLog.intensities.${log.intensity}`)} • {format(new Date(log.date), "p")}
+                          </p>
                         </div>
                       </div>
                       <div className="font-bold text-sm">{log.durationMinutes}m</div>

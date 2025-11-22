@@ -53,19 +53,21 @@ const weightChartData = [
   { date: "2024-06-29", weight: 82.5 },
 ];
 
-const weightChartConfig = {
-  weight: {
-    label: "Weight (kg)",
-    color: "hsl(var(--primary))",
-  },
-};
+
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
   const [isAddMealDialogOpen, setAddMealDialogOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+
+  const weightChartConfig = {
+    weight: {
+      label: t("dashboard.weightKg"),
+      color: "hsl(var(--primary))",
+    },
+  };
 
   const { profile: userProfile, isLoading: isProfileLoading } = useUserProfile(
     (user as any)?.id
@@ -463,7 +465,7 @@ export default function DashboardPage() {
                           <div className="font-medium">{meal.name}</div>
                         </TableCell>
                         <TableCell className="hidden sm:table-cell capitalize">
-                          {meal.mealType}
+                          {t(`addMeal.${meal.mealType.toLowerCase()}`)}
                         </TableCell>
                         <TableCell className="text-right">
                           {format(new Date(meal.timestamp), "p")}
@@ -504,7 +506,7 @@ export default function DashboardPage() {
                   axisLine={false}
                   tick={{ fontSize: 10 }}
                   tickFormatter={(value) =>
-                    new Date(value).toLocaleDateString("en-US", {
+                    new Date(value).toLocaleDateString(locale, {
                       month: "short",
                       day: "numeric",
                     })

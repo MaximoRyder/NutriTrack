@@ -138,7 +138,8 @@
     "noPatients": "No se encontraron pacientes.",
     "quickStats": "Estadísticas Rápidas",
     "totalPatients": "Pacientes Totales",
-    "quickStatsDesc": "Más estadísticas próximamente."
+    "quickStatsDesc": "Más estadísticas próximamente.",
+    "weightKg": "Peso (kg)"
   },
   "addMeal": {
     "title": "Añadir Nueva Comida",

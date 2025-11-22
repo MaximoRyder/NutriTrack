@@ -138,7 +138,8 @@
     "noPatients": "No patients found.",
     "quickStats": "Quick Stats",
     "totalPatients": "Total Patients",
-    "quickStatsDesc": "More stats coming soon."
+    "quickStatsDesc": "More stats coming soon.",
+    "weightKg": "Weight (kg)"
   },
   "addMeal": {
     "title": "Add New Meal",
