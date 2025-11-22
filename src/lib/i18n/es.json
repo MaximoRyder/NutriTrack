@@ -557,7 +557,8 @@
     },
     "customActivity": "Nombre de la Actividad",
     "customActivityPlaceholder": "Ej: Boxeo",
-    "time": "Hora"
+    "time": "Hora",
+    "remove250": "Quitar 250ml"
   },
   "activities": {
     "title": "Actividades del {date}",

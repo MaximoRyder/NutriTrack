@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { addActivityLog, addWaterLog, useActivityLogs, useWaterLogs } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { format } from "date-fns";
-import { Activity, Droplets, Flame, Plus } from "lucide-react";
+import { Activity, Droplets, Flame, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 
 interface QuickLogCardProps {
@@ -129,6 +129,17 @@ export function QuickLogCard({ patientId, date }: QuickLogCardProps) {
               </Button>
               <Button variant="outline" size="sm" onClick={() => handleAddWater(750)} disabled={isAddingWater}>
                 <Plus className="h-3 w-3 mr-1" /> 750ml
+              </Button>
+            </div>
+            <div className="flex justify-center">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => handleAddWater(-250)} 
+                disabled={isAddingWater || totalWater <= 0}
+                className="text-muted-foreground hover:text-destructive h-8"
+              >
+                <Minus className="h-3 w-3 mr-1" /> {t("quickLog.remove250") || "Remove 250ml"}
               </Button>
             </div>
           </TabsContent>

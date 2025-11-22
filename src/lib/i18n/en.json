@@ -557,7 +557,8 @@
     },
     "customActivity": "Activity Name",
     "customActivityPlaceholder": "e.g., Boxing",
-    "time": "Time"
+    "time": "Time",
+    "remove250": "Remove 250ml"
   },
   "activities": {
     "title": "Activities on {date}",
