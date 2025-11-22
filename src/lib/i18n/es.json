@@ -56,7 +56,7 @@
     "patientEmail": "paciente@example.com",
     "profile": "Perfil",
     "billing": "Facturación",
-    "settings": "Configuración",
+    "settings": "Ajustes",
     "logout": "Cerrar Sesión"
   },
   "login": {
