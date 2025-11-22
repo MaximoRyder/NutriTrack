@@ -367,25 +367,26 @@ export default function DashboardPage() {
         onAddMeal={handleAddMeal}
       />
       
-      <div className="grid gap-6 lg:grid-cols-12">
-        {/* Sidebar / Calendar */}
-        <div className="lg:col-span-3">
-           <Card>
+      <div className="space-y-6 w-full max-w-[1700px] mx-auto">
+        {/* Top Section: Calendar + Stats Cards */}
+        <div className="grid gap-6 grid-cols-1 xl:grid-cols-[minmax(500px,1fr)_minmax(400px,2fr)]">
+          {/* Calendar - Left Side */}
+          <div className="self-start">
+            <Card className="max-h-fit">
               <CardContent className="p-0 sm:p-2">
-                 <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    locale={dateLocale}
-                    className="w-full"
-                 />
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  locale={dateLocale}
+                  className="w-full"
+                />
               </CardContent>
-           </Card>
-        </div>
+            </Card>
+          </div>
 
-        {/* Main Content */}
-        <div className="lg:col-span-9 space-y-6">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {/* Stats Cards - Right Side */}
+          <div className="flex flex-col gap-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -435,25 +436,15 @@ export default function DashboardPage() {
                 </p>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {t("dashboard.quickStats")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  {t("dashboard.quickStatsDesc")}
-                </p>
-              </CardContent>
-            </Card>
           </div>
+        </div>
 
-          <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-            <div className="xl:col-span-1">
+        {/* Bottom Section: Quick Log, Meals, Weight Chart */}
+        <div className="grid gap-4 grid-cols-1 lg:grid-cols-[minmax(350px,1fr)_minmax(500px,2fr)]">
+            <div>
               <QuickLogCard patientId={(user as any)?.id} date={date || new Date()} />
             </div>
-            <Card className="xl:col-span-2">
+            <Card>
               <CardHeader className="flex flex-row items-center">
                 <div className="grid gap-2">
                   <CardTitle>{t("dashboard.recentMeals")}</CardTitle>
@@ -555,7 +546,6 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </div>
-        </div>
       </div>
     </>
   );
