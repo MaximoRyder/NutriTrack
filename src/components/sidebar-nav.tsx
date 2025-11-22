@@ -6,18 +6,11 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
+import { getNavigation } from "@/config/navigation";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import {
-    Activity,
-    AreaChart,
-    BookCopy,
-    Calendar,
-    LayoutDashboard,
-    Settings,
-    Shield,
-    Stethoscope,
-    Users
+    Settings
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -36,28 +29,7 @@ export function SidebarNav() {
     setOpenMobile(false);
   };
 
-  const patientNav = [
-    { name: t("sidebar.overview"), href: "/overview", icon: LayoutDashboard },
-    { name: t("sidebar.foodJournal"), href: "/journal", icon: Calendar },
-    { name: t("sidebar.activityLog"), href: "/activities", icon: Activity },
-    { name: t("sidebar.myProgress"), href: "/progress", icon: AreaChart },
-    { name: t("sidebar.mealPlan"), href: "/plan", icon: BookCopy },
-    {
-      name: t("sidebar.myNutritionist"),
-      href: "/nutritionist",
-      icon: Stethoscope,
-    },
-  ];
-
-  const nutritionistNav = [
-    { name: t("sidebar.overview"), href: "/overview", icon: LayoutDashboard },
-    { name: t("sidebar.myPatients"), href: "/patients", icon: Users },
-  ];
-
-  const adminNav = [
-    { name: t("sidebar.overview"), href: "/overview", icon: LayoutDashboard },
-    { name: t("sidebar.userManagement"), href: "/admin", icon: Shield },
-  ];
+  const { patientNav, nutritionistNav, adminNav } = getNavigation(t);
 
   const getNavItems = () => {
     switch (userProfile?.role) {

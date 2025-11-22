@@ -3,24 +3,35 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getNavigation } from "@/config/navigation";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
-import { BarChart3, LogOut, Settings, Shield, User, Users } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 
-export function UserNav() {
+interface UserNavProps {
+  onLinkClick?: () => void;
+}
+
+export function UserNav({ onLinkClick }: UserNavProps) {
   const { t } = useTranslation();
   const { user } = useUser();
   const { profile: userProfile } = useUserProfile((user as any)?.id);
+
+  const handleLinkClick = () => {
+    if (onLinkClick) {
+      onLinkClick();
+    }
+  };
 
   const handleLogout = async () => {
     // Limpiar cualquier dato local
@@ -33,62 +44,42 @@ export function UserNav() {
   };
 
   const renderMenuItems = () => {
+    const { patientNav, nutritionistNav, adminNav } = getNavigation(t);
+    
     switch (userProfile?.role) {
       case "admin":
         return (
-          <Link href="/admin">
-            <DropdownMenuItem>
-              <Shield className="mr-2 h-4 w-4" />
-              <span>{t("sidebar.userManagement")}</span>
-            </DropdownMenuItem>
-          </Link>
+          <>{adminNav.map((item) => (
+            <Link href={item.href} key={item.name} passHref onClick={handleLinkClick}>
+              <DropdownMenuItem>
+                <item.icon className="mr-2 h-4 w-4" />
+                <span>{item.name}</span>
+              </DropdownMenuItem>
+            </Link>
+          ))}</>
         );
       case "nutritionist":
         return (
-          <>
-            <Link href="/overview">
+          <>{nutritionistNav.map((item) => (
+            <Link href={item.href} key={item.name} passHref onClick={handleLinkClick}>
               <DropdownMenuItem>
-                <BarChart3 className="mr-2 h-4 w-4" />
-                <span>{t("sidebar.overview")}</span>
+                <item.icon className="mr-2 h-4 w-4" />
+                <span>{item.name}</span>
               </DropdownMenuItem>
             </Link>
-            <Link href="/patients">
-              <DropdownMenuItem>
-                <Users className="mr-2 h-4 w-4" />
-                <span>{t("sidebar.myPatients")}</span>
-              </DropdownMenuItem>
-            </Link>
-            <Link href="/settings">
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>{t("userNav.profile")}</span>
-              </DropdownMenuItem>
-            </Link>
-            <Link href="/settings">
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>{t("userNav.settings")}</span>
-              </DropdownMenuItem>
-            </Link>
-          </>
+          ))}</>
         );
       case "patient":
       default:
         return (
-          <>
-            <Link href="/settings">
+          <>{patientNav.map((item) => (
+            <Link href={item.href} key={item.name} passHref onClick={handleLinkClick}>
               <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>{t("userNav.profile")}</span>
+                <item.icon className="mr-2 h-4 w-4" />
+                <span>{item.name}</span>
               </DropdownMenuItem>
             </Link>
-            <Link href="/settings">
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>{t("userNav.settings")}</span>
-              </DropdownMenuItem>
-            </Link>
-          </>
+          ))}</>
         );
     }
   };
