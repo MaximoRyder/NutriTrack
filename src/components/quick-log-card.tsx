@@ -16,11 +16,11 @@ import { useState } from "react";
 
 interface QuickLogCardProps {
   patientId: string;
+  date: Date;
 }
 
-export function QuickLogCard({ patientId }: QuickLogCardProps) {
+export function QuickLogCard({ patientId, date }: QuickLogCardProps) {
   const { t } = useTranslation();
-  const [date] = useState<Date>(new Date());
   
   // Water Logic
   const { waterLogs, mutate: mutateWater } = useWaterLogs(patientId, date);
@@ -32,9 +32,18 @@ export function QuickLogCard({ patientId }: QuickLogCardProps) {
   const handleAddWater = async (amount: number) => {
     setIsAddingWater(true);
     try {
+      // Create a date object for the selected date
+      const logDate = new Date(date);
+      // If it's today, keep current time, otherwise set to noon to avoid timezone issues
+      if (logDate.toDateString() === new Date().toDateString()) {
+        logDate.setHours(new Date().getHours(), new Date().getMinutes());
+      } else {
+        logDate.setHours(12, 0, 0, 0);
+      }
+
       await addWaterLog({
         userId: patientId,
-        date: new Date().toISOString(),
+        date: logDate.toISOString(),
         quantityMl: amount,
       });
       mutateWater();
@@ -60,7 +69,7 @@ export function QuickLogCard({ patientId }: QuickLogCardProps) {
     setIsSavingActivity(true);
     try {
       const [hours, minutes] = time.split(":").map(Number);
-      const activityDate = new Date();
+      const activityDate = new Date(date);
       activityDate.setHours(hours, minutes, 0, 0);
 
       await addActivityLog({

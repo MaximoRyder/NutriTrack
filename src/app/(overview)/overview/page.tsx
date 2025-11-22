@@ -4,6 +4,7 @@ import { AddMealDialog } from "@/components/add-meal-dialog";
 import { QuickLogCard } from "@/components/quick-log-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
     Card,
     CardContent,
@@ -30,6 +31,7 @@ import { usePatients, useUser, useUserProfile, useWaterLogs } from "@/lib/data-h
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { Meal } from "@/lib/types";
 import { format } from "date-fns";
+import { enUS, es, pt } from "date-fns/locale";
 import {
     ArrowUpRight,
     BookOpen,
@@ -59,8 +61,12 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [isAddMealDialogOpen, setAddMealDialogOpen] = useState(false);
   const { t, locale } = useTranslation();
+
+  // Get the appropriate date-fns locale
+  const dateLocale = locale === 'es' ? es : locale === 'pt' ? pt : enUS;
 
   const weightChartConfig = {
     weight: {
@@ -74,15 +80,22 @@ export default function DashboardPage() {
   );
 
   // Patient queries
+  // Patient queries
   const { data: recentMeals, isLoading: isLoadingMeals } = useSWR<Meal[]>(
-    userProfile?.role === "patient" && user
-      ? `/api/meals?userId=${(user as any).id}&limit=5`
+    userProfile?.role === "patient" && user && date
+      ? (() => {
+          const startDate = new Date(date);
+          startDate.setHours(0, 0, 0, 0);
+          const endDate = new Date(date);
+          endDate.setHours(23, 59, 59, 999);
+          return `/api/meals?userId=${(user as any).id}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+        })()
       : null,
     fetcher
   );
 
   // Water logs
-  const { waterLogs } = useWaterLogs((user as any)?.id, new Date());
+  const { waterLogs } = useWaterLogs((user as any)?.id, date);
   const totalWaterToday = waterLogs?.reduce((acc: any, log: any) => acc + log.quantityMl, 0) || 0;
   const hydrationProgress = Math.min((totalWaterToday / 2000) * 100, 100);
 
@@ -353,174 +366,196 @@ export default function DashboardPage() {
         onOpenChange={setAddMealDialogOpen}
         onAddMeal={handleAddMeal}
       />
-      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("dashboard.currentWeight")}
-            </CardTitle>
-            <Scale className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {userProfile?.currentWeightKg || t("general.na")} kg
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {t("dashboard.goal", {
-                value: userProfile?.goalWeightKg || t("general.na"),
-              })}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("dashboard.dailyHydration")}
-            </CardTitle>
-            <Droplets className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalWaterToday} ml</div>
-            <p className="text-xs text-muted-foreground">
-              {t("dashboard.hydrationGoal", { value: 2000 })}
-            </p>
-            <Progress value={hydrationProgress} className="mt-2 h-2" />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("dashboard.activeMealPlan")}
-            </CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold truncate">
-              {t("dashboard.week1Detox")}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {t("dashboard.assignedBy", { name: "Dr. Salas" })}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              {t("dashboard.quickStats")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              {t("dashboard.quickStatsDesc")}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-      <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-        <div className="xl:col-span-1">
-          <QuickLogCard patientId={(user as any)?.id} />
+      
+      <div className="grid gap-6 md:grid-cols-12">
+        {/* Sidebar / Calendar */}
+        <div className="md:col-span-4 lg:col-span-3">
+           <Card>
+              <CardContent className="p-0 sm:p-2">
+                 <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    locale={dateLocale}
+                    className="w-full"
+                 />
+              </CardContent>
+           </Card>
         </div>
-        <Card className="xl:col-span-2">
-          <CardHeader className="flex flex-row items-center">
-            <div className="grid gap-2">
-              <CardTitle>{t("dashboard.recentMeals")}</CardTitle>
-              <CardDescription>
-                {t("dashboard.recentMealsDesc")}
-              </CardDescription>
+
+        {/* Main Content */}
+        <div className="md:col-span-8 lg:col-span-9 space-y-6">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  {t("dashboard.currentWeight")}
+                </CardTitle>
+                <Scale className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {userProfile?.currentWeightKg || t("general.na")} kg
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {t("dashboard.goal", {
+                    value: userProfile?.goalWeightKg || t("general.na"),
+                  })}
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  {t("dashboard.dailyHydration")}
+                </CardTitle>
+                <Droplets className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{totalWaterToday} ml</div>
+                <p className="text-xs text-muted-foreground">
+                  {t("dashboard.hydrationGoal", { value: 2000 })}
+                </p>
+                <Progress value={hydrationProgress} className="mt-2 h-2" />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  {t("dashboard.activeMealPlan")}
+                </CardTitle>
+                <BookOpen className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold truncate">
+                  {t("dashboard.week1Detox")}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {t("dashboard.assignedBy", { name: "Dr. Salas" })}
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  {t("dashboard.quickStats")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  {t("dashboard.quickStatsDesc")}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+            <div className="xl:col-span-1">
+              <QuickLogCard patientId={(user as any)?.id} date={date || new Date()} />
             </div>
-            <Button
-              size="sm"
-              className="ml-auto gap-1"
-              onClick={() => setAddMealDialogOpen(true)}
-            >
-              {t("dashboard.addMeal")}
-              <PlusCircle className="h-4 w-4" />
-            </Button>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t("dashboard.meal")}</TableHead>
-                  <TableHead className="hidden sm:table-cell">
-                    {t("dashboard.type")}
-                  </TableHead>
-                  <TableHead className="text-right">
-                    {t("dashboard.time")}
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoadingMeals && (
-                  <TableRow>
-                    <TableCell colSpan={3} className="text-center">
-                      {t("dashboard.loadingMeals")}
-                    </TableCell>
-                  </TableRow>
-                )}
-                {recentMeals && recentMeals.length > 0
-                  ? recentMeals.map((meal) => (
-                      <TableRow key={meal.id}>
-                        <TableCell>
-                          <div className="font-medium">{meal.name}</div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell capitalize">
-                          {t(`addMeal.${meal.mealType.toLowerCase()}`)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {format(new Date(meal.timestamp), "p")}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  : !isLoadingMeals && (
+            <Card className="xl:col-span-2">
+              <CardHeader className="flex flex-row items-center">
+                <div className="grid gap-2">
+                  <CardTitle>{t("dashboard.recentMeals")}</CardTitle>
+                  <CardDescription>
+                    {t("dashboard.recentMealsDesc")}
+                  </CardDescription>
+                </div>
+                <Button
+                  size="sm"
+                  className="ml-auto gap-1"
+                  onClick={() => setAddMealDialogOpen(true)}
+                >
+                  {t("dashboard.addMeal")}
+                  <PlusCircle className="h-4 w-4" />
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t("dashboard.meal")}</TableHead>
+                      <TableHead className="hidden sm:table-cell">
+                        {t("dashboard.type")}
+                      </TableHead>
+                      <TableHead className="text-right">
+                        {t("dashboard.time")}
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {isLoadingMeals && (
                       <TableRow>
                         <TableCell colSpan={3} className="text-center">
-                          {t("dashboard.noRecentMeals")}
+                          {t("dashboard.loadingMeals")}
                         </TableCell>
                       </TableRow>
                     )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-        <Card className="overflow-hidden xl:col-span-3">
-          <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="text-base sm:text-lg">
-              {t("dashboard.weightProgress")}
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm">
-              {t("dashboard.weightProgressDesc")}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-2 sm:p-4 lg:p-6 pt-0">
-            <ChartContainer
-              config={weightChartConfig}
-              className="h-[200px] sm:h-[250px] w-full"
-            >
-              <BarChart accessibilityLayer data={weightChartData}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="date"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  tick={{ fontSize: 10 }}
-                  tickFormatter={(value) =>
-                    new Date(value).toLocaleDateString(locale, {
-                      month: "short",
-                      day: "numeric",
-                    })
-                  }
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator="dot" />}
-                />
-                <Bar dataKey="weight" fill="var(--color-weight)" radius={4} />
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+                    {recentMeals && recentMeals.length > 0
+                      ? recentMeals.map((meal) => (
+                          <TableRow key={meal.id}>
+                            <TableCell>
+                              <div className="font-medium">{meal.name}</div>
+                            </TableCell>
+                            <TableCell className="hidden sm:table-cell capitalize">
+                              {t(`addMeal.${meal.mealType.toLowerCase()}`)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {format(new Date(meal.timestamp), "p")}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      : !isLoadingMeals && (
+                          <TableRow>
+                            <TableCell colSpan={3} className="text-center">
+                              {t("dashboard.noRecentMeals")}
+                            </TableCell>
+                          </TableRow>
+                        )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+            <Card className="overflow-hidden xl:col-span-3">
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-base sm:text-lg">
+                  {t("dashboard.weightProgress")}
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
+                  {t("dashboard.weightProgressDesc")}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-2 sm:p-4 lg:p-6 pt-0">
+                <ChartContainer
+                  config={weightChartConfig}
+                  className="h-[200px] sm:h-[250px] w-full"
+                >
+                  <BarChart accessibilityLayer data={weightChartData}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="date"
+                      tickLine={false}
+                      tickMargin={10}
+                      axisLine={false}
+                      tick={{ fontSize: 10 }}
+                      tickFormatter={(value) =>
+                        new Date(value).toLocaleDateString(locale, {
+                          month: "short",
+                          day: "numeric",
+                        })
+                      }
+                    />
+                    <ChartTooltip
+                      cursor={false}
+                      content={<ChartTooltipContent indicator="dot" />}
+                    />
+                    <Bar dataKey="weight" fill="var(--color-weight)" radius={4} />
+                  </BarChart>
+                </ChartContainer>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </>
   );
