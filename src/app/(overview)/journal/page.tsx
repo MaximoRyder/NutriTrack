@@ -3,29 +3,29 @@
 import { AddMealDialog } from "@/components/add-meal-dialog";
 import { MealDetailDialog } from "@/components/meal-detail-dialog";
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { addMeal, useMealsByDate, useUser } from "@/lib/data-hooks";
@@ -192,17 +192,17 @@ export default function JournalPage() {
                   className="cursor-pointer hover:bg-accent/50 transition-colors"
                   onClick={() => setSelectedMeal(meal)}
                 >
-                  <CardContent className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-                    <div className="md:col-span-1 relative h-40 w-full overflow-hidden rounded-md">
+                  <CardContent className="p-4 flex flex-col sm:flex-row gap-4 items-start">
+                    <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-md bg-secondary/30 mx-auto sm:mx-0">
                       <Image
                         src={meal.photoUrl}
                         alt={meal.name}
                         fill
-                        className="object-cover"
+                        className="object-contain"
                         data-ai-hint="healthy food"
                       />
                     </div>
-                    <div className="md:col-span-2 space-y-2">
+                    <div className="flex-1 space-y-2 w-full">
                       <div className="flex justify-between items-start">
                         <div>
                           <CardTitle className="text-xl">{meal.name}</CardTitle>
@@ -248,7 +248,7 @@ export default function JournalPage() {
                         </div>
                       </div>
                       {meal.description && (
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground line-clamp-2">
                           {meal.description}
                         </p>
                       )}
