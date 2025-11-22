@@ -12,8 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { addComment, useComments } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { Comment, Meal } from "@/lib/types";
-import { formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import { enUS, es, pt } from "date-fns/locale";
+import { AlignLeft, Clock, Scale, Utensils, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -34,6 +35,7 @@ export function MealDetailDialog({
 }: MealDetailDialogProps) {
   const { t, locale } = useTranslation();
   const [reply, setReply] = useState("");
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   // Get the appropriate date-fns locale
   const dateLocale = locale === 'es' ? es : locale === 'pt' ? pt : enUS;
@@ -67,35 +69,71 @@ export function MealDetailDialog({
   if (!meal) return null;
 
   return (
+    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <div>
-            <DialogTitle className="text-2xl">{meal.name}</DialogTitle>
-            <p className="text-sm text-muted-foreground capitalize mt-1">
-              {getMealTypeTranslation(meal.mealType)}
-            </p>
-          </div>
+          <DialogTitle className="text-2xl">{meal.name}</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-          {/* Meal Image */}
-          <div className="relative h-64 w-full overflow-hidden rounded-md">
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Left Column: Image */}
+          <div 
+            className="relative aspect-square w-full overflow-hidden rounded-md bg-secondary/30 cursor-zoom-in"
+            onClick={() => setIsLightboxOpen(true)}
+          >
             <Image
               src={meal.photoUrl}
               alt={meal.name}
               fill
-              className="object-cover"
+              className="object-contain"
             />
           </div>
 
-          {/* Meal Description */}
-          {meal.description && (
-            <p className="text-muted-foreground">{meal.description}</p>
-          )}
+          {/* Right Column: Details */}
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <div className="flex items-center text-muted-foreground mb-1">
+                <Utensils className="h-4 w-4 mr-2" />
+                <span className="text-xs font-medium uppercase tracking-wider">{t("addMeal.type") || "Type"}</span>
+              </div>
+              <p className="font-medium capitalize">{getMealTypeTranslation(meal.mealType)}</p>
+            </div>
 
-          {/* Comments Section */}
-          <div className="space-y-3 pt-4 border-t">
+            {meal.portionSize && (
+              <div className="space-y-1">
+                <div className="flex items-center text-muted-foreground mb-1">
+                  <Scale className="h-4 w-4 mr-2" />
+                  <span className="text-xs font-medium uppercase tracking-wider">{t("addMeal.portionSize") || "Portion"}</span>
+                </div>
+                <p className="font-medium capitalize">{t(`addMeal.${meal.portionSize}`) || meal.portionSize}</p>
+              </div>
+            )}
+
+            <div className="space-y-1">
+              <div className="flex items-center text-muted-foreground mb-1">
+                <Clock className="h-4 w-4 mr-2" />
+                <span className="text-xs font-medium uppercase tracking-wider">{t("addMeal.time") || "Time"}</span>
+              </div>
+              <p className="font-medium">
+                {format(new Date(meal.timestamp), "PPp", { locale: dateLocale })}
+              </p>
+            </div>
+
+            {meal.description && (
+              <div className="space-y-1">
+                <div className="flex items-center text-muted-foreground mb-1">
+                  <AlignLeft className="h-4 w-4 mr-2" />
+                  <span className="text-xs font-medium uppercase tracking-wider">{t("addMeal.descriptionField") || "Description"}</span>
+                </div>
+                <p className="text-sm leading-relaxed">{meal.description}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Comments Section */}
+        <div className="space-y-3 pt-4 border-t mt-4">
             <h3 className="text-sm font-semibold">
               {t("general.comments") || "Comentarios"}
             </h3>
@@ -138,8 +176,40 @@ export function MealDetailDialog({
               </Button>
             </div>
           </div>
-        </div>
+
       </DialogContent>
     </Dialog>
+
+    {isLightboxOpen && (
+        <div 
+            className="fixed inset-0 z-[500] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
+            onClick={() => setIsLightboxOpen(false)}
+        >
+            <div 
+                className="relative h-full w-full max-h-[90vh] max-w-[90vw]"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <Image
+                    src={meal.photoUrl}
+                    alt={meal.name}
+                    fill
+                    className="object-contain"
+                />
+            </div>
+            <Button
+                variant="ghost"
+                size="icon"
+                className="absolute top-4 right-4 text-white hover:bg-white/20 rounded-full z-50"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setIsLightboxOpen(false);
+                }}
+            >
+                <X className="h-8 w-8" />
+                <span className="sr-only">Close</span>
+            </Button>
+        </div>
+    )}
+    </>
   );
 }
