@@ -1,45 +1,45 @@
 "use client";
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useActivityLogs, useUser } from "@/lib/data-hooks";
@@ -291,8 +291,8 @@ export default function ActivitiesPage() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <div className="grid gap-6 md:grid-cols-3">
-        <div className="md:col-span-1">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-1">
           <Card>
             <CardContent className="p-0 sm:p-2">
               <Calendar
@@ -305,7 +305,7 @@ export default function ActivitiesPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="md:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-4">
           <Card>
             <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>

@@ -133,8 +133,8 @@ export default function JournalPage() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <div className="grid gap-6 md:grid-cols-3">
-        <div className="md:col-span-1">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-1">
           <Card>
             <CardContent className="p-0 sm:p-2">
               <Calendar
@@ -147,7 +147,7 @@ export default function JournalPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="md:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-4">
           <Card>
             <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>

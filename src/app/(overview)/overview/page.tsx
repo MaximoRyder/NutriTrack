@@ -367,9 +367,9 @@ export default function DashboardPage() {
         onAddMeal={handleAddMeal}
       />
       
-      <div className="grid gap-6 md:grid-cols-12">
+      <div className="grid gap-6 lg:grid-cols-12">
         {/* Sidebar / Calendar */}
-        <div className="md:col-span-4 lg:col-span-3">
+        <div className="lg:col-span-3">
            <Card>
               <CardContent className="p-0 sm:p-2">
                  <Calendar
@@ -384,7 +384,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Main Content */}
-        <div className="md:col-span-8 lg:col-span-9 space-y-6">
+        <div className="lg:col-span-9 space-y-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
