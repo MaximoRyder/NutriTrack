@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
@@ -180,36 +180,37 @@ export function MealDetailDialog({
       </DialogContent>
     </Dialog>
 
-    {isLightboxOpen && (
-        <div 
-            className="fixed inset-0 z-[500] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
-            onClick={() => setIsLightboxOpen(false)}
-        >
+
+
+    <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] w-full h-[90vh] border-none bg-transparent shadow-none p-0 flex flex-col items-center justify-center [&>button]:hidden">
+            <DialogTitle className="sr-only">{meal?.name}</DialogTitle>
             <div 
-                className="relative h-full w-full max-h-[90vh] max-w-[90vw]"
-                onClick={(e) => e.stopPropagation()}
+                className="relative w-full h-full flex items-center justify-center"
+                onClick={() => setIsLightboxOpen(false)}
             >
-                <Image
-                    src={meal.photoUrl}
-                    alt={meal.name}
-                    fill
-                    className="object-contain"
-                />
+                {meal && (
+                  <div className="relative w-full h-full">
+                    <Image
+                        src={meal.photoUrl}
+                        alt={meal.name}
+                        fill
+                        className="object-contain"
+                    />
+                  </div>
+                )}
             </div>
             <Button
                 variant="ghost"
                 size="icon"
-                className="absolute top-4 right-4 text-white hover:bg-white/20 rounded-full z-50"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setIsLightboxOpen(false);
-                }}
+                className="absolute top-0 right-0 text-white hover:bg-white/20 rounded-full z-50"
+                onClick={() => setIsLightboxOpen(false)}
             >
                 <X className="h-8 w-8" />
                 <span className="sr-only">Close</span>
             </Button>
-        </div>
-    )}
+        </DialogContent>
+    </Dialog>
     </>
   );
 }
