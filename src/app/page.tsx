@@ -54,8 +54,26 @@ export default function Home() {
     );
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "NutriTrack Pro",
+    url: "https://nutritrackpro.vercel.app",
+    description:
+      "Plataforma profesional de seguimiento nutricional. Monitorea comidas, progreso y mejora la comunicación entre nutricionistas y pacientes.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://nutritrackpro.vercel.app/search?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
