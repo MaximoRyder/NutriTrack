@@ -70,6 +70,8 @@
     "mealItems": "Meal Library",
     "mealTemplates": "Meal Plan Templates",
     "userManagement": "User Management",
+    "appointments": "Appointments",
+    "availability": "Availability",
     "settings": "Settings"
   },
   "login": {
@@ -771,5 +773,20 @@
     "assigning": "Assigning...",
     "success": "Plan assigned successfully",
     "error": "Error assigning plan"
+  },
+  "appointments": {
+    "book": "Book Appointment",
+    "selectDateTimeDesc": "Select a date and time for your appointment.",
+    "selectDate": "Select Date",
+    "appointmentType": "Appointment Type",
+    "types": {
+      "initial": "Initial Consultation",
+      "followup": "Follow-up",
+      "checkup": "Check-up"
+    },
+    "notes": "Notes (Optional)",
+    "notesPlaceholder": "Add any notes for your nutritionist...",
+    "actions": "Actions",
+    "cancel": "Cancel"
   }
 }

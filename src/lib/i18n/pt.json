@@ -69,9 +69,10 @@
     "myPatients": "Meus Pacientes",
     "mealItems": "Biblioteca de Refeições",
     "mealTemplates": "Modelos de Planos",
-    "settings": "Configurações",
-    "admin": "Admin",
-    "userManagement": "Gerenciamento de Usuários"
+    "userManagement": "Gerenciamento de Usuários",
+    "appointments": "Agendamentos",
+    "availability": "Disponibilidade",
+    "settings": "Configurações"
   },
   "login": {
     "title": "Entrar",
@@ -500,7 +501,7 @@
     "actions": {
       "edit": "Ver / Editar",
       "updateStatus": "Atualizar Status",
-      "approve": "Aprovar",
+      "approve": "Aprobar",
       "deactivate": "Desativar",
       "reactivate": "Reativar",
       "setPending": "Definir como Pendente",
@@ -772,5 +773,20 @@
     "assigning": "Atribuindo...",
     "success": "Plano atribuído com sucesso",
     "error": "Erro ao atribuir plano"
+  },
+  "appointments": {
+    "book": "Agendar Consulta",
+    "selectDateTimeDesc": "Selecione uma data e hora para sua consulta.",
+    "selectDate": "Selecionar Data",
+    "appointmentType": "Tipo de Consulta",
+    "types": {
+      "initial": "Consulta Inicial",
+      "followup": "Acompanhamento",
+      "checkup": "Check-up"
+    },
+    "notes": "Notas (Opcional)",
+    "notesPlaceholder": "Adicione notas para seu nutricionista...",
+    "actions": "Ações",
+    "cancel": "Cancelar"
   }
 }

@@ -71,7 +71,9 @@
     "mealTemplates": "Plantillas de Planes",
     "settings": "Ajustes",
     "admin": "Admin",
-    "userManagement": "Gestión de Usuarios"
+    "userManagement": "Gestión de Usuarios",
+    "appointments": "Citas",
+    "availability": "Disponibilidad"
   },
   "login": {
     "title": "Iniciar Sesión",
@@ -772,5 +774,20 @@
     "assigning": "Asignando...",
     "success": "Plan asignado exitosamente",
     "error": "Error al asignar el plan"
+  },
+  "appointments": {
+    "book": "Reservar Cita",
+    "selectDateTimeDesc": "Selecciona una fecha y hora para tu cita.",
+    "selectDate": "Seleccionar Fecha",
+    "appointmentType": "Tipo de Cita",
+    "types": {
+      "initial": "Consulta Inicial",
+      "followup": "Seguimiento",
+      "checkup": "Control"
+    },
+    "notes": "Notas (Opcional)",
+    "notesPlaceholder": "Agrega cualquier nota para tu nutricionista...",
+    "actions": "Acciones",
+    "cancel": "Cancelar"
   }
 }
