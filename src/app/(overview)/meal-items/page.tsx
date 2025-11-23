@@ -22,6 +22,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { MealItem } from "@/lib/types";
 import { Clock, Edit2, Image as ImageIcon, Plus, Search, Trash2, Video } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -29,23 +30,31 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function MealItemsPage() {
+  const { t } = useTranslation();
   const { data: session } = useSession();
   const [mealItems, setMealItems] = useState<MealItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<MealItem[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [mealTypeFilter, setMealTypeFilter] = useState<string>("all");
+  const [mealTypeFilter, setMealTypeFilter] = useState("all");
+  const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [itemToEdit, setItemToEdit] = useState<MealItem | null>(null);
   const [itemToDelete, setItemToDelete] = useState<MealItem | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchMealItems();
+  }, []);
+
+  useEffect(() => {
+    filterItems();
+  }, [searchQuery, mealTypeFilter, mealItems]);
 
   const fetchMealItems = async () => {
     try {
-      const response = await fetch(`/api/meal-items`);
+      const response = await fetch("/api/meal-items");
       if (response.ok) {
         const data = await response.json();
         setMealItems(data);
-        setFilteredItems(data);
       }
     } catch (error) {
       console.error("Error fetching meal items:", error);
@@ -54,60 +63,59 @@ export default function MealItemsPage() {
     }
   };
 
-  useEffect(() => {
-    if (session) {
-      fetchMealItems();
-    }
-  }, [session]);
+  const filterItems = () => {
+    let filtered = [...mealItems];
 
-  useEffect(() => {
-    let filtered = mealItems;
-
-    // Filter by search query
     if (searchQuery) {
+      const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (item) =>
-          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.description.toLowerCase().includes(searchQuery.toLowerCase())
+          item.title.toLowerCase().includes(query) ||
+          item.description.toLowerCase().includes(query)
       );
     }
 
-    // Filter by meal type
     if (mealTypeFilter !== "all") {
       filtered = filtered.filter((item) => item.mealType === mealTypeFilter);
     }
 
     setFilteredItems(filtered);
-  }, [searchQuery, mealTypeFilter, mealItems]);
+  };
 
-  const handleSaveMealItem = async (mealItemData: Partial<MealItem>) => {
+  const handleCreateMealItem = async (data: Partial<MealItem>) => {
     try {
-      if (itemToEdit) {
-        // Update existing
-        const response = await fetch(`/api/meal-items?id=${itemToEdit.id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(mealItemData),
-        });
+      const response = await fetch("/api/meal-items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-        if (response.ok) {
-          await fetchMealItems();
-          setItemToEdit(null);
-        }
-      } else {
-        // Create new
-        const response = await fetch("/api/meal-items", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(mealItemData),
-        });
-
-        if (response.ok) {
-          await fetchMealItems();
-        }
+      if (response.ok) {
+        fetchMealItems();
+        setIsDialogOpen(false);
       }
     } catch (error) {
-      console.error("Error saving meal item:", error);
+      console.error("Error creating meal item:", error);
+    }
+  };
+
+  const handleUpdateMealItem = async (data: Partial<MealItem>) => {
+    if (!itemToEdit) return;
+
+    try {
+      const response = await fetch(`/api/meal-items?id=${itemToEdit._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        fetchMealItems();
+        setIsDialogOpen(false);
+        setItemToEdit(null);
+      }
+    } catch (error) {
+      console.error("Error updating meal item:", error);
     }
   };
 
@@ -115,30 +123,30 @@ export default function MealItemsPage() {
     if (!itemToDelete) return;
 
     try {
-      const response = await fetch(`/api/meal-items?id=${itemToDelete.id}`, {
+      const response = await fetch(`/api/meal-items?id=${itemToDelete._id}`, {
         method: "DELETE",
       });
 
       if (response.ok) {
-        await fetchMealItems();
+        fetchMealItems();
         setItemToDelete(null);
       } else {
         const error = await response.json();
-        alert(error.error || "Error al eliminar la comida");
+        alert(error.error || t("mealLibrary.deleteError"));
       }
     } catch (error) {
       console.error("Error deleting meal item:", error);
-      alert("Error al eliminar la comida");
+      alert(t("mealLibrary.deleteError"));
     }
   };
 
   const getMealTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
-      breakfast: "Desayuno",
-      lunch: "Almuerzo",
-      dinner: "Cena",
-      snack: "Merienda",
-      other: "Otro",
+      breakfast: t("addMeal.breakfast"),
+      lunch: t("addMeal.lunch"),
+      dinner: t("addMeal.dinner"),
+      snack: t("addMeal.snack"),
+      other: t("addMeal.other"),
     };
     return labels[type] || type;
   };
@@ -147,9 +155,9 @@ export default function MealItemsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Biblioteca de Comidas</h1>
+          <h1 className="text-3xl font-bold">{t("mealLibrary.title")}</h1>
           <p className="text-muted-foreground">
-            Gestiona tus comidas reutilizables
+            {t("mealLibrary.subtitle")}
           </p>
         </div>
         <Button
@@ -159,7 +167,7 @@ export default function MealItemsPage() {
           }}
         >
           <Plus className="mr-2 h-4 w-4" />
-          Crear Comida
+          {t("mealLibrary.createMeal")}
         </Button>
       </div>
 
@@ -168,7 +176,7 @@ export default function MealItemsPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Buscar comidas..."
+            placeholder={t("mealLibrary.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -176,15 +184,15 @@ export default function MealItemsPage() {
         </div>
         <Select value={mealTypeFilter} onValueChange={setMealTypeFilter}>
           <SelectTrigger className="w-full sm:w-[200px]">
-            <SelectValue placeholder="Tipo de comida" />
+            <SelectValue placeholder={t("mealLibrary.filterType")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos los tipos</SelectItem>
-            <SelectItem value="breakfast">Desayuno</SelectItem>
-            <SelectItem value="lunch">Almuerzo</SelectItem>
-            <SelectItem value="dinner">Cena</SelectItem>
-            <SelectItem value="snack">Merienda</SelectItem>
-            <SelectItem value="other">Otro</SelectItem>
+            <SelectItem value="all">{t("mealLibrary.filterAll")}</SelectItem>
+            <SelectItem value="breakfast">{t("addMeal.breakfast")}</SelectItem>
+            <SelectItem value="lunch">{t("addMeal.lunch")}</SelectItem>
+            <SelectItem value="dinner">{t("addMeal.dinner")}</SelectItem>
+            <SelectItem value="snack">{t("addMeal.snack")}</SelectItem>
+            <SelectItem value="other">{t("addMeal.other")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -192,128 +200,133 @@ export default function MealItemsPage() {
       {/* Meal Items Grid */}
       {isLoading ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">Cargando comidas...</p>
+          <p className="text-muted-foreground">{t("mealLibrary.loading")}</p>
         </div>
       ) : filteredItems.length === 0 ? (
         <Card>
-          <CardContent className="py-12 text-center">
+          <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="rounded-full bg-muted p-4 mb-4">
+              <Search className="h-8 w-8 text-muted-foreground" />
+            </div>
             <p className="text-muted-foreground">
               {searchQuery || mealTypeFilter !== "all"
-                ? "No se encontraron comidas con los filtros aplicados"
-                : "No tienes comidas creadas. ¡Crea tu primera comida!"}
+                ? t("mealLibrary.noResults")
+                : t("mealLibrary.emptyState")}
             </p>
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredItems.map((item) => (
-            <Card key={item.id} className="overflow-hidden">
-              {item.photoUrl && (
-                <div className="relative h-48 w-full">
+            <Card key={item._id} className="overflow-hidden flex flex-col">
+              <div className="relative aspect-video bg-muted">
+                {item.photoUrl ? (
                   <Image
                     src={item.photoUrl}
                     alt={item.title}
                     fill
                     className="object-cover"
                   />
-                </div>
-              )}
-              <CardHeader>
-                <div className="flex justify-between items-start gap-2">
-                  <CardTitle className="text-lg line-clamp-2">
-                    {item.title}
-                  </CardTitle>
-                  <Badge variant="secondary" className="shrink-0">
+                ) : (
+                  <div className="flex items-center justify-center h-full text-muted-foreground">
+                    <ImageIcon className="h-10 w-10" />
+                  </div>
+                )}
+                <div className="absolute top-2 right-2">
+                  <Badge variant="secondary" className="shadow-sm">
                     {getMealTypeLabel(item.mealType)}
                   </Badge>
                 </div>
-                {(item.portionInfo || item.recommendedTime) && (
+              </div>
+              <CardHeader className="pb-2">
+                <CardTitle className="line-clamp-1" title={item.title}>
+                  {item.title}
+                </CardTitle>
+                <CardDescription className="line-clamp-2" title={item.description}>
+                  {item.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-1 pb-4">
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  {item.recommendedTime && (
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {item.recommendedTime}
+                    </div>
+                  )}
                   <CardDescription className="space-y-1">
                     {item.portionInfo && (
                       <div className="flex items-center gap-1 text-xs">
-                        <span className="font-medium">Porción:</span>
+                        <span className="font-medium">{t("mealLibrary.portionLabel")}</span>
                         {item.portionInfo}
                       </div>
                     )}
-                    {item.recommendedTime && (
-                      <div className="flex items-center gap-1 text-xs">
-                        <Clock className="h-3 w-3" />
-                        {item.recommendedTime}
-                      </div>
-                    )}
                   </CardDescription>
-                )}
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
-                  {item.description}
-                </p>
-                <div className="flex items-center gap-2 mb-4">
+                </div>
+                
+                <div className="flex gap-2 mt-3">
                   {item.photoUrl && (
                     <Badge variant="outline" className="text-xs">
                       <ImageIcon className="h-3 w-3 mr-1" />
-                      Foto
+                      {t("mealLibrary.photoBadge")}
                     </Badge>
                   )}
                   {item.videoUrl && (
                     <Badge variant="outline" className="text-xs">
                       <Video className="h-3 w-3 mr-1" />
-                      Video
+                      {t("mealLibrary.videoBadge")}
                     </Badge>
                   )}
                 </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    onClick={() => {
-                      setItemToEdit(item);
-                      setIsDialogOpen(true);
-                    }}
-                  >
-                    <Edit2 className="h-4 w-4 mr-1" />
-                    Editar
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setItemToDelete(item)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
               </CardContent>
+              <div className="p-4 pt-0 mt-auto flex justify-end gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setItemToEdit(item);
+                    setIsDialogOpen(true);
+                  }}
+                >
+                  <Edit2 className="h-4 w-4 mr-1" />
+                  {t("mealLibrary.editButton")}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                  onClick={() => setItemToDelete(item)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
             </Card>
           ))}
         </div>
       )}
 
-      {/* Create/Edit Dialog */}
       <CreateMealItemDialog
         isOpen={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        onSave={handleSaveMealItem}
+        onSave={itemToEdit ? handleUpdateMealItem : handleCreateMealItem}
         mealItemToEdit={itemToEdit}
       />
 
-      {/* Delete Confirmation Dialog */}
       <AlertDialog
         open={!!itemToDelete}
         onOpenChange={(open) => !open && setItemToDelete(null)}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar comida?</AlertDialogTitle>
+            <AlertDialogTitle>{t("mealLibrary.deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que deseas eliminar "{itemToDelete?.title}"? Esta
-              acción no se puede deshacer.
+              {t("mealLibrary.deleteDialog.description").replace("{title}", itemToDelete?.title || "")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel>{t("mealLibrary.deleteDialog.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteMealItem}>
-              Eliminar
+              {t("mealLibrary.deleteDialog.confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -623,6 +623,53 @@
     "positiveNumber": "Debe ser un número positivo",
     "urlInvalid": "Debe ser una URL válida"
   },
+  "mealLibrary": {
+    "title": "Biblioteca de Comidas",
+    "subtitle": "Gestiona tus comidas reutilizables",
+    "createMeal": "Crear Comida",
+    "searchPlaceholder": "Buscar comidas...",
+    "filterType": "Tipo de comida",
+    "filterAll": "Todos los tipos",
+    "loading": "Cargando comidas...",
+    "noResults": "No se encontraron comidas con los filtros aplicados",
+    "emptyState": "No tienes comidas creadas. ¡Crea tu primera comida!",
+    "portionLabel": "Porción:",
+    "photoBadge": "Foto",
+    "videoBadge": "Video",
+    "editButton": "Editar",
+    "deleteDialog": {
+      "title": "¿Eliminar comida?",
+      "description": "¿Estás seguro de que deseas eliminar \"{title}\"? Esta acción no se puede deshacer.",
+      "cancel": "Cancelar",
+      "confirm": "Eliminar"
+    },
+    "deleteError": "Error al eliminar la comida",
+    "validation": {
+      "titleRequired": "El título es requerido",
+      "descriptionRequired": "La descripción es requerida",
+      "maxLength": "Máximo {max} caracteres"
+    },
+    "dialog": {
+      "editTitle": "Editar Comida",
+      "createTitle": "Crear Nueva Comida",
+      "editDesc": "Modifica los detalles de la comida",
+      "createDesc": "Agrega una nueva comida a tu biblioteca"
+    },
+    "form": {
+      "photoLabel": "Foto (Opcional)",
+      "uploadPrompt": "Click para subir una foto",
+      "titleLabel": "Título *",
+      "titlePlaceholder": "Ej: Ensalada César con Pollo",
+      "typeLabel": "Tipo de Comida *",
+      "recommendedTimeLabel": "Horario Recomendado",
+      "descriptionLabel": "Receta/Descripción *",
+      "descriptionPlaceholder": "Describe la receta, ingredientes, preparación...",
+      "portionLabel": "Porciones/Cantidades",
+      "portionPlaceholder": "Ej: 1 taza, 150g, 2 porciones",
+      "videoLabel": "URL de Video (Opcional)",
+      "saving": "Guardando..."
+    }
+  },
   "assignPlan": {
     "title": "Asignar Plan de Comidas",
     "description": "Asigna un plan de comidas a {patientName}. Puedes usar una plantilla existente o crear un plan personalizado.",

@@ -363,7 +363,7 @@
     "weight": "Peso",
     "bmi": "IMC: {value}",
     "goal": "Meta",
-    "toGo": "Faltam {value} kg",
+    "toGo": "Faltan {value} kg",
     "hydration": "Hidratação",
     "activityLevel": "Nível de Atividade",
     "activityLevelDesc": "Nível de atividade auto-relatado pelo paciente.",
@@ -621,6 +621,53 @@
     "passwordsMatch": "As senhas devem coincidir",
     "positiveNumber": "Deve ser um número positivo",
     "urlInvalid": "Deve ser uma URL válida"
+  },
+  "mealLibrary": {
+    "title": "Biblioteca de Refeições",
+    "subtitle": "Gerencie suas refeições reutilizáveis",
+    "createMeal": "Criar Refeição",
+    "searchPlaceholder": "Buscar refeições...",
+    "filterType": "Tipo de refeição",
+    "filterAll": "Todos os tipos",
+    "loading": "Carregando refeições...",
+    "noResults": "Nenhuma refeição encontrada com os filtros aplicados",
+    "emptyState": "Você não tem refeições criadas. Crie sua primeira refeição!",
+    "portionLabel": "Porção:",
+    "photoBadge": "Foto",
+    "videoBadge": "Vídeo",
+    "editButton": "Editar",
+    "deleteDialog": {
+      "title": "Excluir refeição?",
+      "description": "Tem certeza de que deseja excluir \"{title}\"? Esta ação não pode ser desfeita.",
+      "cancel": "Cancelar",
+      "confirm": "Excluir"
+    },
+    "deleteError": "Erro ao excluir a refeição",
+    "validation": {
+      "titleRequired": "O título é obrigatório",
+      "descriptionRequired": "A descrição é obrigatória",
+      "maxLength": "Máximo de {max} caracteres"
+    },
+    "dialog": {
+      "editTitle": "Editar Refeição",
+      "createTitle": "Criar Nova Refeição",
+      "editDesc": "Modifique os detalhes da refeição",
+      "createDesc": "Adicione uma nova refeição à sua biblioteca"
+    },
+    "form": {
+      "photoLabel": "Foto (Opcional)",
+      "uploadPrompt": "Clique para enviar uma foto",
+      "titleLabel": "Título *",
+      "titlePlaceholder": "Ex: Salada Caesar com Frango",
+      "typeLabel": "Tipo de Refeição *",
+      "recommendedTimeLabel": "Horário Recomendado",
+      "descriptionLabel": "Receita/Descrição *",
+      "descriptionPlaceholder": "Descreva a receita, ingredientes, preparação...",
+      "portionLabel": "Porções/Quantidades",
+      "portionPlaceholder": "Ex: 1 xícara, 150g, 2 porções",
+      "videoLabel": "URL do Vídeo (Opcional)",
+      "saving": "Salvando..."
+    }
   },
   "assignPlan": {
     "title": "Atribuir Plano de Refeições",

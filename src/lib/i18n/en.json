@@ -622,6 +622,53 @@
     "positiveNumber": "Must be a positive number",
     "urlInvalid": "Must be a valid URL"
   },
+  "mealLibrary": {
+    "title": "Meal Library",
+    "subtitle": "Manage your reusable meals",
+    "createMeal": "Create Meal",
+    "searchPlaceholder": "Search meals...",
+    "filterType": "Meal type",
+    "filterAll": "All types",
+    "loading": "Loading meals...",
+    "noResults": "No meals found with the applied filters",
+    "emptyState": "You haven't created any meals yet. Create your first meal!",
+    "portionLabel": "Portion:",
+    "photoBadge": "Photo",
+    "videoBadge": "Video",
+    "editButton": "Edit",
+    "deleteDialog": {
+      "title": "Delete meal?",
+      "description": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "deleteError": "Error deleting meal",
+    "validation": {
+      "titleRequired": "Title is required",
+      "descriptionRequired": "Description is required",
+      "maxLength": "Max {max} characters"
+    },
+    "dialog": {
+      "editTitle": "Edit Meal",
+      "createTitle": "Create New Meal",
+      "editDesc": "Modify meal details",
+      "createDesc": "Add a new meal to your library"
+    },
+    "form": {
+      "photoLabel": "Photo (Optional)",
+      "uploadPrompt": "Click to upload a photo",
+      "titleLabel": "Title *",
+      "titlePlaceholder": "e.g., Caesar Salad with Chicken",
+      "typeLabel": "Meal Type *",
+      "recommendedTimeLabel": "Recommended Time",
+      "descriptionLabel": "Recipe/Description *",
+      "descriptionPlaceholder": "Describe the recipe, ingredients, preparation...",
+      "portionLabel": "Portions/Amounts",
+      "portionPlaceholder": "e.g., 1 cup, 150g, 2 servings",
+      "videoLabel": "Video URL (Optional)",
+      "saving": "Saving..."
+    }
+  },
   "assignPlan": {
     "title": "Assign Meal Plan",
     "description": "Assign a meal plan to {patientName}. You can use an existing template or create a custom plan.",
