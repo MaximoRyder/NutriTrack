@@ -31,6 +31,7 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { WeekPlanBuilder } from "@/components/week-plan-builder";
+import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { MealItem, MealPlanTemplate } from "@/lib/types";
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -44,9 +45,10 @@ const EMPTY_WEEK_STRUCTURE = {
   friday: [],
   saturday: [],
   sunday: [],
-};
+  };
 
 export default function MealPlanTemplatesPage() {
+  const { t } = useTranslation();
   const { data: session } = useSession();
   const [templates, setTemplates] = useState<MealPlanTemplate[]>([]);
   const [mealItems, setMealItems] = useState<MealItem[]>([]);
@@ -114,7 +116,7 @@ export default function MealPlanTemplatesPage() {
 
   const handleSaveTemplate = async () => {
     if (!name.trim()) {
-      alert("El nombre es requerido");
+      alert(t("validation.nameRequired"));
       return;
     }
 
@@ -192,26 +194,26 @@ export default function MealPlanTemplatesPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Plantillas de Planes</h1>
+          <h1 className="text-3xl font-bold">{t("mealTemplates.title")}</h1>
           <p className="text-muted-foreground">
-            Crea planes semanales reutilizables
+            {t("mealTemplates.subtitle")}
           </p>
         </div>
         <Button onClick={() => handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" />
-          Crear Plantilla
+          {t("mealTemplates.createTemplate")}
         </Button>
       </div>
 
       {isLoading ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">Cargando plantillas...</p>
+          <p className="text-muted-foreground">{t("mealTemplates.loading")}</p>
         </div>
       ) : templates.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
             <p className="text-muted-foreground">
-              No tienes plantillas creadas. ¡Crea tu primera plantilla!
+              {t("mealTemplates.emptyState")}
             </p>
           </CardContent>
         </Card>
@@ -229,7 +231,7 @@ export default function MealPlanTemplatesPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
-                  {getTotalMeals(template)} comidas programadas
+                  {t("mealTemplates.scheduledMeals", { count: getTotalMeals(template) })}
                 </p>
                 <div className="flex gap-2">
                   <Button
@@ -239,7 +241,7 @@ export default function MealPlanTemplatesPage() {
                     onClick={() => handleOpenDialog(template)}
                   >
                     <Edit2 className="h-4 w-4 mr-1" />
-                    Editar
+                    {t("mealTemplates.edit")}
                   </Button>
                   <Button
                     variant="outline"
@@ -260,40 +262,40 @@ export default function MealPlanTemplatesPage() {
         <DialogContent className="max-w-4xl max-h-[90vh] grid-rows-[auto,1fr,auto] p-0">
           <DialogHeader className="p-6 pb-0">
             <DialogTitle>
-              {templateToEdit ? "Editar Plantilla" : "Crear Nueva Plantilla"}
+              {templateToEdit ? t("mealTemplates.dialog.editTitle") : t("mealTemplates.dialog.createTitle")}
             </DialogTitle>
             <DialogDescription>
               {templateToEdit
-                ? "Modifica tu plantilla de plan semanal"
-                : "Crea un plan semanal reutilizable"}
+                ? t("mealTemplates.dialog.editDesc")
+                : t("mealTemplates.dialog.createDesc")}
             </DialogDescription>
           </DialogHeader>
 
           <ScrollArea className="h-full px-6">
             <div className="space-y-4 pb-4">
               <div>
-                <Label htmlFor="name">Nombre *</Label>
+                <Label htmlFor="name">{t("mealTemplates.dialog.nameLabel")}</Label>
                 <Input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Ej: Plan Detox Semana 1"
+                  placeholder={t("mealTemplates.dialog.namePlaceholder")}
                 />
               </div>
 
               <div>
-                <Label htmlFor="description">Descripción</Label>
+                <Label htmlFor="description">{t("mealTemplates.dialog.descLabel")}</Label>
                 <Textarea
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Describe el objetivo de este plan..."
+                  placeholder={t("mealTemplates.dialog.descPlaceholder")}
                   rows={3}
                 />
               </div>
 
               <div>
-                <Label>Plan Semanal</Label>
+                <Label>{t("mealTemplates.dialog.weekPlanLabel")}</Label>
                 <div className="mt-2">
                   <WeekPlanBuilder
                     mealItems={mealItems}
@@ -311,14 +313,14 @@ export default function MealPlanTemplatesPage() {
               onClick={() => setIsDialogOpen(false)}
               disabled={isSaving}
             >
-              Cancelar
+              {t("mealTemplates.dialog.cancel")}
             </Button>
             <Button onClick={handleSaveTemplate} disabled={isSaving}>
               {isSaving
-                ? "Guardando..."
+                ? t("mealTemplates.dialog.saving")
                 : templateToEdit
-                ? "Guardar Cambios"
-                : "Crear Plantilla"}
+                ? t("mealTemplates.dialog.save")
+                : t("mealTemplates.dialog.create")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -331,16 +333,15 @@ export default function MealPlanTemplatesPage() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar plantilla?</AlertDialogTitle>
+            <AlertDialogTitle>{t("mealTemplates.deleteDialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que deseas eliminar "{templateToDelete?.name}"?
-              Esta acción no se puede deshacer.
+              {t("mealTemplates.deleteDialog.description").replace("{name}", templateToDelete?.name || "")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel>{t("mealTemplates.deleteDialog.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteTemplate}>
-              Eliminar
+              {t("mealTemplates.deleteDialog.confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

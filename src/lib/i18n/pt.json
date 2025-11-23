@@ -2,8 +2,8 @@
   "home": {
     "hero": {
       "title": "O Diário Alimentar Inteligente para Nutricionistas Modernos",
-      "subtitle": "Capacite sua prática com o NutriTrack Pro. Uma plataforma B2B perfeita para monitorar as refeições dos pacientes, fornecer feedback instantâneo e acompanhar o progresso como nunca antes.",
-      "ctaNutritionist": "Comece para Nutricionistas",
+      "subtitle": "Potencialize sua prática com o NutriTrack Pro. Uma plataforma B2B perfeita para monitorar as refeições dos pacientes, fornecer feedback instantâneo e acompanhar o progresso como nunca antes.",
+      "ctaNutritionist": "Começar para Nutricionistas",
       "ctaPatient": "Login do Paciente"
     },
     "features": {
@@ -12,7 +12,7 @@
       "subtitle": "Tudo o que você precisa para gerenciar as jornadas nutricionais de seus pacientes de forma eficiente e eficaz.",
       "feature1": {
         "title": "Registro de Refeições Sem Esforço",
-        "description": "Os pacientes podem registrar rapidamente as refeições com fotos, descrições e tamanhos das porções."
+        "description": "Os pacientes podem registrar refeições rapidamente com fotos, descrições e tamanhos das porções."
       },
       "feature2": {
         "title": "Feedback Profissional em Tempo Real",
@@ -20,7 +20,7 @@
       },
       "feature3": {
         "title": "Acompanhamento Visual do Progresso",
-        "description": "Acompanhe o peso, as medidas e a hidratação com gráficos intuitivos para manter os pacientes motivados."
+        "description": "Acompanhe peso, medidas e hidratação com gráficos intuitivos para manter os pacientes motivados."
       }
     },
     "forProfessionals": {
@@ -28,7 +28,7 @@
       "title": "Potencialize seu Coaching Nutricional",
       "feature1": {
         "title": "Painel de Pacientes Centralizado",
-        "description": "Gerencie todos os seus pacientes de um só lugar com informações e alertas rápidos."
+        "description": "Gerencie todos os seus pacientes em um só lugar com insights e alertas rápidos."
       },
       "feature2": {
         "title": "Sugestões de Refeições com IA",
@@ -36,10 +36,10 @@
       },
       "feature3": {
         "title": "Relatórios Profissionais em PDF",
-        "description": "Exporte resumos profissionais e com sua marca do progresso do paciente para avaliações e registros."
+        "description": "Exporte resumos profissionais e com sua marca do progresso do paciente para revisões e registros."
       },
       "cta": "Comece Agora",
-      "testimonial": "\"O NutriTrack Pro transformou a forma como eu interajo com meus clientes. A capacidade de ver fotos e comentar em tempo real é uma virada de jogo para a responsabilidade e o suporte.\"",
+      "testimonial": "\"O NutriTrack Pro transformou a forma como interajo com meus clientes. A capacidade de ver fotos e comentar em tempo real é um divisor de águas para a responsabilidade e o apoio.\"",
       "testimonialAuthor": "- Dra. Evelyn Reed, Nutricionista Registrada"
     },
     "footer": {
@@ -49,15 +49,29 @@
   },
   "header": {
     "login": "Entrar",
-    "signUp": "Inscrever-se"
+    "signUp": "Cadastrar"
   },
   "userNav": {
     "patientName": "Nome do Paciente",
-    "patientEmail": "paciente@example.com",
+    "patientEmail": "paciente@exemplo.com",
     "profile": "Perfil",
     "billing": "Faturamento",
     "settings": "Configurações",
     "logout": "Sair"
+  },
+  "sidebar": {
+    "overview": "Visão Geral",
+    "foodJournal": "Diário Alimentar",
+    "activityLog": "Registro de Atividades",
+    "myProgress": "Meu Progresso",
+    "mealPlan": "Plano Alimentar",
+    "myNutritionist": "Meu Nutricionista",
+    "myPatients": "Meus Pacientes",
+    "mealItems": "Biblioteca de Refeições",
+    "mealTemplates": "Modelos de Planos",
+    "settings": "Configurações",
+    "admin": "Admin",
+    "userManagement": "Gerenciamento de Usuários"
   },
   "login": {
     "title": "Entrar",
@@ -66,11 +80,11 @@
     "password": "Senha",
     "submit": "Entrar",
     "noAccount": "Não tem uma conta?",
-    "signUp": "Inscreva-se",
+    "signUp": "Cadastre-se",
     "errorTitle": "Falha no Login",
     "errorInvalidCredential": "O e-mail ou a senha que você digitou está incorreto.",
     "errorGenericTitle": "Ocorreu um Erro",
-    "errorGenericDescription": "Não foi possível fazer login. Por favor, tente novamente."
+    "errorGenericDescription": "Não foi possível entrar. Por favor, tente novamente."
   },
   "register": {
     "title": "Criar uma conta",
@@ -91,31 +105,17 @@
   },
   "welcome": {
     "title": "Bem-vindo ao NutriTrack Pro!",
-    "description": "Vamos terminar de configurar seu perfil. Por favor, insira suas estatísticas atuais e, se tiver um, o código de convite do seu nutricionista.",
+    "description": "Vamos terminar de configurar seu perfil. Por favor, insira suas estatísticas atuais e, se tiver, o código de convite do seu nutricionista.",
     "invitationCode": "Código do Nutricionista",
     "invitationCodePlaceholder": "Ex: DRSALAS25",
-    "goalWeight": "Peso Alvo (kg)",
+    "goalWeight": "Peso Meta (kg)",
     "height": "Altura (cm)",
-    "submit": "Completar Perfil",
+    "submit": "Concluir Perfil",
     "errorTitle": "Código Inválido",
     "errorMessage": "O código de convite que você inseriu não é válido. Por favor, verifique e tente novamente, ou deixe em branco.",
     "genericError": "Algo deu errado. Por favor, tente novamente.",
-    "genericErrorTitle": "Oh não!",
+    "genericErrorTitle": "Ah não!",
     "saving": "Salvando..."
-  },
-  "sidebar": {
-    "overview": "Visão Geral",
-    "foodJournal": "Diário Alimentar",
-    "activityLog": "Registro de Atividades",
-    "myProgress": "Meu Progresso",
-    "mealPlan": "Plano Alimentar",
-    "myNutritionist": "Meu Nutricionista",
-    "myPatients": "Meus Pacientes",
-    "mealItems": "Biblioteca de Refeições",
-    "mealTemplates": "Modelos de Planos",
-    "settings": "Configurações",
-    "admin": "Admin",
-    "userManagement": "Gerenciamento de Usuários"
   },
   "dashboard": {
     "currentWeight": "Peso Atual",
@@ -125,14 +125,14 @@
     "activeMealPlan": "Plano Alimentar Ativo",
     "assignedBy": "Atribuído por {name}",
     "recentMeals": "Refeições Recentes",
-    "recentMealsDesc": "Um registro de suas entradas de comida mais recentes.",
+    "recentMealsDesc": "Um registro das suas entradas de comida mais recentes.",
     "addMeal": "Adicionar Refeição",
     "meal": "Refeição",
     "type": "Tipo",
-    "time": "Hora",
+    "time": "Horário",
     "loadingMeals": "Carregando refeições...",
     "noRecentMeals": "Nenhuma refeição recente registrada.",
-    "weightProgress": "Progresso do Peso",
+    "weightProgress": "Progresso de Peso",
     "weightProgressDesc": "Sua tendência de peso no último mês.",
     "week1Detox": "Semana 1: Detox",
     "nutritionistPatientDesc": "Seus pacientes mais ativos recentemente.",
@@ -140,38 +140,39 @@
     "noPatients": "Nenhum paciente encontrado.",
     "quickStats": "Estatísticas Rápidas",
     "totalPatients": "Total de Pacientes",
-    "quickStatsDesc": "Mais estatísticas em breve."
+    "quickStatsDesc": "Mais estatísticas em breve.",
+    "weightKg": "Peso (kg)"
   },
   "addMeal": {
     "title": "Adicionar Nova Refeição",
-    "description": "Registre uma nova refeição em seu diário alimentar. Clique em salvar quando terminar.",
+    "description": "Registre uma nova refeição no seu diário. Clique em salvar quando terminar.",
     "editTitle": "Editar Refeição",
     "editDescription": "Atualize os detalhes desta refeição.",
     "photo": "Foto da Refeição",
-    "uploadPrompt": "Clique ou arraste o arquivo para esta área para fazer o upload",
+    "uploadPrompt": "Clique ou arraste um arquivo para enviar",
     "name": "Nome da Refeição",
     "namePlaceholder": "Ex: Aveia com frutas vermelhas",
     "type": "Tipo de Refeição",
-    "time": "Hora",
+    "time": "Horário",
     "selectType": "Selecione um tipo de refeição",
-    "breakfast": "Café da manhã",
+    "breakfast": "Café da Manhã",
     "lunch": "Almoço",
     "dinner": "Jantar",
     "snack": "Lanche",
     "other": "Outro",
     "descriptionField": "Descrição",
-    "descriptionPlaceholder": "Algum detalhe sobre sua refeição...",
+    "descriptionPlaceholder": "Qualquer detalhe sobre sua refeição...",
     "portionSize": "Tamanho da Porção",
-    "selectPortion": "Selecione o tamanho da porção",
+    "selectPortion": "Selecione um tamanho de porção",
     "small": "Pequena",
     "medium": "Média",
     "large": "Grande",
-    "half": "Metade",
+    "half": "Meia",
     "save": "Salvar Refeição",
     "saveChanges": "Salvar Alterações",
     "charCounter": "{current} / {max}",
     "validation": {
-      "photoRequired": "É necessária uma foto da refeição.",
+      "photoRequired": "Uma foto da refeição é obrigatória.",
       "nameRequired": "O nome da refeição é obrigatório.",
       "nameTooLong": "O nome da refeição não pode ter mais de {max} caracteres.",
       "descriptionTooLong": "A descrição não pode ter mais de {max} caracteres."
@@ -182,11 +183,11 @@
     "description": "Você registrou {count} refeição neste dia.",
     "description_plural": "Você registrou {count} refeições neste dia.",
     "noMeals": "Nenhuma refeição registrada para este dia.",
-    "placeholder": "Selecione um dia no calendário para ver suas refeições.",
+    "placeholder": "Selecione um dia no calendário para ver suas refeições registradas.",
     "edit": "Editar",
     "deleteAction": "Excluir",
     "delete": {
-      "title": "Você tem certeza?",
+      "title": "Tem certeza?",
       "description": "Esta ação não pode ser desfeita. Isso excluirá permanentemente o registro da refeição \"{mealName}\".",
       "cancel": "Cancelar",
       "confirm": "Excluir"
@@ -194,17 +195,17 @@
   },
   "progress": {
     "title": "Visão Geral do Meu Progresso",
-    "description": "Um olhar detalhado sobre sua jornada em direção aos seus objetivos.",
+    "description": "Um olhar detalhado sobre sua jornada em direção às suas metas.",
     "weightTracking": "Acompanhamento de Peso",
-    "weightTrackingDesc": "Sua tendência de peso ao longo do tempo. Continue o ótimo trabalho!",
+    "weightTrackingDesc": "Sua tendência de peso ao longo do tempo. Continue assim!",
     "bodyMeasurements": "Medidas Corporais",
-    "bodyMeasurementsDesc": "Alterações nas suas medidas corporais (cm).",
+    "bodyMeasurementsDesc": "Mudanças nas suas medidas corporais (cm).",
     "weeklyHydration": "Hidratação Semanal",
     "weeklyHydrationDesc": "Sua ingestão diária de água vs. sua meta."
   },
   "plan": {
     "title": "Meu Plano Alimentar: {planTitle}",
-    "description": "Atribuído por {author}. Aqui está o seu guia para a semana.",
+    "description": "Atribuído por {author}. Aqui está seu guia para a semana.",
     "data": {
       "title": "Semana 2: Leve e Verde",
       "author": "Dra. Evelyn Reed",
@@ -240,15 +241,15 @@
         "tuesday": [
           {
             "name": "Iogurte Grego com Frutas Vermelhas",
-            "details": "1 xícara de iogurte, 1/2 xícara de frutas vermelhas, 1 colher de sopa de chia."
+            "details": "1 xícara de iogurte, 1/2 xícara de frutas vermelhas mistas, 1 colher de sopa de chia."
           },
           {
             "name": "Sobras de Salmão Assado",
             "details": "Use as sobras da noite anterior."
           },
           {
-            "name": "Frango Salteado",
-            "details": "150g de peito de frango, brócolis, pimentão, molho de soja light."
+            "name": "Frango Refogado",
+            "details": "150g de peito de frango, brócolis, pimentões, molho de soja light."
           }
         ],
         "wednesday": [
@@ -268,15 +269,15 @@
         "thursday": [
           {
             "name": "Iogurte Grego com Frutas Vermelhas",
-            "details": "1 xícara de iogurte, 1/2 xícara de frutas vermelhas, 1 colher de sopa de chia."
+            "details": "1 xícara de iogurte, 1/2 xícara de frutas vermelhas mistas, 1 colher de sopa de chia."
           },
           {
             "name": "Sobras de Salmão Assado",
             "details": "Use as sobras da noite anterior."
           },
           {
-            "name": "Frango Salteado",
-            "details": "150g de peito de frango, brócolis, pimentão, molho de soja light."
+            "name": "Frango Refogado",
+            "details": "150g de peito de frango, brócolis, pimentões, molho de soja light."
           }
         ],
         "friday": [
@@ -296,15 +297,15 @@
         "saturday": [
           {
             "name": "Iogurte Grego com Frutas Vermelhas",
-            "details": "1 xícara de iogurte, 1/2 xícara de frutas vermelhas, 1 colher de sopa de chia."
+            "details": "1 xícara de iogurte, 1/2 xícara de frutas vermelhas mistas, 1 colher de sopa de chia."
           },
           {
             "name": "Sobras de Salmão Assado",
             "details": "Use as sobras da noite anterior."
           },
           {
-            "name": "Frango Salteado",
-            "details": "150g de peito de frango, brócolis, pimentão, molho de soja light."
+            "name": "Frango Refogado",
+            "details": "150g de peito de frango, brócolis, pimentões, molho de soja light."
           }
         ],
         "sunday": [
@@ -326,7 +327,7 @@
   },
   "patients": {
     "title": "Meus Pacientes",
-    "description": "Uma lista de todos os pacientes atualmente atribuídos a você.",
+    "description": "Uma lista de todos os pacientes atribuídos a você.",
     "patient": "Paciente",
     "status": "Status",
     "lastLog": "Último Registro",
@@ -345,7 +346,7 @@
   },
   "addPatient": {
     "title": "Adicionar Paciente Existente",
-    "description": "Digite o endereço de e-mail do paciente que você deseja atribuir a si mesmo. Se o usuário existir, ele será convertido para um papel de paciente e atribuído a você.",
+    "description": "Digite o endereço de e-mail do paciente que você deseja atribuir a si mesmo. Se o usuário existir, ele será convertido para uma função de paciente e atribuído a você.",
     "email": "E-mail do Paciente",
     "emailPlaceholder": "paciente@exemplo.com",
     "submit": "Adicionar Paciente",
@@ -363,11 +364,11 @@
     "weight": "Peso",
     "bmi": "IMC: {value}",
     "goal": "Meta",
-    "toGo": "Faltan {value} kg",
+    "toGo": "Faltam {value} kg",
     "hydration": "Hidratação",
     "activityLevel": "Nível de Atividade",
     "activityLevelDesc": "Nível de atividade auto-relatado pelo paciente.",
-    "weightProgress": "Progresso do Peso",
+    "weightProgress": "Progresso de Peso",
     "weightProgressDesc": "Tendência de peso do paciente no último mês.",
     "aiSuggestions": "Sugestões de Plano Alimentar com IA",
     "aiSuggestionsDesc": "Gere ideias de refeições com base nos registros e metas deste paciente.",
@@ -387,7 +388,7 @@
     "description": "Gerencie as configurações da sua conta e as informações do seu perfil.",
     "profile": "Perfil",
     "profileDesc": "Este é o seu nome de exibição público e avatar.",
-    "uploadPhoto": "Carregar Foto",
+    "uploadPhoto": "Enviar Foto",
     "displayName": "Nome de Exibição",
     "email": "E-mail",
     "save": "Salvar",
@@ -398,7 +399,7 @@
     "resetPassword": "Enviar E-mail de Redefinição de Senha",
     "resetEmailSent": "E-mail de Redefinição de Senha Enviado",
     "resetEmailDesc": "Verifique sua caixa de entrada para redefinir sua senha.",
-    "resetError": "Não foi possível enviar o e-mail de redefinição de senha.",
+    "resetError": "Não foi possível enviar o e-mail de redefinição.",
     "error": "Erro",
     "currentPassword": "Senha Atual",
     "newPassword": "Nova Senha",
@@ -407,9 +408,9 @@
     "passwordUpdated": "Senha Atualizada",
     "passwordUpdatedDesc": "Sua senha foi alterada.",
     "myPatients": "Meus Pacientes",
-    "myPatientsDesc": "Visualize e gerencie seus pacientes atribuídos.",
+    "myPatientsDesc": "Ver e gerenciar seus pacientes atribuídos.",
     "invitationCode": "Seu código de convite exclusivo é:",
-    "invitationCodeLabel": "Código de Convite",
+    "invitationCodeLabel": "Código de convite",
     "goToDashboard": "Ir para o Painel de Pacientes",
     "myNutritionist": "Meu Nutricionista",
     "myNutritionistDesc": "Seu guia em sua jornada de saúde.",
@@ -419,14 +420,14 @@
     "dateOfBirth": "Data de Nascimento",
     "height": "Altura (cm)",
     "currentWeight": "Peso Atual (kg)",
-    "goalWeight": "Peso Alvo (kg)",
+    "goalWeight": "Peso Meta (kg)",
     "calculatedBmi": "IMC Calculado",
-    "bmiDesc": "Seu índice de massa corporal estimado com base no peso e altura.",
+    "bmiDesc": "Seu Índice de Massa Corporal estimado com base no peso e altura.",
     "bmiCategories": {
       "underweight": "Abaixo do peso",
       "normal": "Ótimo",
       "overweight": "Sobrepeso",
-      "obese": "Obeso",
+      "obese": "Obesidade",
       "obeseSevere": "Obesidade Severa"
     },
     "bodyMeasurements": "Medidas Corporais (cm)",
@@ -456,13 +457,13 @@
     "personalDataUpdated": "Seus dados pessoais foram atualizados."
   },
   "admin": {
-    "title": "Painel Administrativo",
-    "description": "Supervisione e gerencie toda a aplicação.",
+    "title": "Painel de Administração",
+    "description": "Supervisione e gerencie todo o aplicativo.",
     "totalUsers": "Total de Usuários",
     "totalNutritionists": "Nutricionistas",
     "totalPatients": "Pacientes",
     "pendingApproval": "{count} pendentes",
-    "mealsLogged": "Total de Refeições",
+    "mealsLogged": "Refeições Registradas",
     "userManagement": "Gerenciamento de Usuários",
     "userManagementDesc": "Visualize, edite e gerencie todos os usuários do sistema.",
     "allUsers": "Todos os usuários",
@@ -474,12 +475,12 @@
     "userDeleted": "Usuário Excluído",
     "userDeletedDesc": "O usuário {email} foi excluído permanentemente.",
     "noUsers": "Nenhum usuário encontrado no sistema.",
-    "editUser": "Editar Perfil do Usuário",
-    "profileInfo": "Informação do Perfil",
+    "editUser": "Editar Perfil de Usuário",
+    "profileInfo": "Informações do Perfil",
     "profileInfoDesc": "Edite o perfil principal e a função do usuário.",
-    "personalDataDesc": "Visualize e edite os dados de saúde específicos do paciente.",
-    "selectRole": "Selecionar uma função",
-    "selectStatus": "Selecionar um status",
+    "personalDataDesc": "Visualize e edite dados de saúde específicos do paciente.",
+    "selectRole": "Selecione uma função",
+    "selectStatus": "Selecione um status",
     "userUpdated": "Usuário Atualizado",
     "userUpdatedDesc": "O perfil de {email} foi salvo.",
     "table": {
@@ -496,19 +497,19 @@
       "approve": "Aprovar",
       "deactivate": "Desativar",
       "reactivate": "Reativar",
-      "setPending": "Marcar como Pendente",
+      "setPending": "Definir como Pendente",
       "changeRole": "Alterar Função",
       "delete": "Excluir Usuário"
     },
     "status": {
       "active": "Ativo",
       "inactive": "Inativo",
-      "trial": "Avaliação",
+      "trial": "Teste",
       "pending": "Pendente"
     },
     "pending": {
       "title": "Conta Pendente de Aprovação",
-      "description": "Sua conta está sendo revisada. Você será notificado assim que for aprovada por um administrador."
+      "description": "Sua conta está sendo analisada. Você será notificado assim que for aprovada por um administrador."
     },
     "delete": {
       "title": "Tem certeza de que deseja excluir este usuário?",
@@ -532,7 +533,7 @@
   },
   "quickLog": {
     "title": "Registro Rápido",
-    "description": "Acompanhe seus hábitos diários",
+    "description": "Registre seus hábitos diários",
     "water": "Água",
     "activity": "Atividade",
     "noActivity": "Nenhuma atividade registrada hoje",
@@ -548,7 +549,7 @@
       "cycling": "Ciclismo",
       "swimming": "Natação",
       "gym": "Academia / Pesos",
-      "yoga": "Yoga",
+      "yoga": "Ioga",
       "other": "Outro"
     },
     "intensities": {
@@ -558,7 +559,7 @@
     },
     "customActivity": "Nome da Atividade",
     "customActivityPlaceholder": "Ex: Boxe",
-    "time": "Hora",
+    "time": "Horário",
     "remove250": "Remover 250ml"
   },
   "activities": {
@@ -586,7 +587,7 @@
     "sessions": "Sessões e Consultas",
     "sessionsDesc": "Histórico de suas sessões com {name}.",
     "upcomingSessions": "Próximas Sessões",
-    "pastSessions": "Sessões Passadas",
+    "pastSessions": "Sessões Anteriores",
     "noUpcomingSessions": "Você não tem sessões agendadas.",
     "noPastSessions": "Você ainda não teve sessões.",
     "sessionDate": "Data",
@@ -594,12 +595,12 @@
     "sessionNotes": "Notas",
     "sessionDuration": "Duração",
     "requestSession": "Solicitar Sessão",
-    "noNutritionist": "Nenhum nutricionista atribuído",
-    "noNutritionistDesc": "Você pode adicionar um nutricionista usando um código de convite na página de configurações.",
+    "noNutritionist": "Nenhum Nutricionista Atribuído",
+    "noNutritionistDesc": "Você pode adicionar um nutricionista usando um código de convite na sua página de configurações.",
     "goToSettings": "Ir para Configurações",
     "assignNutritionist": "Atribuir Nutricionista",
-    "enterInvitationCode": "Digite o código de convite do seu nutricionista",
-    "invitationCodePlaceholder": "ex: DRSALAS25",
+    "enterInvitationCode": "Insira o código de convite do seu nutricionista",
+    "invitationCodePlaceholder": "Ex: DRSALAS25",
     "assign": "Atribuir",
     "assigning": "Atribuindo...",
     "assignSuccess": "Nutricionista atribuído com sucesso",
@@ -607,7 +608,7 @@
     "sessionTypes": {
       "initial": "Consulta Inicial",
       "followup": "Acompanhamento",
-      "checkup": "Verificação",
+      "checkup": "Check-up",
       "online": "Online",
       "inperson": "Presencial"
     }
@@ -667,6 +668,51 @@
       "portionPlaceholder": "Ex: 1 xícara, 150g, 2 porções",
       "videoLabel": "URL do Vídeo (Opcional)",
       "saving": "Salvando..."
+    }
+  },
+  "mealTemplates": {
+    "title": "Modelos de Planos",
+    "subtitle": "Crie planos semanais reutilizáveis",
+    "createTemplate": "Criar Modelo",
+    "loading": "Carregando modelos...",
+    "emptyState": "Você não tem modelos criados. Crie seu primeiro modelo!",
+    "scheduledMeals": "{count} refeições programadas",
+    "edit": "Editar",
+    "deleteDialog": {
+      "title": "Excluir modelo?",
+      "description": "Tem certeza de que deseja excluir \"{name}\"? Esta ação não pode ser desfeita.",
+      "cancel": "Cancelar",
+      "confirm": "Excluir"
+    },
+    "dialog": {
+      "createTitle": "Criar Novo Modelo",
+      "editTitle": "Editar Modelo",
+      "createDesc": "Crie um plano semanal reutilizável",
+      "editDesc": "Modifique seu modelo de plano semanal",
+      "nameLabel": "Nome *",
+      "namePlaceholder": "Ex: Plano Detox Semana 1",
+      "descLabel": "Descrição",
+      "descPlaceholder": "Descreva o objetivo deste plano...",
+      "weekPlanLabel": "Plano Semanal",
+      "cancel": "Cancelar",
+      "save": "Salvar Alterações",
+      "create": "Criar Modelo",
+      "saving": "Salvando..."
+    },
+    "builder": {
+      "addMeal": "Adicionar refeição",
+      "noMeals": "Nenhuma refeição programada para este dia",
+      "mealLabel": "Refeição",
+      "freeSlot": "Espaço livre",
+      "days": {
+        "monday": "Segunda",
+        "tuesday": "Terça",
+        "wednesday": "Quarta",
+        "thursday": "Quinta",
+        "friday": "Sexta",
+        "saturday": "Sábado",
+        "sunday": "Domingo"
+      }
     }
   },
   "assignPlan": {

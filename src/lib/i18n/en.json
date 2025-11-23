@@ -448,7 +448,7 @@
       "omnivore": "Omnivore",
       "vegetarian": "Vegetarian",
       "vegan": "Vegan",
-      "pescetarian": "Pescetarian"
+      "pescetarian": "Pescetariano"
     },
     "healthConditions": "Health Conditions & Allergies",
     "healthConditionsPlaceholder": "e.g., Lactose intolerant, nut allergy, Type 2 Diabetes...",
@@ -667,6 +667,51 @@
       "portionPlaceholder": "e.g., 1 cup, 150g, 2 servings",
       "videoLabel": "Video URL (Optional)",
       "saving": "Saving..."
+    }
+  },
+  "mealTemplates": {
+    "title": "Meal Plan Templates",
+    "subtitle": "Create reusable weekly plans",
+    "createTemplate": "Create Template",
+    "loading": "Loading templates...",
+    "emptyState": "You haven't created any templates yet. Create your first template!",
+    "scheduledMeals": "{count} scheduled meals",
+    "edit": "Edit",
+    "deleteDialog": {
+      "title": "Delete template?",
+      "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "dialog": {
+      "createTitle": "Create New Template",
+      "editTitle": "Edit Template",
+      "createDesc": "Create a reusable weekly plan",
+      "editDesc": "Modify your weekly plan template",
+      "nameLabel": "Name *",
+      "namePlaceholder": "e.g., Detox Plan Week 1",
+      "descLabel": "Description",
+      "descPlaceholder": "Describe the goal of this plan...",
+      "weekPlanLabel": "Weekly Plan",
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "create": "Create Template",
+      "saving": "Saving..."
+    },
+    "builder": {
+      "addMeal": "Add meal",
+      "noMeals": "No meals scheduled for this day",
+      "mealLabel": "Meal",
+      "freeSlot": "Free slot",
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      }
     }
   },
   "assignPlan": {

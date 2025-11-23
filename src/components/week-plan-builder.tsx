@@ -10,6 +10,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { DayMealSlot, MealItem } from "@/lib/types";
 import { Plus, X } from "lucide-react";
 import { Badge } from "./ui/badge";
@@ -28,29 +29,31 @@ interface WeekPlanBuilderProps {
   onChange: (weekStructure: any) => void;
 }
 
-const DAYS = [
-  { key: "monday", label: "Lunes" },
-  { key: "tuesday", label: "Martes" },
-  { key: "wednesday", label: "Miércoles" },
-  { key: "thursday", label: "Jueves" },
-  { key: "friday", label: "Viernes" },
-  { key: "saturday", label: "Sábado" },
-  { key: "sunday", label: "Domingo" },
-] as const;
-
-const MEAL_TYPES = [
-  { value: "breakfast", label: "Desayuno" },
-  { value: "lunch", label: "Almuerzo" },
-  { value: "dinner", label: "Cena" },
-  { value: "snack", label: "Merienda" },
-  { value: "other", label: "Otro" },
-] as const;
-
 export function WeekPlanBuilder({
   mealItems,
   weekStructure,
   onChange,
 }: WeekPlanBuilderProps) {
+  const { t } = useTranslation();
+
+  const DAYS = [
+    { key: "monday", label: t("mealTemplates.builder.days.monday") },
+    { key: "tuesday", label: t("mealTemplates.builder.days.tuesday") },
+    { key: "wednesday", label: t("mealTemplates.builder.days.wednesday") },
+    { key: "thursday", label: t("mealTemplates.builder.days.thursday") },
+    { key: "friday", label: t("mealTemplates.builder.days.friday") },
+    { key: "saturday", label: t("mealTemplates.builder.days.saturday") },
+    { key: "sunday", label: t("mealTemplates.builder.days.sunday") },
+  ] as const;
+
+  const MEAL_TYPES = [
+    { value: "breakfast", label: t("addMeal.breakfast") },
+    { value: "lunch", label: t("addMeal.lunch") },
+    { value: "dinner", label: t("addMeal.dinner") },
+    { value: "snack", label: t("addMeal.snack") },
+    { value: "other", label: t("addMeal.other") },
+  ] as const;
+
   const addSlot = (day: string, mealType: string) => {
     const newStructure = { ...weekStructure };
     newStructure[day as keyof typeof weekStructure].push({
@@ -98,7 +101,7 @@ export function WeekPlanBuilder({
                 value=""
               >
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Agregar comida" />
+                  <SelectValue placeholder={t("mealTemplates.builder.addMeal")} />
                 </SelectTrigger>
                 <SelectContent>
                   {MEAL_TYPES.map((type) => (
@@ -114,7 +117,7 @@ export function WeekPlanBuilder({
           <CardContent>
             {weekStructure[key as keyof typeof weekStructure].length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-4">
-                No hay comidas programadas para este día
+                {t("mealTemplates.builder.noMeals")}
               </p>
             ) : (
               <div className="space-y-3">
@@ -137,7 +140,7 @@ export function WeekPlanBuilder({
                           </div>
                           <div>
                             <Label className="text-xs text-muted-foreground">
-                              Comida
+                              {t("mealTemplates.builder.mealLabel")}
                             </Label>
                             <Select
                               value={slot.mealItemId || "empty"}
@@ -151,11 +154,11 @@ export function WeekPlanBuilder({
                               }
                             >
                               <SelectTrigger>
-                                <SelectValue placeholder="Espacio libre" />
+                                <SelectValue placeholder={t("mealTemplates.builder.freeSlot")} />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="empty">
-                                  Espacio libre
+                                  {t("mealTemplates.builder.freeSlot")}
                                 </SelectItem>
                                 {mealItems
                                   .filter((item) => item.mealType === slot.mealType)

@@ -670,6 +670,51 @@
       "saving": "Guardando..."
     }
   },
+  "mealTemplates": {
+    "title": "Plantillas de Planes",
+    "subtitle": "Crea planes semanales reutilizables",
+    "createTemplate": "Crear Plantilla",
+    "loading": "Cargando plantillas...",
+    "emptyState": "No tienes plantillas creadas. ¡Crea tu primera plantilla!",
+    "scheduledMeals": "{count} comidas programadas",
+    "edit": "Editar",
+    "deleteDialog": {
+      "title": "¿Eliminar plantilla?",
+      "description": "¿Estás seguro de que deseas eliminar \"{name}\"? Esta acción no se puede deshacer.",
+      "cancel": "Cancelar",
+      "confirm": "Eliminar"
+    },
+    "dialog": {
+      "createTitle": "Crear Nueva Plantilla",
+      "editTitle": "Editar Plantilla",
+      "createDesc": "Crea un plan semanal reutilizable",
+      "editDesc": "Modifica tu plantilla de plan semanal",
+      "nameLabel": "Nombre *",
+      "namePlaceholder": "Ej: Plan Detox Semana 1",
+      "descLabel": "Descripción",
+      "descPlaceholder": "Describe el objetivo de este plan...",
+      "weekPlanLabel": "Plan Semanal",
+      "cancel": "Cancelar",
+      "save": "Guardar Cambios",
+      "create": "Crear Plantilla",
+      "saving": "Guardando..."
+    },
+    "builder": {
+      "addMeal": "Agregar comida",
+      "noMeals": "No hay comidas programadas para este día",
+      "mealLabel": "Comida",
+      "freeSlot": "Espacio libre",
+      "days": {
+        "monday": "Lunes",
+        "tuesday": "Martes",
+        "wednesday": "Miércoles",
+        "thursday": "Jueves",
+        "friday": "Viernes",
+        "saturday": "Sábado",
+        "sunday": "Domingo"
+      }
+    }
+  },
   "assignPlan": {
     "title": "Asignar Plan de Comidas",
     "description": "Asigna un plan de comidas a {patientName}. Puedes usar una plantilla existente o crear un plan personalizado.",
