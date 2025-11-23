@@ -454,7 +454,13 @@
     "healthConditions": "Condições de Saúde e Alergias",
     "healthConditionsPlaceholder": "Ex: Intolerante à lactose, alergia a nozes, Diabetes tipo 2...",
     "savePersonalData": "Salvar Dados Pessoais",
-    "personalDataUpdated": "Seus dados pessoais foram atualizados."
+    "personalDataUpdated": "Seus dados pessoais foram atualizados.",
+    "gallery": "Galeria",
+    "camera": "Câmera",
+    "updateAvatar": "Atualizar Avatar",
+    "change": "Cancelar",
+    "uploading": "Enviando...",
+    "avatarUpdated": "Avatar atualizado"
   },
   "admin": {
     "title": "Painel de Administração",

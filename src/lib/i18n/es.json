@@ -454,7 +454,13 @@
     "healthConditions": "Condiciones de Salud y Alergias",
     "healthConditionsPlaceholder": "Ej: Intolerante a la lactosa, alergia a las nueces, Diabetes tipo 2...",
     "savePersonalData": "Guardar Datos Personales",
-    "personalDataUpdated": "Tus datos personales han sido actualizados."
+    "personalDataUpdated": "Tus datos personales han sido actualizados.",
+    "gallery": "Galería",
+    "camera": "Cámara",
+    "updateAvatar": "Actualizar Avatar",
+    "change": "Cancelar",
+    "uploading": "Subiendo...",
+    "avatarUpdated": "Avatar actualizado"
   },
   "admin": {
     "title": "Panel de Administración",

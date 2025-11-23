@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { Camera, Image as ImageIcon } from "lucide-react";
 import React, { useCallback, useRef, useState } from "react";
 import Cropper from "react-easy-crop";
@@ -18,9 +19,16 @@ interface AvatarCropDialogProps {
   onCropped: (url: string) => void;
 }
 
+type Area = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
 function getCroppedCanvas(
   image: HTMLImageElement,
-  crop: { x: number; y: number; width: number; height: number },
+  crop: Area,
   rotation: number = 0
 ): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
@@ -54,10 +62,11 @@ export const AvatarCropDialog: React.FC<AvatarCropDialogProps> = ({
   onOpenChange,
   onCropped,
 }) => {
+  const { t } = useTranslation();
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -70,7 +79,7 @@ export const AvatarCropDialog: React.FC<AvatarCropDialogProps> = ({
     reader.readAsDataURL(file);
   };
 
-  const onCropComplete = useCallback((_croppedArea, croppedPixels) => {
+  const onCropComplete = useCallback((_croppedArea: Area, croppedPixels: Area) => {
     setCroppedAreaPixels(croppedPixels);
   }, []);
 
@@ -101,7 +110,7 @@ export const AvatarCropDialog: React.FC<AvatarCropDialogProps> = ({
       if (!res.ok) throw new Error(json.error || "Upload failed");
       onCropped(json.url);
       onOpenChange(false);
-      toast({ title: "Avatar actualizado" });
+      toast({ title: t("settings.avatarUpdated") });
     } catch (e: any) {
       toast({ variant: "destructive", title: "Error", description: e.message });
     } finally {
@@ -113,7 +122,7 @@ export const AvatarCropDialog: React.FC<AvatarCropDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Actualizar Avatar</DialogTitle>
+          <DialogTitle>{t("settings.updateAvatar")}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           {!imageSrc && (
@@ -126,7 +135,7 @@ export const AvatarCropDialog: React.FC<AvatarCropDialogProps> = ({
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <ImageIcon className="h-8 w-8" />
-                  <span>Galería</span>
+                  <span>{t("settings.gallery")}</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -134,7 +143,7 @@ export const AvatarCropDialog: React.FC<AvatarCropDialogProps> = ({
                   onClick={() => cameraInputRef.current?.click()}
                 >
                   <Camera className="h-8 w-8" />
-                  <span>Cámara</span>
+                  <span>{t("settings.camera")}</span>
                 </Button>
               </div>
 
@@ -146,7 +155,7 @@ export const AvatarCropDialog: React.FC<AvatarCropDialogProps> = ({
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <ImageIcon className="h-10 w-10 text-muted-foreground" />
-                  <span className="text-muted-foreground">Subir Foto</span>
+                  <span className="text-muted-foreground">{t("settings.uploadPhoto")}</span>
                 </Button>
               </div>
 
@@ -198,10 +207,10 @@ export const AvatarCropDialog: React.FC<AvatarCropDialogProps> = ({
                   onClick={() => setImageSrc(null)}
                   disabled={loading}
                 >
-                  Cambiar
+                  {t("settings.change")}
                 </Button>
                 <Button type="button" onClick={handleSave} disabled={loading}>
-                  {loading ? "Subiendo..." : "Guardar"}
+                  {loading ? t("settings.uploading") : t("settings.save")}
                 </Button>
               </div>
             </div>

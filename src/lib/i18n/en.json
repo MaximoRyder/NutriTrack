@@ -453,7 +453,13 @@
     "healthConditions": "Health Conditions & Allergies",
     "healthConditionsPlaceholder": "e.g., Lactose intolerant, nut allergy, Type 2 Diabetes...",
     "savePersonalData": "Save Personal Data",
-    "personalDataUpdated": "Your personal data has been updated."
+    "personalDataUpdated": "Your personal data has been updated.",
+    "gallery": "Gallery",
+    "camera": "Camera",
+    "updateAvatar": "Update Avatar",
+    "change": "Cancel",
+    "uploading": "Uploading...",
+    "avatarUpdated": "Avatar updated"
   },
   "admin": {
     "title": "Admin Dashboard",
