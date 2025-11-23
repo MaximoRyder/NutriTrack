@@ -2,25 +2,25 @@
 
 import { CreateMealItemDialog } from "@/components/create-meal-item-dialog";
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { MealItem } from "@/lib/types";
@@ -103,8 +103,8 @@ export default function MealItemsPage() {
     if (!itemToEdit) return;
 
     try {
-      const response = await fetch(`/api/meal-items?id=${itemToEdit._id}`, {
-        method: "PUT",
+      const response = await fetch(`/api/meal-items?id=${itemToEdit.id}`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
@@ -123,7 +123,7 @@ export default function MealItemsPage() {
     if (!itemToDelete) return;
 
     try {
-      const response = await fetch(`/api/meal-items?id=${itemToDelete._id}`, {
+      const response = await fetch(`/api/meal-items?id=${itemToDelete.id}`, {
         method: "DELETE",
       });
 
@@ -218,7 +218,7 @@ export default function MealItemsPage() {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredItems.map((item) => (
-            <Card key={item._id} className="overflow-hidden flex flex-col">
+            <Card key={item.id} className="overflow-hidden flex flex-col">
               <div className="relative aspect-video bg-muted">
                 {item.photoUrl ? (
                   <Image
@@ -263,7 +263,7 @@ export default function MealItemsPage() {
                     )}
                   </CardDescription>
                 </div>
-                
+
                 <div className="flex gap-2 mt-3">
                   {item.photoUrl && (
                     <Badge variant="outline" className="text-xs">

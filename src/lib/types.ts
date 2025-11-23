@@ -76,6 +76,7 @@ export interface ActivityLog {
 
 export interface MealItem {
   id: string;
+  _id?: string;
   nutritionistId: string;
   title: string;
   description: string;

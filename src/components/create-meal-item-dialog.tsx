@@ -2,28 +2,28 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
@@ -125,10 +125,12 @@ export function CreateMealItemDialog({
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // In a real app, you would upload the file to a storage service here
-      // For now, we'll just create a fake URL
-      const fakeUrl = URL.createObjectURL(file);
-      form.setValue("photoUrl", fakeUrl);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        form.setValue("photoUrl", base64String);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -340,8 +342,8 @@ export function CreateMealItemDialog({
                 {isSaving
                   ? t("mealLibrary.form.saving")
                   : isEditing
-                  ? t("general.save")
-                  : t("mealLibrary.createMeal")}
+                    ? t("general.save")
+                    : t("mealLibrary.createMeal")}
               </Button>
             </DialogFooter>
           </form>
