@@ -4,6 +4,7 @@ import {
     generateMealPlanSuggestions,
     GenerateMealPlanSuggestionsOutput,
 } from "@/ai/flows/generate-meal-plan-suggestions";
+import { AssignMealPlanDialog } from "@/components/assign-meal-plan-dialog";
 import { QuickLogCard } from "@/components/quick-log-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,7 @@ import { Comment, Meal, WeightLog } from "@/lib/types";
 import { format, formatDistanceToNow } from "date-fns";
 import {
     Bot,
+    CalendarPlus,
     Droplets,
     FileText,
     MessageSquare,
@@ -122,6 +124,7 @@ export default function PatientDetailPage() {
     useState<GenerateMealPlanSuggestionsOutput | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExportingPdf, setIsExportingPdf] = useState(false);
+  const [isAssignPlanDialogOpen, setIsAssignPlanDialogOpen] = useState(false);
 
   // Profile
   const { profile: patient, isLoading: isLoadingPatient } =
@@ -258,6 +261,15 @@ export default function PatientDetailPage() {
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full sm:flex-1"
+                onClick={() => setIsAssignPlanDialogOpen(true)}
+              >
+                <CalendarPlus className="mr-2 h-4 w-4" />
+                Asignar Plan
+              </Button>
               <Button variant="outline" size="sm" className="w-full sm:flex-1">
                 <MessageSquare className="mr-2 h-4 w-4" />
                 {t("patientDetail.chat")}
@@ -513,6 +525,18 @@ export default function PatientDetailPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Assign Meal Plan Dialog */}
+      {patient && (
+        <AssignMealPlanDialog
+          isOpen={isAssignPlanDialogOpen}
+          onOpenChange={setIsAssignPlanDialogOpen}
+          patient={patient}
+          onSuccess={() => {
+            console.log("Meal plan assigned successfully");
+          }}
+        />
+      )}
     </div>
   );
 }

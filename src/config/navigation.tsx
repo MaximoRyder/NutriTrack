@@ -2,11 +2,13 @@ import {
     Activity,
     AreaChart,
     BookCopy,
+    BookTemplate,
     Calendar,
     LayoutDashboard,
     Shield,
     Stethoscope,
-    Users
+    Users,
+    Utensils
 } from "lucide-react";
 
 export const getNavigation = (t: (key: string) => string) => {
@@ -26,6 +28,8 @@ export const getNavigation = (t: (key: string) => string) => {
   const nutritionistNav = [
     { name: t("sidebar.overview"), href: "/overview", icon: LayoutDashboard },
     { name: t("sidebar.myPatients"), href: "/patients", icon: Users },
+    { name: t("sidebar.mealItems"), href: "/meal-items", icon: Utensils },
+    { name: t("sidebar.mealTemplates"), href: "/meal-plan-templates", icon: BookTemplate },
   ];
 
   const adminNav = [

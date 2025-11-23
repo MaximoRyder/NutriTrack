@@ -620,5 +620,25 @@
     "passwordsMatch": "Las contraseñas deben coincidir",
     "positiveNumber": "Debe ser un número positivo",
     "urlInvalid": "Debe ser una URL válida"
+  },
+  "assignPlan": {
+    "title": "Asignar Plan de Comidas",
+    "description": "Asigna un plan de comidas a {patientName}. Puedes usar una plantilla existente o crear un plan personalizado.",
+    "selectTemplate": "Seleccionar Plantilla",
+    "selectTemplatePlaceholder": "Selecciona una plantilla...",
+    "customPlan": "Plan Personalizado",
+    "planName": "Nombre del Plan",
+    "planNamePlaceholder": "Ej: Plan de Pérdida de Peso - Semana 1",
+    "descriptionLabel": "Descripción (Opcional)",
+    "descriptionPlaceholder": "Instrucciones adicionales para el paciente...",
+    "startDate": "Fecha de Inicio",
+    "startDatePlaceholder": "Selecciona una fecha",
+    "isActive": "Marcar como Activo",
+    "isActiveDesc": "Este será el plan principal que verá el paciente.",
+    "cancel": "Cancelar",
+    "assign": "Asignar Plan",
+    "assigning": "Asignando...",
+    "success": "Plan asignado exitosamente",
+    "error": "Error al asignar el plan"
   }
 }

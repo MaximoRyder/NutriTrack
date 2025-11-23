@@ -74,13 +74,76 @@ export interface ActivityLog {
   date: string; // ISO String
 }
 
+export interface MealItem {
+  id: string;
+  nutritionistId: string;
+  title: string;
+  description: string;
+  photoUrl?: string;
+  videoUrl?: string;
+  mealType: "breakfast" | "lunch" | "snack" | "dinner" | "other";
+  portionInfo?: string;
+  recommendedTime?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DayMealSlot {
+  mealItemId: string | null;
+  mealType: "breakfast" | "lunch" | "snack" | "dinner" | "other";
+  notes?: string;
+}
+
+export interface MealPlanTemplate {
+  id: string;
+  nutritionistId: string;
+  name: string;
+  description?: string;
+  weekStructure: {
+    monday: DayMealSlot[];
+    tuesday: DayMealSlot[];
+    wednesday: DayMealSlot[];
+    thursday: DayMealSlot[];
+    friday: DayMealSlot[];
+    saturday: DayMealSlot[];
+    sunday: DayMealSlot[];
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AssignedDayMealSlot extends DayMealSlot {
+  mealItem?: {
+    title: string;
+    description: string;
+    photoUrl?: string;
+    videoUrl?: string;
+    portionInfo?: string;
+    recommendedTime?: string;
+  };
+}
+
 export interface MealPlan {
   id: string;
-  userId: string; // The patient this is for
-  authorNutritionistId: string;
-  title: string;
-  startDate: string; // ISO String
-  planData: string; // JSON string of the complex plan object
+  patientId: string;
+  nutritionistId: string;
+  templateId?: string;
+  name: string;
+  description?: string;
+  startDate: string;
+  endDate?: string;
+  weekStructure: {
+    monday: AssignedDayMealSlot[];
+    tuesday: AssignedDayMealSlot[];
+    wednesday: AssignedDayMealSlot[];
+    thursday: AssignedDayMealSlot[];
+    friday: AssignedDayMealSlot[];
+    saturday: AssignedDayMealSlot[];
+    sunday: AssignedDayMealSlot[];
+  };
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Snippet {

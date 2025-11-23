@@ -6,26 +6,26 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { usePatients, useUser, useUserProfile, useWaterLogs } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
@@ -33,14 +33,15 @@ import type { Meal } from "@/lib/types";
 import { format } from "date-fns";
 import { enUS, es, pt } from "date-fns/locale";
 import {
-    ArrowUpRight,
-    BookOpen,
-    Droplets,
-    PlusCircle,
-    Scale,
-    Stethoscope,
-    Users,
-    Utensils,
+  ArrowUpRight,
+  BookOpen,
+  CalendarDays,
+  Droplets,
+  PlusCircle,
+  Scale,
+  Stethoscope,
+  Users,
+  Utensils,
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -98,6 +99,33 @@ export default function DashboardPage() {
   const { waterLogs } = useWaterLogs((user as any)?.id, date);
   const totalWaterToday = waterLogs?.reduce((acc: any, log: any) => acc + log.quantityMl, 0) || 0;
   const hydrationProgress = Math.min((totalWaterToday / 2000) * 100, 100);
+
+  // Active meal plan for patient
+  const { data: activeMealPlanData } = useSWR(
+    userProfile?.role === "patient" && user
+      ? `/api/meal-plans/active?patientId=${(user as any).id}`
+      : null,
+    fetcher
+  );
+  const activeMealPlan = activeMealPlanData?.activePlan;
+
+  // Fetch nutritionist info if there's an active plan
+  const { data: nutritionistInfo } = useSWR(
+    activeMealPlan?.nutritionistId
+      ? `/api/users?id=${activeMealPlan.nutritionistId}`
+      : null,
+    fetcher
+  );
+
+  // Calculate current week of the plan
+  const getCurrentWeek = () => {
+    if (!activeMealPlan?.startDate) return 1;
+    const start = new Date(activeMealPlan.startDate);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return Math.ceil(diffDays / 7);
+  };
 
   // Nutritionist queries
   const { patients, isLoading: isLoadingPatients } = usePatients();
@@ -420,22 +448,50 @@ export default function DashboardPage() {
                 <Progress value={hydrationProgress} className="mt-2 h-2" />
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {t("dashboard.activeMealPlan")}
-                </CardTitle>
-                <BookOpen className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold truncate">
-                  {t("dashboard.week1Detox")}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.assignedBy", { name: "Dr. Salas" })}
-                </p>
-              </CardContent>
-            </Card>
+
+
+            {/* Active Meal Plan Card */}
+            {activeMealPlan ? (
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Plan de Comidas Activo
+                  </CardTitle>
+                  <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div>
+                      <div className="text-xl font-bold">{activeMealPlan.name}</div>
+                      {activeMealPlan.description && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {activeMealPlan.description}
+                        </p>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-muted-foreground">Semana:</span>
+                      <span className="font-semibold">{getCurrentWeek()}</span>
+                    </div>
+
+                    {nutritionistInfo && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-muted-foreground">Asignado por:</span>
+                        <span className="font-medium">{nutritionistInfo.displayName}</span>
+                      </div>
+                    )}
+
+                    <Link href="/plan">
+                      <Button className="w-full mt-2" size="sm">
+                        <BookOpen className="mr-2 h-4 w-4" />
+                        Ver Plan Completo
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : null}
           </div>
         </div>
 

@@ -1,219 +1,343 @@
 "use client";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { Badge } from "@/components/ui/badge";
-import { useTranslation } from "@/lib/i18n/i18n-provider";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { AssignedDayMealSlot, MealPlan, UserProfile } from "@/lib/types";
+import { Calendar as CalendarIcon, Clock, ImageIcon, Stethoscope, Video } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
-type Meal = {
-  mealType: string;
-  name: string;
-  details: string;
-};
+const DAYS = [
+  { key: "monday", label: "Lunes" },
+  { key: "tuesday", label: "Martes" },
+  { key: "wednesday", label: "Miércoles" },
+  { key: "thursday", label: "Jueves" },
+  { key: "friday", label: "Viernes" },
+  { key: "saturday", label: "Sábado" },
+  { key: "sunday", label: "Domingo" },
+] as const;
 
-type MealPlanData = {
-  title: string;
-  author: string;
-  days: Record<string, Meal[]>;
+const MEAL_TYPE_LABELS: Record<string, string> = {
+  breakfast: "Desayuno",
+  lunch: "Almuerzo",
+  dinner: "Cena",
+  snack: "Merienda",
+  other: "Otro",
 };
 
 export default function PlanPage() {
-  const { t } = useTranslation();
+  const { data: session } = useSession();
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [activePlan, setActivePlan] = useState<MealPlan | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedMeal, setSelectedMeal] = useState<{
+    slot: AssignedDayMealSlot;
+    day: string;
+  } | null>(null);
 
-  // Dynamically build the meal plan from translations
-  const mealPlan: MealPlanData = {
-    title: t("plan.data.title"),
-    author: t("plan.data.author"),
-    days: {
-      monday: [
-        {
-          mealType: t("plan.data.mealTypes.breakfast"),
-          name: t("plan.data.days.monday.0.name"),
-          details: t("plan.data.days.monday.0.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.lunch"),
-          name: t("plan.data.days.monday.1.name"),
-          details: t("plan.data.days.monday.1.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.dinner"),
-          name: t("plan.data.days.monday.2.name"),
-          details: t("plan.data.days.monday.2.details"),
-        },
-      ],
-      tuesday: [
-        {
-          mealType: t("plan.data.mealTypes.breakfast"),
-          name: t("plan.data.days.tuesday.0.name"),
-          details: t("plan.data.days.tuesday.0.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.lunch"),
-          name: t("plan.data.days.tuesday.1.name"),
-          details: t("plan.data.days.tuesday.1.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.dinner"),
-          name: t("plan.data.days.tuesday.2.name"),
-          details: t("plan.data.days.tuesday.2.details"),
-        },
-      ],
-      wednesday: [
-        {
-          mealType: t("plan.data.mealTypes.breakfast"),
-          name: t("plan.data.days.wednesday.0.name"),
-          details: t("plan.data.days.wednesday.0.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.lunch"),
-          name: t("plan.data.days.wednesday.1.name"),
-          details: t("plan.data.days.wednesday.1.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.dinner"),
-          name: t("plan.data.days.wednesday.2.name"),
-          details: t("plan.data.days.wednesday.2.details"),
-        },
-      ],
-      thursday: [
-        {
-          mealType: t("plan.data.mealTypes.breakfast"),
-          name: t("plan.data.days.thursday.0.name"),
-          details: t("plan.data.days.thursday.0.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.lunch"),
-          name: t("plan.data.days.thursday.1.name"),
-          details: t("plan.data.days.thursday.1.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.dinner"),
-          name: t("plan.data.days.thursday.2.name"),
-          details: t("plan.data.days.thursday.2.details"),
-        },
-      ],
-      friday: [
-        {
-          mealType: t("plan.data.mealTypes.breakfast"),
-          name: t("plan.data.days.friday.0.name"),
-          details: t("plan.data.days.friday.0.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.lunch"),
-          name: t("plan.data.days.friday.1.name"),
-          details: t("plan.data.days.friday.1.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.dinner"),
-          name: t("plan.data.days.friday.2.name"),
-          details: t("plan.data.days.friday.2.details"),
-        },
-      ],
-      saturday: [
-        {
-          mealType: t("plan.data.mealTypes.breakfast"),
-          name: t("plan.data.days.saturday.0.name"),
-          details: t("plan.data.days.saturday.0.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.lunch"),
-          name: t("plan.data.days.saturday.1.name"),
-          details: t("plan.data.days.saturday.1.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.dinner"),
-          name: t("plan.data.days.saturday.2.name"),
-          details: t("plan.data.days.saturday.2.details"),
-        },
-      ],
-      sunday: [
-        {
-          mealType: t("plan.data.mealTypes.breakfast"),
-          name: t("plan.data.days.sunday.0.name"),
-          details: t("plan.data.days.sunday.0.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.lunch"),
-          name: t("plan.data.days.sunday.1.name"),
-          details: t("plan.data.days.sunday.1.details"),
-        },
-        {
-          mealType: t("plan.data.mealTypes.dinner"),
-          name: t("plan.data.days.sunday.2.name"),
-          details: t("plan.data.days.sunday.2.details"),
-        },
-      ],
-    },
-  };
-
-  const dayKeys: (keyof typeof mealPlan.days)[] = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ];
   const today = new Date()
     .toLocaleDateString("en-US", { weekday: "long" })
-    .toLowerCase() as keyof typeof mealPlan.days;
+    .toLowerCase() as keyof MealPlan["weekStructure"];
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!session?.user?.email) return;
+
+      try {
+        // Fetch user profile
+        const profileRes = await fetch("/api/users/profile");
+        if (profileRes.ok) {
+          const profile = await profileRes.json();
+          setUserProfile(profile);
+
+          // If user has nutritionist, fetch active plan
+          if (profile.assignedNutritionistId) {
+            const planRes = await fetch(
+              `/api/meal-plans/active?patientId=${profile.id}`
+            );
+            if (planRes.ok) {
+              const data = await planRes.json();
+              setActivePlan(data.activePlan);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [session]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-muted-foreground">Cargando plan de comidas...</p>
+      </div>
+    );
+  }
+
+  // State 1: No nutritionist assigned
+  if (!userProfile?.assignedNutritionistId) {
+    return (
+      <Card className="max-w-2xl mx-auto mt-8">
+        <CardHeader className="text-center">
+          <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-secondary flex items-center justify-center">
+            <Stethoscope className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <CardTitle>No tienes un nutricionista asignado</CardTitle>
+          <CardDescription>
+            Para acceder a un plan de comidas personalizado, necesitas tener un
+            nutricionista asignado. Solicita a tu nutricionista que te asigne un
+            plan.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  // State 2: Has nutritionist but no active plan
+  if (!activePlan) {
+    return (
+      <Card className="max-w-2xl mx-auto mt-8">
+        <CardHeader className="text-center">
+          <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-secondary flex items-center justify-center">
+            <CalendarIcon className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <CardTitle>Sin Plan Asignado</CardTitle>
+          <CardDescription>
+            Tu nutricionista aún no te ha asignado un plan de comidas. Contacta
+            con tu nutricionista para que te cree un plan personalizado.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  // State 3: Has active plan - show it
   return (
-    <Card>
-      <CardHeader className="p-3 sm:p-4 md:p-6">
-        <CardTitle className="text-sm sm:text-base md:text-lg">
-          {t("plan.title", { planTitle: "" })}{" "}
-          <span className="text-primary break-words">{mealPlan.title}</span>
-        </CardTitle>
-        <CardDescription className="text-xs sm:text-sm">
-          {t("plan.description", { author: mealPlan.author })}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="p-2 sm:p-4 md:p-6 pt-0">
-        <Tabs defaultValue={today} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-7 h-auto gap-1">
-            {dayKeys.map((day) => (
-              <TabsTrigger
-                key={day}
-                value={day}
-                className="capitalize text-xs sm:text-sm px-2 py-2 sm:px-3 sm:py-2.5 whitespace-nowrap overflow-hidden text-ellipsis"
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl">{activePlan.name}</CardTitle>
+          {activePlan.description && (
+            <CardDescription>{activePlan.description}</CardDescription>
+          )}
+          <div className="flex gap-2 text-sm text-muted-foreground">
+            <span>
+              Inicio: {new Date(activePlan.startDate).toLocaleDateString()}
+            </span>
+            {activePlan.endDate && (
+              <>
+                <span>•</span>
+                <span>
+                  Fin: {new Date(activePlan.endDate).toLocaleDateString()}
+                </span>
+              </>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue={today} className="w-full">
+            <TabsList className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-7 h-auto gap-1">
+              {DAYS.map(({ key, label }) => (
+                <TabsTrigger
+                  key={key}
+                  value={key}
+                  className="capitalize text-xs sm:text-sm px-2 py-2 sm:px-3 sm:py-2.5"
+                >
+                  {label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            {DAYS.map(({ key, label }) => (
+              <TabsContent
+                key={key}
+                value={key}
+                className="mt-4 space-y-4"
               >
-                {t(`plan.data.dayNames.${day}`)}
-              </TabsTrigger>
+                {activePlan.weekStructure[key].length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">
+                    No hay comidas programadas para {label.toLowerCase()}
+                  </p>
+                ) : (
+                  activePlan.weekStructure[key].map((slot, index) => (
+                    <Card
+                      key={index}
+                      className="cursor-pointer hover:bg-accent/50 transition-colors"
+                      onClick={() =>
+                        slot.mealItem && setSelectedMeal({ slot, day: label })
+                      }
+                    >
+                      <CardHeader className="pb-3">
+                        <div className="flex justify-between items-start gap-2">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Badge variant="secondary">
+                                {MEAL_TYPE_LABELS[slot.mealType]}
+                              </Badge>
+                              {slot.mealItem?.recommendedTime && (
+                                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                  <Clock className="h-3 w-3" />
+                                  {slot.mealItem.recommendedTime}
+                                </div>
+                              )}
+                            </div>
+                            <CardTitle className="text-lg">
+                              {slot.mealItem?.title || "Espacio libre"}
+                            </CardTitle>
+                            {slot.mealItem?.portionInfo && (
+                              <CardDescription className="text-xs">
+                                Porción: {slot.mealItem.portionInfo}
+                              </CardDescription>
+                            )}
+                          </div>
+                          {slot.mealItem?.photoUrl && (
+                            <div className="relative w-20 h-20 rounded-md overflow-hidden shrink-0">
+                              <Image
+                                src={slot.mealItem.photoUrl}
+                                alt={slot.mealItem.title}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </CardHeader>
+                      {slot.mealItem && (
+                        <CardContent className="pt-0">
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {slot.mealItem.description}
+                          </p>
+                          {slot.notes && (
+                            <p className="text-sm text-primary mt-2 italic">
+                              Nota: {slot.notes}
+                            </p>
+                          )}
+                          <div className="flex gap-2 mt-3">
+                            {slot.mealItem.photoUrl && (
+                              <Badge variant="outline" className="text-xs">
+                                <ImageIcon className="h-3 w-3 mr-1" />
+                                Foto
+                              </Badge>
+                            )}
+                            {slot.mealItem.videoUrl && (
+                              <Badge variant="outline" className="text-xs">
+                                <Video className="h-3 w-3 mr-1" />
+                                Video
+                              </Badge>
+                            )}
+                          </div>
+                        </CardContent>
+                      )}
+                    </Card>
+                  ))
+                )}
+              </TabsContent>
             ))}
-          </TabsList>
-          {dayKeys.map((day) => (
-            <TabsContent
-              key={day}
-              value={day}
-              className="mt-3 sm:mt-4 space-y-3 sm:space-y-4"
-            >
-              {mealPlan.days[day].map((meal) => (
-                <div key={meal.name} className="p-3 sm:p-4 border rounded-lg">
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
-                    <h3 className="font-semibold text-sm sm:text-base md:text-lg break-words pr-2">
-                      {meal.name}
-                    </h3>
-                    <Badge className="self-start sm:self-auto shrink-0 text-xs">
-                      {meal.mealType}
-                    </Badge>
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      {/* Meal Detail Dialog */}
+      <Dialog
+        open={!!selectedMeal}
+        onOpenChange={(open) => !open && setSelectedMeal(null)}
+      >
+        <DialogContent className="max-w-3xl max-h-[90vh] grid-rows-[auto,1fr] p-0">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle>{selectedMeal?.slot.mealItem?.title}</DialogTitle>
+            <DialogDescription>
+              {selectedMeal?.day} •{" "}
+              {selectedMeal?.slot.mealType &&
+                MEAL_TYPE_LABELS[selectedMeal.slot.mealType]}
+            </DialogDescription>
+          </DialogHeader>
+          <ScrollArea className="h-full px-6 pb-6">
+            <div className="space-y-4">
+              {selectedMeal?.slot.mealItem?.photoUrl && (
+                <div className="relative w-full h-64 rounded-lg overflow-hidden">
+                  <Image
+                    src={selectedMeal.slot.mealItem.photoUrl}
+                    alt={selectedMeal.slot.mealItem.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+
+              {selectedMeal?.slot.mealItem?.videoUrl && (
+                <div className="space-y-2">
+                  <h3 className="font-semibold">Video de Preparación</h3>
+                  <div className="aspect-video rounded-lg overflow-hidden bg-secondary">
+                    <iframe
+                      src={selectedMeal.slot.mealItem.videoUrl.replace(
+                        "watch?v=",
+                        "embed/"
+                      )}
+                      className="w-full h-full"
+                      allowFullScreen
+                    />
                   </div>
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-2 break-words">
-                    {meal.details}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <h3 className="font-semibold">Receta</h3>
+                <p className="text-sm whitespace-pre-wrap">
+                  {selectedMeal?.slot.mealItem?.description}
+                </p>
+              </div>
+
+              {selectedMeal?.slot.mealItem?.portionInfo && (
+                <div className="space-y-2">
+                  <h3 className="font-semibold">Porción Recomendada</h3>
+                  <p className="text-sm">
+                    {selectedMeal.slot.mealItem.portionInfo}
                   </p>
                 </div>
-              ))}
-            </TabsContent>
-          ))}
-        </Tabs>
-      </CardContent>
-    </Card>
+              )}
+
+              {selectedMeal?.slot.mealItem?.recommendedTime && (
+                <div className="space-y-2">
+                  <h3 className="font-semibold">Horario Recomendado</h3>
+                  <p className="text-sm flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    {selectedMeal.slot.mealItem.recommendedTime}
+                  </p>
+                </div>
+              )}
+
+              {selectedMeal?.slot.notes && (
+                <div className="space-y-2">
+                  <h3 className="font-semibold">Notas del Nutricionista</h3>
+                  <p className="text-sm text-primary italic">
+                    {selectedMeal.slot.notes}
+                  </p>
+                </div>
+              )}
+            </div>
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }

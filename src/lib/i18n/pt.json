@@ -619,5 +619,25 @@
     "passwordsMatch": "As senhas devem coincidir",
     "positiveNumber": "Deve ser um número positivo",
     "urlInvalid": "Deve ser uma URL válida"
+  },
+  "assignPlan": {
+    "title": "Atribuir Plano de Refeições",
+    "description": "Atribua um plano de refeições para {patientName}. Você pode usar um modelo existente ou criar um plano personalizado.",
+    "selectTemplate": "Selecionar Modelo",
+    "selectTemplatePlaceholder": "Selecione um modelo...",
+    "customPlan": "Plano Personalizado",
+    "planName": "Nome do Plano",
+    "planNamePlaceholder": "Ex: Plano de Perda de Peso - Semana 1",
+    "descriptionLabel": "Descrição (Opcional)",
+    "descriptionPlaceholder": "Instruções adicionais para o paciente...",
+    "startDate": "Data de Início",
+    "startDatePlaceholder": "Selecione uma data",
+    "isActive": "Marcar como Ativo",
+    "isActiveDesc": "Este será o plano principal que o paciente verá.",
+    "cancel": "Cancelar",
+    "assign": "Atribuir Plano",
+    "assigning": "Atribuindo...",
+    "success": "Plano atribuído com sucesso",
+    "error": "Erro ao atribuir plano"
   }
 }

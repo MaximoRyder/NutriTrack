@@ -59,6 +59,19 @@
     "settings": "Settings",
     "logout": "Log out"
   },
+  "sidebar": {
+    "overview": "Overview",
+    "foodJournal": "Food Journal",
+    "activityLog": "Activity Log",
+    "myProgress": "My Progress",
+    "mealPlan": "Meal Plan",
+    "myNutritionist": "My Nutritionist",
+    "myPatients": "My Patients",
+    "mealItems": "Meal Library",
+    "mealTemplates": "Meal Plan Templates",
+    "userManagement": "User Management",
+    "settings": "Settings"
+  },
   "login": {
     "title": "Login",
     "description": "Enter your email below to login to your account.",
@@ -102,18 +115,6 @@
     "genericError": "Something went wrong. Please try again.",
     "genericErrorTitle": "Oh no!",
     "saving": "Saving..."
-  },
-  "sidebar": {
-    "overview": "Overview",
-    "foodJournal": "Food Journal",
-    "activityLog": "Activity Log",
-    "myProgress": "My Progress",
-    "mealPlan": "Meal Plan",
-    "myNutritionist": "My Nutritionist",
-    "myPatients": "My Patients",
-    "settings": "Settings",
-    "admin": "Admin",
-    "userManagement": "User Management"
   },
   "dashboard": {
     "currentWeight": "Current Weight",
@@ -325,7 +326,7 @@
   },
   "patients": {
     "title": "My Patients",
-    "description": "A list of all patients currently assigned to you.",
+    "description": "A list of all patients assigned to you.",
     "patient": "Patient",
     "status": "Status",
     "lastLog": "Last Log",
@@ -345,7 +346,7 @@
   "addPatient": {
     "title": "Add Existing Patient",
     "description": "Enter the email address of the patient you want to assign to yourself. If the user exists, they will be converted to a patient role and assigned to you.",
-    "email": "Patient's Email",
+    "email": "Patient Email",
     "emailPlaceholder": "patient@example.com",
     "submit": "Add Patient",
     "submitting": "Adding...",
@@ -373,12 +374,12 @@
     "generate": "Generate Suggestions",
     "generating": "Generating...",
     "aiIdeas": "Here are some ideas:",
-    "recentMealLog": "Patient's Meal Log",
+    "recentMealLog": "Patient Meal Log",
     "recentMealLogDesc": "Meal entries for {date}.",
     "leaveComment": "Leave a comment...",
     "send": "Send",
     "notFound": "Patient not found.",
-    "selectDate": "Select a date to see meal logs.",
+    "selectDate": "Select a date to view meal logs.",
     "noRecentMeals": "No recent meals found to generate suggestions."
   },
   "settings": {
@@ -397,7 +398,7 @@
     "resetPassword": "Send Password Reset Email",
     "resetEmailSent": "Password Reset Email Sent",
     "resetEmailDesc": "Check your inbox to reset your password.",
-    "resetError": "Could not send password reset email.",
+    "resetError": "Could not send reset email.",
     "error": "Error",
     "currentPassword": "Current Password",
     "newPassword": "New Password",
@@ -409,7 +410,7 @@
     "myPatientsDesc": "View and manage your assigned patients.",
     "invitationCode": "Your unique invitation code is:",
     "invitationCodeLabel": "Invitation Code",
-    "goToDashboard": "Go to Patients Dashboard",
+    "goToDashboard": "Go to Patient Dashboard",
     "myNutritionist": "My Nutritionist",
     "myNutritionistDesc": "Your guide on your health journey.",
     "noNutritionist": "You are not currently assigned to a nutritionist.",
@@ -425,8 +426,8 @@
       "underweight": "Underweight",
       "normal": "Optimal",
       "overweight": "Overweight",
-      "obese": "Obese",
-      "obeseSevere": "Severely Obese"
+      "obese": "Obesity",
+      "obeseSevere": "Severe Obesity"
     },
     "bodyMeasurements": "Body Measurements (cm)",
     "chest": "Chest",
@@ -461,21 +462,21 @@
     "totalNutritionists": "Nutritionists",
     "totalPatients": "Patients",
     "pendingApproval": "{count} pending",
-    "mealsLogged": "Total Meals Logged",
+    "mealsLogged": "Meals Logged",
     "userManagement": "User Management",
     "userManagementDesc": "View, edit, and manage all users in the system.",
     "allUsers": "All Users",
     "allUsersDesc": "Approve, deactivate, change roles, or delete users from this panel.",
     "statusUpdated": "Status Updated",
-    "statusUpdatedDesc": "The user's status has been changed to {status}.",
+    "statusUpdatedDesc": "User status has been changed to {status}.",
     "roleUpdated": "Role Updated",
-    "roleUpdatedDesc": "The user's role has been changed to {role}.",
+    "roleUpdatedDesc": "User role has been changed to {role}.",
     "userDeleted": "User Deleted",
-    "userDeletedDesc": "The user {email} has been permanently deleted.",
+    "userDeletedDesc": "User {email} has been permanently deleted.",
     "noUsers": "No users found in the system.",
     "editUser": "Edit User Profile",
     "profileInfo": "Profile Information",
-    "profileInfoDesc": "Edit the user's core profile and role.",
+    "profileInfoDesc": "Edit the user's main profile and role.",
     "personalDataDesc": "View and edit patient-specific health data.",
     "selectRole": "Select a role",
     "selectStatus": "Select a status",
@@ -494,7 +495,7 @@
       "updateStatus": "Update Status",
       "approve": "Approve",
       "deactivate": "Deactivate",
-      "reactivate": "Re-activate",
+      "reactivate": "Reactivate",
       "setPending": "Set to Pending",
       "changeRole": "Change Role",
       "delete": "Delete User"
@@ -511,7 +512,7 @@
     },
     "delete": {
       "title": "Are you sure you want to delete this user?",
-      "description": "This will permanently delete the user {email} and all associated data. This action cannot be undone.",
+      "description": "This will permanently delete user {email} and all their associated data. This action cannot be undone.",
       "cancel": "Cancel",
       "confirm": "Delete User"
     }
@@ -531,7 +532,7 @@
   },
   "quickLog": {
     "title": "Quick Log",
-    "description": "Track your daily habits",
+    "description": "Log your daily habits",
     "water": "Water",
     "activity": "Activity",
     "noActivity": "No activity logged today",
@@ -561,28 +562,28 @@
     "remove250": "Remove 250ml"
   },
   "activities": {
-    "title": "Activities on {date}",
+    "title": "Activities for {date}",
     "description": "You logged {count} activity on this day.",
     "description_plural": "You logged {count} activities on this day.",
     "noActivities": "No activities logged for this day.",
     "placeholder": "Select a day on the calendar to view your logged activities.",
     "delete": {
       "title": "Delete Activity",
-      "description": "This action cannot be undone. This will permanently delete the activity '{activityName}'.",
+      "description": "This action cannot be undone. This will permanently delete the activity entry for '{activityName}'.",
       "cancel": "Cancel",
       "confirm": "Delete"
     }
   },
   "nutritionist": {
     "title": "My Nutritionist",
-    "description": "Information about your assigned health professional.",
+    "description": "Information about your assigned healthcare professional.",
     "contact": "Contact",
     "phone": "Phone",
     "email": "Email",
     "specialization": "Specialization",
     "license": "Professional License",
     "about": "About",
-    "sessions": "Sessions & Appointments",
+    "sessions": "Sessions & Consultations",
     "sessionsDesc": "History of your sessions with {name}.",
     "upcomingSessions": "Upcoming Sessions",
     "pastSessions": "Past Sessions",
@@ -593,7 +594,7 @@
     "sessionNotes": "Notes",
     "sessionDuration": "Duration",
     "requestSession": "Request Session",
-    "noNutritionist": "No nutritionist assigned",
+    "noNutritionist": "No Nutritionist Assigned",
     "noNutritionistDesc": "You can add a nutritionist using an invitation code in your settings page.",
     "goToSettings": "Go to Settings",
     "assignNutritionist": "Assign Nutritionist",
@@ -608,17 +609,37 @@
       "followup": "Follow-up",
       "checkup": "Check-up",
       "online": "Online",
-      "inperson": "In Person"
+      "inperson": "In-person"
     }
   },
   "validation": {
     "required": "Required",
     "nameRequired": "Name is required",
-    "emailInvalid": "Please enter a valid email address",
+    "emailInvalid": "Please enter a valid email",
     "passwordMin": "Password must be at least 6 characters",
     "roleRequired": "You must select a role",
     "passwordsMatch": "Passwords must match",
     "positiveNumber": "Must be a positive number",
     "urlInvalid": "Must be a valid URL"
+  },
+  "assignPlan": {
+    "title": "Assign Meal Plan",
+    "description": "Assign a meal plan to {patientName}. You can use an existing template or create a custom plan.",
+    "selectTemplate": "Select Template",
+    "selectTemplatePlaceholder": "Select a template...",
+    "customPlan": "Custom Plan",
+    "planName": "Plan Name",
+    "planNamePlaceholder": "Ex: Weight Loss Plan - Week 1",
+    "descriptionLabel": "Description (Optional)",
+    "descriptionPlaceholder": "Additional instructions for the patient...",
+    "startDate": "Start Date",
+    "startDatePlaceholder": "Select a date",
+    "isActive": "Mark as Active",
+    "isActiveDesc": "This will be the main plan the patient sees.",
+    "cancel": "Cancel",
+    "assign": "Assign Plan",
+    "assigning": "Assigning...",
+    "success": "Plan assigned successfully",
+    "error": "Error assigning plan"
   }
 }
