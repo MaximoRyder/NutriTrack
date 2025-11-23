@@ -166,7 +166,7 @@ export function AppointmentBookingDialog({
                     </Button>
                 )}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-[600px] flex flex-col max-h-[90vh]">
                 <DialogHeader>
                     <DialogTitle>{t("appointments.book")}</DialogTitle>
                     <DialogDescription>
@@ -174,7 +174,7 @@ export function AppointmentBookingDialog({
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="grid gap-6 py-4">
+                <div className="grid gap-2 py-2 overflow-y-auto flex-1 px-2">
                     {/* Calendar */}
                     <div className="space-y-2">
                         <Label>{t("appointments.selectDate")}</Label>
@@ -186,6 +186,11 @@ export function AppointmentBookingDialog({
                                 disabled={(date) => date < new Date()}
                                 locale={currentLocale}
                                 className="rounded-md border"
+                                classNames={{
+                                    head_cell: "text-muted-foreground rounded-md w-10 font-normal text-[0.8rem]",
+                                    cell: "h-10 w-10 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                                    day: "h-10 w-10 p-0 font-normal aria-selected:opacity-100"
+                                }}
                             />
                         </div>
                     </div>
