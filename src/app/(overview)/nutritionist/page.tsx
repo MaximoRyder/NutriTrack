@@ -1,5 +1,6 @@
 "use client";
 
+import { AppointmentBookingDialog } from "@/components/appointment-booking-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,14 +34,15 @@ import useSWR from "swr";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-interface Session {
-  id: string;
+interface Appointment {
+  _id: string;
   date: string;
-  type: "initial" | "followup" | "checkup" | "online" | "inperson";
-  duration: number; // minutes
+  type: "initial" | "followup" | "checkup";
+  duration: number;
+  status: "pending" | "confirmed" | "cancelled" | "completed";
   notes?: string;
-  nutritionistId: string;
-  patientId: string;
+  nutritionistId: any;
+  patientId: any;
 }
 
 export default function NutritionistPage() {
@@ -60,10 +62,10 @@ export default function NutritionistPage() {
   const { profile: nutritionist, isLoading: isLoadingNutritionist } =
     useUserProfile(userProfile?.assignedNutritionistId || "");
 
-  // Fetch sessions
-  const { data: sessions, isLoading: isLoadingSessions } = useSWR<Session[]>(
-    userProfile?.id && userProfile?.assignedNutritionistId
-      ? `/api/sessions?patientId=${userProfile.id}&nutritionistId=${userProfile.assignedNutritionistId}`
+  // Fetch appointments
+  const { data: appointments, isLoading: isLoadingAppointments, mutate: mutateAppointments } = useSWR<Appointment[]>(
+    userProfile?.id
+      ? `/api/appointments?userId=${userProfile.id}&role=patient`
       : null,
     fetcher
   );
@@ -182,11 +184,11 @@ export default function NutritionistPage() {
     );
   }
 
-  // Split sessions into upcoming and past
+  // Split appointments into upcoming and past
   const now = new Date();
-  const upcomingSessions =
-    sessions?.filter((s) => new Date(s.date) >= now) || [];
-  const pastSessions = sessions?.filter((s) => new Date(s.date) < now) || [];
+  const upcomingAppointments =
+    appointments?.filter((a) => a.status !== "cancelled" && new Date(a.date) >= now) || [];
+  const pastAppointments = appointments?.filter((a) => new Date(a.date) < now) || [];
 
   return (
     <div className="space-y-6">
@@ -239,10 +241,11 @@ export default function NutritionistPage() {
               <MessageSquare className="h-4 w-4 mr-2" />
               Chat
             </Button>
-            <Button size="sm">
-              <Calendar className="h-4 w-4 mr-2" />
-              {t("nutritionist.requestSession")}
-            </Button>
+            <AppointmentBookingDialog
+              nutritionistId={userProfile.assignedNutritionistId}
+              patientId={userProfile.id}
+              onSuccess={() => mutateAppointments()}
+            />
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -309,9 +312,9 @@ export default function NutritionistPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {isLoadingSessions ? (
+            {isLoadingAppointments ? (
               <Skeleton className="h-32 w-full" />
-            ) : upcomingSessions.length === 0 ? (
+            ) : upcomingAppointments.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
                 <Calendar className="h-12 w-12 mb-3 opacity-50" />
                 <p className="text-sm">
@@ -325,22 +328,60 @@ export default function NutritionistPage() {
                     <TableHead>{t("nutritionist.sessionDate")}</TableHead>
                     <TableHead>{t("nutritionist.sessionType")}</TableHead>
                     <TableHead>{t("nutritionist.sessionDuration")}</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {upcomingSessions.map((session) => (
-                    <TableRow key={session.id}>
-                      <TableCell className="font-medium">
-                        {format(new Date(session.date), "PPp")}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">
-                          {t(`nutritionist.sessionTypes.${session.type}`)}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{session.duration} min</TableCell>
-                    </TableRow>
-                  ))}
+                  {upcomingAppointments.map((appointment) => {
+                    const appointmentDate = new Date(appointment.date);
+                    const now = new Date();
+                    const hoursUntilAppointment = (appointmentDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+                    const canCancel = hoursUntilAppointment > 24;
+
+                    return (
+                      <TableRow key={appointment._id}>
+                        <TableCell className="font-medium">
+                          {format(new Date(appointment.date), "PPp")}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline">
+                            {t(`appointments.types.${appointment.type}`)}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{appointment.duration} min</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={!canCancel}
+                            onClick={async () => {
+                              try {
+                                const res = await fetch(`/api/appointments?id=${appointment._id}`, {
+                                  method: "DELETE",
+                                });
+                                if (res.ok) {
+                                  toast({
+                                    title: t("settings.success"),
+                                    description: "Appointment cancelled",
+                                  });
+                                  mutateAppointments();
+                                }
+                              } catch (error) {
+                                toast({
+                                  variant: "destructive",
+                                  title: t("settings.error"),
+                                  description: "Failed to cancel appointment",
+                                });
+                              }
+                            }}
+                            title={!canCancel ? "Cannot cancel within 24 hours of appointment" : "Cancel appointment"}
+                          >
+                            Cancel
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             )}
@@ -359,9 +400,9 @@ export default function NutritionistPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {isLoadingSessions ? (
+            {isLoadingAppointments ? (
               <Skeleton className="h-32 w-full" />
-            ) : pastSessions.length === 0 ? (
+            ) : pastAppointments.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
                 <Calendar className="h-12 w-12 mb-3 opacity-50" />
                 <p className="text-sm">{t("nutritionist.noPastSessions")}</p>
@@ -376,17 +417,17 @@ export default function NutritionistPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {pastSessions.slice(0, 5).map((session) => (
-                    <TableRow key={session.id}>
+                  {pastAppointments.slice(0, 5).map((appointment) => (
+                    <TableRow key={appointment._id}>
                       <TableCell className="font-medium">
-                        {format(new Date(session.date), "PP")}
+                        {format(new Date(appointment.date), "PP")}
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline">
-                          {t(`nutritionist.sessionTypes.${session.type}`)}
+                          {t(`appointments.types.${appointment.type}`)}
                         </Badge>
                       </TableCell>
-                      <TableCell>{session.duration} min</TableCell>
+                      <TableCell>{appointment.duration} min</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

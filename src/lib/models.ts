@@ -227,3 +227,55 @@ const SnippetSchema = new Schema<ISnippet>({
 
 export const Snippet =
   models.Snippet || model<ISnippet>("Snippet", SnippetSchema);
+
+export interface IAvailability extends Document {
+  nutritionistId: mongoose.Types.ObjectId;
+  dayOfWeek: number; // 0-6 (Sunday-Saturday)
+  startTime: string; // HH:mm format
+  endTime: string; // HH:mm format
+  slotDuration: number; // minutes
+}
+
+const AvailabilitySchema = new Schema<IAvailability>({
+  nutritionistId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  dayOfWeek: { type: Number, required: true, min: 0, max: 6 },
+  startTime: { type: String, required: true },
+  endTime: { type: String, required: true },
+  slotDuration: { type: Number, required: true },
+});
+
+export const Availability =
+  models.Availability || model<IAvailability>("Availability", AvailabilitySchema);
+
+export interface IAppointment extends Document {
+  nutritionistId: mongoose.Types.ObjectId;
+  patientId: mongoose.Types.ObjectId;
+  date: Date;
+  duration: number; // minutes
+  status: "pending" | "confirmed" | "cancelled" | "completed";
+  type: "initial" | "followup" | "checkup";
+  notes?: string;
+  createdAt: Date;
+}
+
+const AppointmentSchema = new Schema<IAppointment>({
+  nutritionistId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  patientId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  date: { type: Date, required: true },
+  duration: { type: Number, required: true },
+  status: {
+    type: String,
+    enum: ["pending", "confirmed", "cancelled", "completed"],
+    default: "pending",
+  },
+  type: {
+    type: String,
+    enum: ["initial", "followup", "checkup"],
+    required: true,
+  },
+  notes: String,
+  createdAt: { type: Date, default: Date.now },
+});
+
+export const Appointment =
+  models.Appointment || model<IAppointment>("Appointment", AppointmentSchema);

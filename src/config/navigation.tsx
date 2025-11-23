@@ -1,14 +1,15 @@
 import {
-    Activity,
-    AreaChart,
-    BookCopy,
-    BookTemplate,
-    Calendar,
-    LayoutDashboard,
-    Shield,
-    Stethoscope,
-    Users,
-    Utensils
+  Activity,
+  AreaChart,
+  BookCopy,
+  BookTemplate,
+  Calendar,
+  Clock,
+  LayoutDashboard,
+  Shield,
+  Stethoscope,
+  Users,
+  Utensils
 } from "lucide-react";
 
 export const getNavigation = (t: (key: string) => string) => {
@@ -28,6 +29,8 @@ export const getNavigation = (t: (key: string) => string) => {
   const nutritionistNav = [
     { name: t("sidebar.overview"), href: "/overview", icon: LayoutDashboard },
     { name: t("sidebar.myPatients"), href: "/patients", icon: Users },
+    { name: t("sidebar.appointments"), href: "/patients/appointments", icon: Calendar },
+    { name: t("sidebar.availability"), href: "/patients/availability", icon: Clock },
     { name: t("sidebar.mealItems"), href: "/meal-items", icon: Utensils },
     { name: t("sidebar.mealTemplates"), href: "/meal-plan-templates", icon: BookTemplate },
   ];
