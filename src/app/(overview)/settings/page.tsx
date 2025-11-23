@@ -537,7 +537,7 @@ export default function SettingsPage() {
 
                         return (
                           <FormItem className="flex flex-col">
-                            <FormLabel>{t("settings.dateOfBirth")}</FormLabel>
+                            <FormLabel className="pointer-events-none">{t("settings.dateOfBirth")}</FormLabel>
                             <Popover open={isOpen} onOpenChange={setIsOpen}>
                               <PopoverTrigger asChild>
                                 <FormControl>
