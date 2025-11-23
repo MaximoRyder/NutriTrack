@@ -5,6 +5,7 @@ import { BmiGauge } from "@/components/bmi-gauge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Card,
   CardContent,
@@ -24,6 +25,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -36,6 +42,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { enUS, es, ptBR } from "date-fns/locale";
+import { CalendarIcon } from "lucide-react";
 import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -47,7 +56,7 @@ export default function SettingsPage() {
     isLoading: isProfileLoading,
     mutate: mutateProfile,
   } = useUserProfile((user as any)?.id);
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { toast } = useToast();
 
   const [isAvatarDialogOpen, setAvatarDialogOpen] = React.useState(
@@ -511,15 +520,133 @@ export default function SettingsPage() {
                     <FormField
                       control={patientForm.control}
                       name="dateOfBirth"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("settings.dateOfBirth")}</FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                      render={({ field }) => {
+                        const dateLocales = { en: enUS, es: es, pt: ptBR };
+                        const currentLocale = dateLocales[locale as keyof typeof dateLocales] || enUS;
+                        const [isOpen, setIsOpen] = React.useState(false);
+                        const [displayMonth, setDisplayMonth] = React.useState<Date>(
+                          field.value ? new Date(field.value + 'T00:00:00') : new Date()
+                        );
+
+                        // Update displayMonth when popover opens to show the selected date
+                        React.useEffect(() => {
+                          if (isOpen && field.value) {
+                            setDisplayMonth(new Date(field.value + 'T00:00:00'));
+                          }
+                        }, [isOpen, field.value]);
+
+                        return (
+                          <FormItem className="flex flex-col">
+                            <FormLabel>{t("settings.dateOfBirth")}</FormLabel>
+                            <Popover open={isOpen} onOpenChange={setIsOpen}>
+                              <PopoverTrigger asChild>
+                                <FormControl>
+                                  <Button
+                                    variant="outline"
+                                    className="w-full justify-start text-left font-normal"
+                                  >
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    {field.value ? (
+                                      format(new Date(field.value + 'T00:00:00'), "PPP", { locale: currentLocale })
+                                    ) : (
+                                      <span className="text-muted-foreground">
+                                        {t("settings.dateOfBirth")}
+                                      </span>
+                                    )}
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0" align="start">
+                                <div className="p-2 sm:p-3 space-y-2 sm:space-y-3">
+                                  <div className="flex gap-1 sm:gap-2">
+                                    <Select
+                                      value={displayMonth.getMonth().toString()}
+                                      onValueChange={(month) => {
+                                        const newDate = new Date(displayMonth);
+                                        newDate.setMonth(parseInt(month));
+                                        setDisplayMonth(newDate);
+                                      }}
+                                    >
+                                      <SelectTrigger className="w-[120px] sm:w-[140px] h-8 sm:h-10 text-xs sm:text-sm capitalize">
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent position="popper" className="max-h-[300px]">
+                                        {Array.from({ length: 12 }, (_, i) => {
+                                          const date = new Date(2000, i, 1);
+                                          const monthName = format(date, "MMMM", { locale: currentLocale });
+                                          return (
+                                            <SelectItem key={i} value={i.toString()} className="capitalize">
+                                              {monthName}
+                                            </SelectItem>
+                                          );
+                                        })}
+                                      </SelectContent>
+                                    </Select>
+                                    <Select
+                                      value={displayMonth.getFullYear().toString()}
+                                      onValueChange={(year) => {
+                                        const newDate = new Date(displayMonth);
+                                        newDate.setFullYear(parseInt(year));
+                                        setDisplayMonth(newDate);
+                                      }}
+                                    >
+                                      <SelectTrigger className="w-[85px] sm:w-[100px] h-8 sm:h-10 text-xs sm:text-sm">
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {Array.from({ length: 125 }, (_, i) => {
+                                          const year = new Date().getFullYear() - i;
+                                          return (
+                                            <SelectItem key={year} value={year.toString()}>
+                                              {year}
+                                            </SelectItem>
+                                          );
+                                        })}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                  <Calendar
+                                    mode="single"
+                                    selected={field.value ? new Date(field.value + 'T00:00:00') : undefined}
+                                    onSelect={(date) => {
+                                      if (date) {
+                                        const year = date.getFullYear();
+                                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                                        const day = String(date.getDate()).padStart(2, '0');
+                                        field.onChange(`${year}-${month}-${day}`);
+                                        setIsOpen(false);
+                                      }
+                                    }}
+                                    month={displayMonth}
+                                    onMonthChange={setDisplayMonth}
+                                    locale={currentLocale}
+                                    disabled={(date) =>
+                                      date > new Date() || date < new Date("1900-01-01")
+                                    }
+                                    initialFocus
+                                    className="text-base"
+                                    classNames={{
+                                      months: "flex flex-col space-y-4",
+                                      month: "space-y-4",
+                                      caption: "flex justify-center pt-1 relative items-center",
+                                      caption_label: "text-sm sm:text-base font-medium capitalize",
+                                      nav: "space-x-1 flex items-center",
+                                      nav_button: "h-7 w-7 sm:h-9 sm:w-9",
+                                      table: "w-full border-collapse space-y-1",
+                                      head_row: "flex",
+                                      head_cell: "text-muted-foreground rounded-md w-8 sm:w-10 font-normal text-[0.65rem] sm:text-sm capitalize",
+                                      row: "flex w-full mt-1 sm:mt-2",
+                                      cell: "h-8 w-8 sm:h-10 sm:w-10 text-center text-xs sm:text-sm p-0 relative",
+                                      day: "h-8 w-8 sm:h-10 sm:w-10 p-0 font-normal text-xs sm:text-sm",
+                                    }}
+                                  />
+                                </div>
+                              </PopoverContent>
+                            </Popover>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
                     />
                     <div className="grid gap-4 sm:grid-cols-2">
                       <FormField
