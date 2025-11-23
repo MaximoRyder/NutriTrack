@@ -58,11 +58,7 @@ export default function SettingsPage() {
     () =>
       z.object({
         displayName: z.string().min(1, t("validation.required")),
-        photoUrl: z
-          .string()
-          .url(t("validation.urlInvalid"))
-          .or(z.string().length(0))
-          .optional(),
+        photoUrl: z.string().optional(),
       }),
     [t]
   );
@@ -160,10 +156,15 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (userProfile) {
+      // Preserve dirty fields (like displayName if the user is editing it)
+      const currentDisplayName = profileForm.getValues("displayName");
+      const isDisplayNameDirty = profileForm.getFieldState("displayName").isDirty;
+
       profileForm.reset({
-        displayName: userProfile.displayName || "",
+        displayName: isDisplayNameDirty ? currentDisplayName : userProfile.displayName || "",
         photoUrl: userProfile.photoUrl || "",
       });
+
       if (userProfile.role === "patient") {
         patientForm.reset({
           dateOfBirth: userProfile.dateOfBirth
@@ -308,7 +309,9 @@ export default function SettingsPage() {
                   <CardContent className="space-y-4">
                     <div className="flex items-center gap-4">
                       <Avatar className="h-20 w-20">
-                        <AvatarImage src={userProfile.photoUrl || ""} />
+                        <AvatarImage
+                          src={profileForm.watch("photoUrl") || ""}
+                        />
                         <AvatarFallback>
                           {userProfile.displayName?.charAt(0) || "U"}
                         </AvatarFallback>
@@ -382,13 +385,35 @@ export default function SettingsPage() {
             <AvatarCropDialog
               isOpen={isAvatarDialogOpen}
               onOpenChange={setAvatarDialogOpen}
-              onCropped={(url) => {
-                profileForm.setValue("photoUrl", url, { shouldDirty: true });
-                // auto-save after upload
-                handleProfileSubmit({
-                  displayName: profileForm.getValues("displayName"),
-                  photoUrl: url,
+              onCropped={async (url) => {
+                // Immediate save for profile picture
+                if (!userProfile) return;
+
+                // Optimistic update
+                profileForm.setValue("photoUrl", url, { shouldDirty: false });
+
+                const res = await fetch("/api/users", {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    id: userProfile.id,
+                    photoUrl: url,
+                  }),
                 });
+
+                if (res.ok) {
+                  mutateProfile();
+                  toast({
+                    title: t("settings.success"),
+                    description: t("settings.profileUpdated"),
+                  });
+                } else {
+                  toast({
+                    variant: "destructive",
+                    title: t("settings.error"),
+                    description: await res.text(),
+                  });
+                }
               }}
             />
 

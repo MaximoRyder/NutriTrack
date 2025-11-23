@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "@/hooks/use-toast";
-import React, { useCallback, useState } from "react";
+import { Camera, Image as ImageIcon } from "lucide-react";
+import React, { useCallback, useRef, useState } from "react";
 import Cropper from "react-easy-crop";
 
 interface AvatarCropDialogProps {
@@ -58,6 +59,8 @@ export const AvatarCropDialog: React.FC<AvatarCropDialogProps> = ({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const onSelectFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
@@ -114,7 +117,55 @@ export const AvatarCropDialog: React.FC<AvatarCropDialogProps> = ({
         </DialogHeader>
         <div className="space-y-4">
           {!imageSrc && (
-            <input type="file" accept="image/*" onChange={onSelectFile} />
+            <div className="flex flex-col gap-4 items-center py-8">
+              {/* Mobile View */}
+              <div className="flex gap-4 md:hidden">
+                <Button
+                  variant="outline"
+                  className="h-24 w-24 flex-col gap-2"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <ImageIcon className="h-8 w-8" />
+                  <span>Galería</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-24 w-24 flex-col gap-2"
+                  onClick={() => cameraInputRef.current?.click()}
+                >
+                  <Camera className="h-8 w-8" />
+                  <span>Cámara</span>
+                </Button>
+              </div>
+
+              {/* Desktop View */}
+              <div className="hidden md:flex">
+                <Button
+                  variant="outline"
+                  className="h-32 w-32 flex-col gap-4 border-dashed"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <ImageIcon className="h-10 w-10 text-muted-foreground" />
+                  <span className="text-muted-foreground">Subir Foto</span>
+                </Button>
+              </div>
+
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={onSelectFile}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                className="hidden"
+                ref={cameraInputRef}
+                onChange={onSelectFile}
+              />
+            </div>
           )}
           {imageSrc && (
             <div className="relative h-[400px] bg-muted rounded">
