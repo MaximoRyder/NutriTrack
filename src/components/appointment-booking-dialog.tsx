@@ -201,7 +201,7 @@ export function AppointmentBookingDialog({
                             <Label>{t("appointments.selectTime")}</Label>
                             {isLoadingSlots ? (
                                 <div className="text-sm text-muted-foreground">
-                                    {t("general.loading")}...
+                                    {t("general.loading")}
                                 </div>
                             ) : timeSlots.length === 0 ? (
                                 <div className="text-sm text-muted-foreground">
