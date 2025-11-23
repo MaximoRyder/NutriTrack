@@ -715,6 +715,38 @@
       }
     }
   },
+  "patientPlan": {
+    "loading": "Carregando plano alimentar...",
+    "noNutritionist": {
+      "title": "Nenhum Nutricionista Atribuído",
+      "description": "Para acessar um plano alimentar personalizado, você precisa ter um nutricionista atribuído. Peça ao seu nutricionista para lhe atribuir um plano."
+    },
+    "noPlan": {
+      "title": "Nenhum Plano Atribuído",
+      "description": "Seu nutricionista ainda não lhe atribuiu um plano alimentar. Contate seu nutricionista para criar um plano personalizado para você."
+    },
+    "start": "Início",
+    "end": "Fim",
+    "noMealsForDay": "Nenhuma refeição programada para {day}",
+    "freeSlot": "Espaço livre",
+    "portion": "Porção",
+    "photo": "Foto",
+    "video": "Vídeo",
+    "preparationVideo": "Vídeo de Preparação",
+    "recipe": "Receita",
+    "recommendedPortion": "Porção Recomendada",
+    "recommendedTime": "Horário Recomendado",
+    "nutritionistNotes": "Notas do Nutricionista",
+    "days": {
+      "monday": "Segunda",
+      "tuesday": "Terça",
+      "wednesday": "Quarta",
+      "thursday": "Quinta",
+      "friday": "Sexta",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    }
+  },
   "assignPlan": {
     "title": "Atribuir Plano de Refeições",
     "description": "Atribua um plano de refeições para {patientName}. Você pode usar um modelo existente ou criar um plano personalizado.",

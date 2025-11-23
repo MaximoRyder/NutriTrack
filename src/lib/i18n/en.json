@@ -714,6 +714,38 @@
       }
     }
   },
+  "patientPlan": {
+    "loading": "Loading meal plan...",
+    "noNutritionist": {
+      "title": "No Nutritionist Assigned",
+      "description": "To access a personalized meal plan, you need to have a nutritionist assigned. Ask your nutritionist to assign you a plan."
+    },
+    "noPlan": {
+      "title": "No Plan Assigned",
+      "description": "Your nutritionist hasn't assigned you a meal plan yet. Contact your nutritionist to create a personalized plan for you."
+    },
+    "start": "Start",
+    "end": "End",
+    "noMealsForDay": "No meals scheduled for {day}",
+    "freeSlot": "Free slot",
+    "portion": "Portion",
+    "photo": "Photo",
+    "video": "Video",
+    "preparationVideo": "Preparation Video",
+    "recipe": "Recipe",
+    "recommendedPortion": "Recommended Portion",
+    "recommendedTime": "Recommended Time",
+    "nutritionistNotes": "Nutritionist Notes",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  },
   "assignPlan": {
     "title": "Assign Meal Plan",
     "description": "Assign a meal plan to {patientName}. You can use an existing template or create a custom plan.",

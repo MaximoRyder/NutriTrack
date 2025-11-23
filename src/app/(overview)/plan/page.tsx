@@ -17,31 +17,15 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { AssignedDayMealSlot, MealPlan, UserProfile } from "@/lib/types";
 import { Calendar as CalendarIcon, Clock, ImageIcon, Stethoscope, Video } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const DAYS = [
-  { key: "monday", label: "Lunes" },
-  { key: "tuesday", label: "Martes" },
-  { key: "wednesday", label: "Miércoles" },
-  { key: "thursday", label: "Jueves" },
-  { key: "friday", label: "Viernes" },
-  { key: "saturday", label: "Sábado" },
-  { key: "sunday", label: "Domingo" },
-] as const;
-
-const MEAL_TYPE_LABELS: Record<string, string> = {
-  breakfast: "Desayuno",
-  lunch: "Almuerzo",
-  dinner: "Cena",
-  snack: "Merienda",
-  other: "Otro",
-};
-
 export default function PlanPage() {
+  const { t } = useTranslation();
   const { data: session } = useSession();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [activePlan, setActivePlan] = useState<MealPlan | null>(null);
@@ -54,6 +38,24 @@ export default function PlanPage() {
   const today = new Date()
     .toLocaleDateString("en-US", { weekday: "long" })
     .toLowerCase() as keyof MealPlan["weekStructure"];
+
+  const DAYS = [
+    { key: "monday", label: t("patientPlan.days.monday") },
+    { key: "tuesday", label: t("patientPlan.days.tuesday") },
+    { key: "wednesday", label: t("patientPlan.days.wednesday") },
+    { key: "thursday", label: t("patientPlan.days.thursday") },
+    { key: "friday", label: t("patientPlan.days.friday") },
+    { key: "saturday", label: t("patientPlan.days.saturday") },
+    { key: "sunday", label: t("patientPlan.days.sunday") },
+  ] as const;
+
+  const MEAL_TYPE_LABELS: Record<string, string> = {
+    breakfast: t("addMeal.breakfast"),
+    lunch: t("addMeal.lunch"),
+    dinner: t("addMeal.dinner"),
+    snack: t("addMeal.snack"),
+    other: t("addMeal.other"),
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,7 +92,7 @@ export default function PlanPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <p className="text-muted-foreground">Cargando plan de comidas...</p>
+        <p className="text-muted-foreground">{t("patientPlan.loading")}</p>
       </div>
     );
   }
@@ -103,11 +105,9 @@ export default function PlanPage() {
           <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-secondary flex items-center justify-center">
             <Stethoscope className="h-8 w-8 text-muted-foreground" />
           </div>
-          <CardTitle>No tienes un nutricionista asignado</CardTitle>
+          <CardTitle>{t("patientPlan.noNutritionist.title")}</CardTitle>
           <CardDescription>
-            Para acceder a un plan de comidas personalizado, necesitas tener un
-            nutricionista asignado. Solicita a tu nutricionista que te asigne un
-            plan.
+            {t("patientPlan.noNutritionist.description")}
           </CardDescription>
         </CardHeader>
       </Card>
@@ -122,10 +122,9 @@ export default function PlanPage() {
           <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-secondary flex items-center justify-center">
             <CalendarIcon className="h-8 w-8 text-muted-foreground" />
           </div>
-          <CardTitle>Sin Plan Asignado</CardTitle>
+          <CardTitle>{t("patientPlan.noPlan.title")}</CardTitle>
           <CardDescription>
-            Tu nutricionista aún no te ha asignado un plan de comidas. Contacta
-            con tu nutricionista para que te cree un plan personalizado.
+            {t("patientPlan.noPlan.description")}
           </CardDescription>
         </CardHeader>
       </Card>
@@ -143,13 +142,13 @@ export default function PlanPage() {
           )}
           <div className="flex gap-2 text-sm text-muted-foreground">
             <span>
-              Inicio: {new Date(activePlan.startDate).toLocaleDateString()}
+              {t("patientPlan.start")}: {new Date(activePlan.startDate).toLocaleDateString()}
             </span>
             {activePlan.endDate && (
               <>
                 <span>•</span>
                 <span>
-                  Fin: {new Date(activePlan.endDate).toLocaleDateString()}
+                  {t("patientPlan.end")}: {new Date(activePlan.endDate).toLocaleDateString()}
                 </span>
               </>
             )}
@@ -176,7 +175,7 @@ export default function PlanPage() {
               >
                 {activePlan.weekStructure[key].length === 0 ? (
                   <p className="text-center text-muted-foreground py-8">
-                    No hay comidas programadas para {label.toLowerCase()}
+                    {t("patientPlan.noMealsForDay").replace("{day}", label.toLowerCase())}
                   </p>
                 ) : (
                   activePlan.weekStructure[key].map((slot, index) => (
@@ -202,11 +201,11 @@ export default function PlanPage() {
                               )}
                             </div>
                             <CardTitle className="text-lg">
-                              {slot.mealItem?.title || "Espacio libre"}
+                              {slot.mealItem?.title || t("patientPlan.freeSlot")}
                             </CardTitle>
                             {slot.mealItem?.portionInfo && (
                               <CardDescription className="text-xs">
-                                Porción: {slot.mealItem.portionInfo}
+                                {t("patientPlan.portion")}: {slot.mealItem.portionInfo}
                               </CardDescription>
                             )}
                           </div>
@@ -229,20 +228,20 @@ export default function PlanPage() {
                           </p>
                           {slot.notes && (
                             <p className="text-sm text-primary mt-2 italic">
-                              Nota: {slot.notes}
+                              {t("patientPlan.nutritionistNotes")}: {slot.notes}
                             </p>
                           )}
                           <div className="flex gap-2 mt-3">
                             {slot.mealItem.photoUrl && (
                               <Badge variant="outline" className="text-xs">
                                 <ImageIcon className="h-3 w-3 mr-1" />
-                                Foto
+                                {t("patientPlan.photo")}
                               </Badge>
                             )}
                             {slot.mealItem.videoUrl && (
                               <Badge variant="outline" className="text-xs">
                                 <Video className="h-3 w-3 mr-1" />
-                                Video
+                                {t("patientPlan.video")}
                               </Badge>
                             )}
                           </div>
@@ -286,7 +285,7 @@ export default function PlanPage() {
 
               {selectedMeal?.slot.mealItem?.videoUrl && (
                 <div className="space-y-2">
-                  <h3 className="font-semibold">Video de Preparación</h3>
+                  <h3 className="font-semibold">{t("patientPlan.preparationVideo")}</h3>
                   <div className="aspect-video rounded-lg overflow-hidden bg-secondary">
                     <iframe
                       src={selectedMeal.slot.mealItem.videoUrl.replace(
@@ -301,7 +300,7 @@ export default function PlanPage() {
               )}
 
               <div className="space-y-2">
-                <h3 className="font-semibold">Receta</h3>
+                <h3 className="font-semibold">{t("patientPlan.recipe")}</h3>
                 <p className="text-sm whitespace-pre-wrap">
                   {selectedMeal?.slot.mealItem?.description}
                 </p>
@@ -309,7 +308,7 @@ export default function PlanPage() {
 
               {selectedMeal?.slot.mealItem?.portionInfo && (
                 <div className="space-y-2">
-                  <h3 className="font-semibold">Porción Recomendada</h3>
+                  <h3 className="font-semibold">{t("patientPlan.recommendedPortion")}</h3>
                   <p className="text-sm">
                     {selectedMeal.slot.mealItem.portionInfo}
                   </p>
@@ -318,7 +317,7 @@ export default function PlanPage() {
 
               {selectedMeal?.slot.mealItem?.recommendedTime && (
                 <div className="space-y-2">
-                  <h3 className="font-semibold">Horario Recomendado</h3>
+                  <h3 className="font-semibold">{t("patientPlan.recommendedTime")}</h3>
                   <p className="text-sm flex items-center gap-2">
                     <Clock className="h-4 w-4" />
                     {selectedMeal.slot.mealItem.recommendedTime}
@@ -328,7 +327,7 @@ export default function PlanPage() {
 
               {selectedMeal?.slot.notes && (
                 <div className="space-y-2">
-                  <h3 className="font-semibold">Notas del Nutricionista</h3>
+                  <h3 className="font-semibold">{t("patientPlan.nutritionistNotes")}</h3>
                   <p className="text-sm text-primary italic">
                     {selectedMeal.slot.notes}
                   </p>
