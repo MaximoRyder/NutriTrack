@@ -535,6 +535,7 @@
     "na": "N/A",
     "back": "Back",
     "save": "Save",
+    "saving": "Saving...",
     "cancel": "Cancel",
     "comments": "Comments"
   },
@@ -778,6 +779,8 @@
     "book": "Book Appointment",
     "selectDateTimeDesc": "Select a date and time for your appointment.",
     "selectDate": "Select Date",
+    "selectTime": "Select Time",
+    "noAvailableSlots": "No available slots for this date.",
     "appointmentType": "Appointment Type",
     "types": {
       "initial": "Initial Consultation",

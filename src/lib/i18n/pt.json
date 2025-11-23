@@ -365,7 +365,7 @@
     "weight": "Peso",
     "bmi": "IMC: {value}",
     "goal": "Meta",
-    "toGo": "Faltam {value} kg",
+    "toGo": "Faltan {value} kg",
     "hydration": "Hidratação",
     "activityLevel": "Nível de Atividade",
     "activityLevelDesc": "Nível de atividade auto-relatado pelo paciente.",
@@ -535,6 +535,7 @@
     "na": "N/D",
     "back": "Voltar",
     "save": "Salvar",
+    "saving": "Salvando...",
     "cancel": "Cancelar",
     "comments": "Comentários"
   },
@@ -778,6 +779,8 @@
     "book": "Agendar Consulta",
     "selectDateTimeDesc": "Selecione uma data e hora para sua consulta.",
     "selectDate": "Selecionar Data",
+    "selectTime": "Selecionar Horário",
+    "noAvailableSlots": "Não há horários disponíveis para esta data.",
     "appointmentType": "Tipo de Consulta",
     "types": {
       "initial": "Consulta Inicial",

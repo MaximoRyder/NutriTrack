@@ -536,6 +536,7 @@
     "na": "N/D",
     "back": "Volver",
     "save": "Guardar",
+    "saving": "Guardando...",
     "cancel": "Cancelar",
     "comments": "Comentarios"
   },
@@ -779,6 +780,8 @@
     "book": "Reservar Cita",
     "selectDateTimeDesc": "Selecciona una fecha y hora para tu cita.",
     "selectDate": "Seleccionar Fecha",
+    "selectTime": "Seleccionar Hora",
+    "noAvailableSlots": "No hay horarios disponibles para esta fecha.",
     "appointmentType": "Tipo de Cita",
     "types": {
       "initial": "Consulta Inicial",
