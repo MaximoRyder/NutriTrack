@@ -2,23 +2,24 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { addPatientRecord, usePatientRecords, useUser } from "@/lib/data-hooks";
@@ -191,7 +192,27 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
       <CardContent>
         <div className="space-y-4">
           {isLoading ? (
-            <div className="text-center py-4">{t("general.loading")}</div>
+            Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg gap-4"
+              >
+                <div className="space-y-2 w-full sm:w-1/3">
+                  <Skeleton className="h-5 w-32" />
+                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="h-16 w-full mt-2" />
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full sm:w-auto">
+                  {Array.from({ length: 4 }).map((_, j) => (
+                    <div key={j} className="flex flex-col items-center p-2 gap-2">
+                      <Skeleton className="h-4 w-4 rounded-full" />
+                      <Skeleton className="h-5 w-16" />
+                      <Skeleton className="h-3 w-12" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
           ) : records && records.length > 0 ? (
             records.map((record: any) => (
               <div

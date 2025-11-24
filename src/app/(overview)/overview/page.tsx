@@ -85,12 +85,12 @@ export default function DashboardPage() {
   const { data: recentMeals, isLoading: isLoadingMeals } = useSWR<Meal[]>(
     userProfile?.role === "patient" && user && date
       ? (() => {
-          const startDate = new Date(date);
-          startDate.setHours(0, 0, 0, 0);
-          const endDate = new Date(date);
-          endDate.setHours(23, 59, 59, 999);
-          return `/api/meals?userId=${(user as any).id}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
-        })()
+        const startDate = new Date(date);
+        startDate.setHours(0, 0, 0, 0);
+        const endDate = new Date(date);
+        endDate.setHours(23, 59, 59, 999);
+        return `/api/meals?userId=${(user as any).id}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+      })()
       : null,
     fetcher
   );
@@ -100,8 +100,8 @@ export default function DashboardPage() {
   const totalWaterToday = waterLogs?.reduce((acc: any, log: any) => acc + log.quantityMl, 0) || 0;
   const hydrationProgress = Math.min((totalWaterToday / 2000) * 100, 100);
 
-  // Active meal plan for patient
-  const { data: activeMealPlanData } = useSWR(
+  // Active Meal Plan for patient
+  const { data: activeMealPlanData, isLoading: isLoadingMealPlan } = useSWR(
     userProfile?.role === "patient" && user
       ? `/api/meal-plans/active?patientId=${(user as any).id}`
       : null,
@@ -394,7 +394,7 @@ export default function DashboardPage() {
         onOpenChange={setAddMealDialogOpen}
         onAddMeal={handleAddMeal}
       />
-      
+
       <div className="space-y-6 w-full max-w-[1700px] mx-auto">
         {/* Top Section: Calendar + Stats Cards */}
         <div className="grid gap-6 grid-cols-1 xl:grid-cols-[minmax(500px,1fr)_minmax(400px,2fr)]">
@@ -451,15 +451,25 @@ export default function DashboardPage() {
 
 
             {/* Active Meal Plan Card */}
-            {activeMealPlan ? (
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Plan de Comidas Activo
-                  </CardTitle>
-                  <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Plan de Comidas Activo
+                </CardTitle>
+                <CalendarDays className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                {isLoadingMealPlan ? (
+                  <div className="space-y-3">
+                    <Skeleton className="h-7 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-4 w-8" />
+                    </div>
+                    <Skeleton className="h-9 w-full mt-2" />
+                  </div>
+                ) : activeMealPlan ? (
                   <div className="space-y-3">
                     <div>
                       <div className="text-xl font-bold">{activeMealPlan.name}</div>
@@ -469,7 +479,7 @@ export default function DashboardPage() {
                         </p>
                       )}
                     </div>
-                    
+
                     <div className="flex items-center gap-2 text-sm">
                       <span className="text-muted-foreground">Semana:</span>
                       <span className="font-semibold">{getCurrentWeek()}</span>
@@ -489,119 +499,128 @@ export default function DashboardPage() {
                       </Button>
                     </Link>
                   </div>
-                </CardContent>
-              </Card>
-            ) : null}
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-4 text-center space-y-3">
+                    <p className="text-sm text-muted-foreground">
+                      No tienes un plan de comidas asignado actualmente.
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Tu nutricionista te asignará uno pronto.
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
 
         {/* Bottom Section: Quick Log, Meals, Weight Chart */}
         <div className="grid gap-4 grid-cols-1 lg:grid-cols-[minmax(350px,1fr)_minmax(500px,2fr)]">
-            <div>
-              <QuickLogCard patientId={(user as any)?.id} date={date || new Date()} />
-            </div>
-            <Card>
-              <CardHeader className="flex flex-row items-center">
-                <div className="grid gap-2">
-                  <CardTitle>{t("dashboard.recentMeals")}</CardTitle>
-                  <CardDescription>
-                    {t("dashboard.recentMealsDesc")}
-                  </CardDescription>
-                </div>
-                <Button
-                  size="sm"
-                  className="ml-auto gap-1"
-                  onClick={() => setAddMealDialogOpen(true)}
-                >
-                  {t("dashboard.addMeal")}
-                  <PlusCircle className="h-4 w-4" />
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
+          <div>
+            <QuickLogCard patientId={(user as any)?.id} date={date || new Date()} />
+          </div>
+          <Card>
+            <CardHeader className="flex flex-row items-center">
+              <div className="grid gap-2">
+                <CardTitle>{t("dashboard.recentMeals")}</CardTitle>
+                <CardDescription>
+                  {t("dashboard.recentMealsDesc")}
+                </CardDescription>
+              </div>
+              <Button
+                size="sm"
+                className="ml-auto gap-1"
+                onClick={() => setAddMealDialogOpen(true)}
+              >
+                {t("dashboard.addMeal")}
+                <PlusCircle className="h-4 w-4" />
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{t("dashboard.meal")}</TableHead>
+                    <TableHead className="hidden sm:table-cell">
+                      {t("dashboard.type")}
+                    </TableHead>
+                    <TableHead className="text-right">
+                      {t("dashboard.time")}
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {isLoadingMeals && (
                     <TableRow>
-                      <TableHead>{t("dashboard.meal")}</TableHead>
-                      <TableHead className="hidden sm:table-cell">
-                        {t("dashboard.type")}
-                      </TableHead>
-                      <TableHead className="text-right">
-                        {t("dashboard.time")}
-                      </TableHead>
+                      <TableCell colSpan={3} className="text-center">
+                        {t("dashboard.loadingMeals")}
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {isLoadingMeals && (
+                  )}
+                  {recentMeals && recentMeals.length > 0
+                    ? recentMeals.map((meal) => (
+                      <TableRow key={meal.id}>
+                        <TableCell>
+                          <div className="font-medium">{meal.name}</div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell capitalize">
+                          {t(`addMeal.${meal.mealType.toLowerCase()}`)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {format(new Date(meal.timestamp), "p")}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                    : !isLoadingMeals && (
                       <TableRow>
                         <TableCell colSpan={3} className="text-center">
-                          {t("dashboard.loadingMeals")}
+                          {t("dashboard.noRecentMeals")}
                         </TableCell>
                       </TableRow>
                     )}
-                    {recentMeals && recentMeals.length > 0
-                      ? recentMeals.map((meal) => (
-                          <TableRow key={meal.id}>
-                            <TableCell>
-                              <div className="font-medium">{meal.name}</div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell capitalize">
-                              {t(`addMeal.${meal.mealType.toLowerCase()}`)}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              {format(new Date(meal.timestamp), "p")}
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      : !isLoadingMeals && (
-                          <TableRow>
-                            <TableCell colSpan={3} className="text-center">
-                              {t("dashboard.noRecentMeals")}
-                            </TableCell>
-                          </TableRow>
-                        )}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-            <Card className="overflow-hidden xl:col-span-3">
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">
-                  {t("dashboard.weightProgress")}
-                </CardTitle>
-                <CardDescription className="text-xs sm:text-sm">
-                  {t("dashboard.weightProgressDesc")}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-4 lg:p-6 pt-0">
-                <ChartContainer
-                  config={weightChartConfig}
-                  className="h-[200px] sm:h-[250px] w-full"
-                >
-                  <BarChart accessibilityLayer data={weightChartData}>
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                      dataKey="date"
-                      tickLine={false}
-                      tickMargin={10}
-                      axisLine={false}
-                      tick={{ fontSize: 10 }}
-                      tickFormatter={(value) =>
-                        new Date(value).toLocaleDateString(locale, {
-                          month: "short",
-                          day: "numeric",
-                        })
-                      }
-                    />
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent indicator="dot" />}
-                    />
-                    <Bar dataKey="weight" fill="var(--color-weight)" radius={4} />
-                  </BarChart>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-          </div>
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+          <Card className="overflow-hidden xl:col-span-3">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">
+                {t("dashboard.weightProgress")}
+              </CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
+                {t("dashboard.weightProgressDesc")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-2 sm:p-4 lg:p-6 pt-0">
+              <ChartContainer
+                config={weightChartConfig}
+                className="h-[200px] sm:h-[250px] w-full"
+              >
+                <BarChart accessibilityLayer data={weightChartData}>
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                    dataKey="date"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                    tick={{ fontSize: 10 }}
+                    tickFormatter={(value) =>
+                      new Date(value).toLocaleDateString(locale, {
+                        month: "short",
+                        day: "numeric",
+                      })
+                    }
+                  />
+                  <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent indicator="dot" />}
+                  />
+                  <Bar dataKey="weight" fill="var(--color-weight)" radius={4} />
+                </BarChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </>
   );

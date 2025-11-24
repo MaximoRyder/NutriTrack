@@ -1,40 +1,32 @@
 "use client";
 import { PatientRecords } from "@/components/patient-records";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Progress } from "@/components/ui/progress";
-import { useUser } from "@/lib/data-hooks";
+import { usePatientRecords, useUser, useWaterLogsRange } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
-import { format } from "date-fns";
+import { endOfDay, format, isSameDay, startOfDay, subDays } from "date-fns";
+import { useMemo } from "react";
 import {
-    Bar,
-    BarChart,
-    CartesianGrid,
-    Line,
-    LineChart,
-    XAxis,
-    YAxis,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  XAxis,
+  YAxis,
 } from "recharts";
 
-const weightData = [
-  { date: "2024-06-01", weight: 85.0 },
-  { date: "2024-06-08", weight: 84.5 },
-  { date: "2024-06-15", weight: 84.0 },
-  { date: "2024-06-22", weight: 83.0 },
-  { date: "2024-06-29", weight: 82.5 },
-  { date: "2024-07-06", weight: 82.0 },
-  { date: "2024-07-13", weight: 81.5 },
-];
 const chartConfig = {
   weight: { label: "Weight (kg)", color: "hsl(var(--primary))" },
   waist: { label: "Waist (cm)", color: "hsl(var(--chart-2))" },
@@ -42,24 +34,64 @@ const chartConfig = {
   water: { label: "Water (ml)", color: "hsl(var(--chart-1))" },
 };
 
-const measurementsData = [
-  { date: "2024-06-01", waist: 95, hips: 105, chest: 100 },
-  { date: "2024-07-01", waist: 92, hips: 103, chest: 99 },
-];
-
-const waterData = [
-  { date: "Sun", goal: 2000, drank: 1500 },
-  { date: "Mon", goal: 2000, drank: 1800 },
-  { date: "Tue", goal: 2000, drank: 2100 },
-  { date: "Wed", goal: 2000, drank: 1900 },
-  { date: "Thu", goal: 2000, drank: 2200 },
-  { date: "Fri", goal: 2000, drank: 1700 },
-  { date: "Sat", goal: 2000, drank: 2000 },
-];
-
 export default function ProgressPage() {
   const { t } = useTranslation();
   const { user } = useUser();
+  const { records } = usePatientRecords((user as any)?.id);
+
+  const today = useMemo(() => new Date(), []);
+  const lastWeekStart = useMemo(() => startOfDay(subDays(today, 6)), [today]);
+  const lastWeekEnd = useMemo(() => endOfDay(today), [today]);
+
+  const { waterLogs } = useWaterLogsRange(
+    (user as any)?.id,
+    lastWeekStart,
+    lastWeekEnd
+  );
+
+  const weightData = useMemo(() => {
+    if (!records) return [];
+    return records
+      .map((record: any) => ({
+        date: record.date,
+        weight: record.weightKg,
+      }))
+      .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }, [records]);
+
+  const measurementsData = useMemo(() => {
+    if (!records) return [];
+    return records
+      .map((record: any) => ({
+        date: record.date,
+        waist: record.waistCm || 0, // Assuming waistCm exists or fallback
+        hips: record.hipsCm || 0,   // Assuming hipsCm exists or fallback
+        bodyFat: record.bodyFatPercentage,
+        visceralFat: record.visceralFatPercentage,
+      }))
+      .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }, [records]);
+
+  const waterData = useMemo(() => {
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const date = subDays(today, 6 - i);
+      const dayLogs = waterLogs?.filter((log: any) =>
+        isSameDay(new Date(log.date), date)
+      ) || [];
+
+      const totalDrank = dayLogs.reduce((acc: number, log: any) => acc + log.quantityMl, 0);
+
+      days.push({
+        date: format(date, "EEE"), // Mon, Tue, etc.
+        fullDate: date,
+        goal: 2000, // Hardcoded goal for now, could be from user profile
+        drank: totalDrank
+      });
+    }
+    return days;
+  }, [waterLogs, today]);
+
   return (
     <div className="space-y-6">
       <Card>
@@ -139,8 +171,8 @@ export default function ProgressPage() {
                   cursor={false}
                   content={<ChartTooltipContent />}
                 />
-                <Bar dataKey="waist" fill="var(--color-waist)" radius={4} />
-                <Bar dataKey="hips" fill="var(--color-hips)" radius={4} />
+                <Bar dataKey="bodyFat" fill="var(--color-waist)" radius={4} name={t("records.bodyFat")} />
+                <Bar dataKey="visceralFat" fill="var(--color-hips)" radius={4} name={t("records.visceralFat")} />
               </BarChart>
             </ChartContainer>
           </CardContent>

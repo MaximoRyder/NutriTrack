@@ -174,6 +174,17 @@ export function useWaterLogs(userId: string | undefined, date: Date | undefined)
   return { waterLogs: data || [], isLoading: shouldFetch && !data && !error, error, mutate };
 }
 
+export function useWaterLogsRange(userId: string | undefined, startDate: Date | undefined, endDate: Date | undefined) {
+  const shouldFetch = !!userId && !!startDate && !!endDate;
+  const { data, error, mutate } = useSWR(
+    shouldFetch 
+      ? `/api/waterlogs?userId=${userId}&startDate=${startDate!.toISOString()}&endDate=${endDate!.toISOString()}` 
+      : null,
+    fetcher
+  );
+  return { waterLogs: data || [], isLoading: shouldFetch && !data && !error, error, mutate };
+}
+
 export async function addWaterLog(payload: {
   date: string;
   quantityMl: number;
