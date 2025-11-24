@@ -221,6 +221,34 @@ export async function addActivityLog(payload: {
   return res.json();
 }
 
+// Patient records
+export function usePatientRecords(patientId: string | undefined) {
+  const { data, error, mutate } = useSWR(
+    patientId ? `/api/patient-records?patientId=${patientId}` : null,
+    fetcher
+  );
+  return { records: data || [], isLoading: !data && !error, error, mutate };
+}
+
+export async function addPatientRecord(payload: {
+  patientId: string;
+  nutritionistId: string;
+  date: Date;
+  weightKg: number;
+  heightCm: number;
+  bodyFatPercentage?: number;
+  visceralFatPercentage?: number;
+  notes?: string;
+}) {
+  const res = await fetch("/api/patient-records", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
 // List patients for nutritionist
 export function usePatients() {
   const { user } = useUser();

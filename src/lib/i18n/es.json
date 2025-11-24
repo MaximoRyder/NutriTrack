@@ -828,6 +828,24 @@
     "actions": "Acciones",
     "cancel": "Cancelar"
   },
+  "records": {
+    "title": "Registros del Paciente",
+    "description": "Historial de consultas y mediciones",
+    "addRecord": "Agregar Registro",
+    "addRecordDesc": "Agrega un nuevo registro de consulta para este paciente",
+    "weight": "Peso",
+    "height": "Altura",
+    "bodyFat": "Grasa Corporal",
+    "visceralFat": "Grasa Visceral",
+    "bodyFatShort": "G. Corp",
+    "visceralFatShort": "G. Visc",
+    "notes": "Notas",
+    "notesPlaceholder": "Agrega notas de la consulta...",
+    "recordedBy": "Registrado por",
+    "noRecords": "No se encontraron registros",
+    "addSuccess": "Registro agregado exitosamente",
+    "addError": "Error al agregar el registro"
+  },
   "availability": {
     "title": "Disponibilidad",
     "description": "Gestiona tu horario semanal",

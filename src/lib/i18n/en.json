@@ -827,6 +827,24 @@
     "actions": "Actions",
     "cancel": "Cancel"
   },
+  "records": {
+    "title": "Patient Records",
+    "description": "History of consultations and measurements",
+    "addRecord": "Add Record",
+    "addRecordDesc": "Add a new consultation record for this patient",
+    "weight": "Weight",
+    "height": "Height",
+    "bodyFat": "Body Fat",
+    "visceralFat": "Visceral Fat",
+    "bodyFatShort": "Body Fat",
+    "visceralFatShort": "Visceral Fat",
+    "notes": "Notes",
+    "notesPlaceholder": "Add consultation notes...",
+    "recordedBy": "Recorded by",
+    "noRecords": "No records found",
+    "addSuccess": "Record added successfully",
+    "addError": "Failed to add record"
+  },
   "availability": {
     "title": "Availability",
     "description": "Manage your weekly schedule",

@@ -1,29 +1,28 @@
 "use client";
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
 } from "@/components/ui/chart";
-import {
-  Line,
-  LineChart,
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { format } from "date-fns";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
+import { format } from "date-fns";
+import {
+    Bar,
+    BarChart,
+    CartesianGrid,
+    Line,
+    LineChart,
+    XAxis,
+    YAxis,
+} from "recharts";
 
 const weightData = [
   { date: "2024-06-01", weight: 85.0 },
@@ -58,6 +57,7 @@ const waterData = [
 
 export default function ProgressPage() {
   const { t } = useTranslation();
+  const { user } = useUser();
   return (
     <div className="space-y-6">
       <Card>
@@ -66,6 +66,8 @@ export default function ProgressPage() {
           <CardDescription>{t("progress.description")}</CardDescription>
         </CardHeader>
       </Card>
+
+      {user && <PatientRecords patientId={(user as any).id} />}
 
       <Card className="overflow-hidden">
         <CardHeader className="p-3 sm:p-4 md:p-6">

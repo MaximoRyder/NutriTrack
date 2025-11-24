@@ -5,6 +5,7 @@ import {
     GenerateMealPlanSuggestionsOutput,
 } from "@/ai/flows/generate-meal-plan-suggestions";
 import { AssignMealPlanDialog } from "@/components/assign-meal-plan-dialog";
+import { PatientRecords } from "@/components/patient-records";
 import { QuickLogCard } from "@/components/quick-log-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -361,6 +362,9 @@ export default function PatientDetailPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* SECCIÓN 1.5: PATIENT RECORDS */}
+      <PatientRecords patientId={patientId} />
 
       {/* SECCIÓN 2: CHART, QUICK LOG, AI */}
       <div className="grid gap-4 lg:grid-cols-4">

@@ -22,6 +22,8 @@ export interface IUser extends Document {
     hips?: number;
     chest?: number;
   };
+  bodyFatPercentage?: number;
+  visceralFatPercentage?: number;
   // Nutritionist fields
   subscriptionStatus?: "active" | "inactive" | "trial" | "pending";
   invitationCode?: string;
@@ -58,6 +60,8 @@ const UserSchema = new Schema<IUser>({
     hips: Number,
     chest: Number,
   },
+  bodyFatPercentage: Number,
+  visceralFatPercentage: Number,
   subscriptionStatus: {
     type: String,
     enum: ["active", "inactive", "trial", "pending"],
@@ -279,3 +283,31 @@ const AppointmentSchema = new Schema<IAppointment>({
 
 export const Appointment =
   models.Appointment || model<IAppointment>("Appointment", AppointmentSchema);
+
+export interface IPatientRecord extends Document {
+  patientId: mongoose.Types.ObjectId;
+  nutritionistId: mongoose.Types.ObjectId;
+  date: Date;
+  weightKg: number;
+  heightCm: number;
+  bodyFatPercentage?: number;
+  visceralFatPercentage?: number;
+  notes?: string;
+  createdAt: Date;
+}
+
+const PatientRecordSchema = new Schema<IPatientRecord>({
+  patientId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  nutritionistId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  date: { type: Date, required: true },
+  weightKg: { type: Number, required: true },
+  heightCm: { type: Number, required: true },
+  bodyFatPercentage: Number,
+  visceralFatPercentage: Number,
+  notes: String,
+  createdAt: { type: Date, default: Date.now },
+});
+
+export const PatientRecord =
+  models.PatientRecord ||
+  model<IPatientRecord>("PatientRecord", PatientRecordSchema);
