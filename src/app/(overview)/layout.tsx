@@ -40,9 +40,11 @@ export default function DashboardLayout({
       return;
     }
     if (!loading && user && userProfile) {
+      // User needs onboarding only if they don't have a valid role yet
+      // Once they have patient/nutritionist/admin role, onboarding is complete
       const needsOnboarding =
-        userProfile.role === "patient" &&
-        (!userProfile.heightCm || !userProfile.goalWeightKg);
+        !userProfile.role ||
+        (userProfile.role !== "patient" && userProfile.role !== "nutritionist" && userProfile.role !== "admin");
       const currentPath = pathname; // safe to read without adding to deps
       if (needsOnboarding && currentPath !== "/welcome") {
         router.replace("/welcome");
