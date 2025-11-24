@@ -186,6 +186,7 @@
     "noMeals": "No meals logged for this day.",
     "placeholder": "Select a day on the calendar to view your logged meals.",
     "edit": "Edit",
+    "view": "View",
     "deleteAction": "Delete",
     "delete": {
       "title": "Are you sure?",
@@ -553,7 +554,8 @@
     "save": "Save",
     "saving": "Saving...",
     "cancel": "Cancel",
-    "comments": "Comments"
+    "comments": "Comments",
+    "close": "Close"
   },
   "quickLog": {
     "title": "Quick Log",
@@ -845,7 +847,10 @@
     "notes": "Notes (Optional)",
     "notesPlaceholder": "Add any notes for your nutritionist...",
     "actions": "Actions",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "detailTitle": "Appointment Details",
+    "detailDesc": "View complete information about this appointment",
+    "duration": "Duration"
   },
   "records": {
     "title": "Patient Records",

@@ -186,6 +186,7 @@
     "noMeals": "Nenhuma refeição registrada para este dia.",
     "placeholder": "Selecione um dia no calendário para ver suas refeições registradas.",
     "edit": "Editar",
+    "view": "Ver",
     "deleteAction": "Excluir",
     "delete": {
       "title": "Tem certeza?",
@@ -553,7 +554,8 @@
     "save": "Salvar",
     "saving": "Salvando...",
     "cancel": "Cancelar",
-    "comments": "Comentários"
+    "comments": "Comentários",
+    "close": "Fechar"
   },
   "quickLog": {
     "title": "Registro Rápido",
@@ -845,7 +847,10 @@
     "notes": "Notas (Opcional)",
     "notesPlaceholder": "Adicione notas para seu nutricionista...",
     "actions": "Ações",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "detailTitle": "Detalhes da Consulta",
+    "detailDesc": "Ver informações completas sobre esta consulta",
+    "duration": "Duração"
   },
   "records": {
     "title": "Registros do Paciente",
