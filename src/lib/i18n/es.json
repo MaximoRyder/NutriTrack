@@ -777,16 +777,45 @@
     "error": "Error al asignar el plan"
   },
   "appointments": {
+    "title": "Citas",
+    "subtitle": "Gestiona las citas de tus pacientes",
+    "upcomingTitle": "Próximas Citas",
+    "upcomingDesc": "Ver y gestionar tus citas programadas",
+    "pastTitle": "Citas Pasadas",
+    "pastDesc": "Historial de citas completadas",
+    "noUpcoming": "No hay citas próximas",
+    "noPast": "No hay citas pasadas",
     "book": "Reservar Cita",
     "selectDateTimeDesc": "Selecciona una fecha y hora para tu cita.",
     "selectDate": "Seleccionar Fecha",
     "selectTime": "Seleccionar Hora",
     "noAvailableSlots": "No hay horarios disponibles para esta fecha.",
     "appointmentType": "Tipo de Cita",
+    "editTitle": "Editar Cita",
+    "editDesc": "Cambia la fecha o la hora de esta cita",
+    "saveChanges": "Guardar Cambios",
+    "updateSuccess": "Cita actualizada exitosamente",
+    "updateError": "Error al actualizar la cita",
+    "selectDateTimeError": "Por favor selecciona una fecha y hora",
+    "cancelSuccess": "Cita cancelada exitosamente",
+    "cancelError": "Error al cancelar la cita",
     "types": {
       "initial": "Consulta Inicial",
       "followup": "Seguimiento",
       "checkup": "Control"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmada",
+      "cancelled": "Cancelada",
+      "completed": "Completada"
+    },
+    "table": {
+      "patient": "Paciente",
+      "dateTime": "Fecha y Hora",
+      "type": "Tipo",
+      "status": "Estado",
+      "actions": "Acciones"
     },
     "notes": "Notas (Opcional)",
     "notesPlaceholder": "Agrega cualquier nota para tu nutricionista...",

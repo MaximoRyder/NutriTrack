@@ -119,7 +119,7 @@ export function EditAppointmentDialog({
             toast({
                 variant: "destructive",
                 title: t("settings.error"),
-                description: "Please select a date and time",
+                description: t("appointments.selectDateTimeError"),
             });
             return;
         }
@@ -142,7 +142,7 @@ export function EditAppointmentDialog({
             if (res.ok) {
                 toast({
                     title: t("settings.success"),
-                    description: "Appointment updated successfully",
+                    description: t("appointments.updateSuccess"),
                 });
                 onSuccess();
                 onClose();
@@ -155,7 +155,7 @@ export function EditAppointmentDialog({
             toast({
                 variant: "destructive",
                 title: t("settings.error"),
-                description: error.message || "Failed to update appointment",
+                description: error.message || t("appointments.updateError"),
             });
         } finally {
             setIsSaving(false);
@@ -168,16 +168,16 @@ export function EditAppointmentDialog({
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
-                    <DialogTitle>Edit Appointment</DialogTitle>
+                    <DialogTitle>{t("appointments.editTitle")}</DialogTitle>
                     <DialogDescription>
-                        Change the date or time of this appointment
+                        {t("appointments.editDesc")}
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className="grid gap-6 py-4">
                     {/* Calendar */}
                     <div className="space-y-2">
-                        <Label>Select Date</Label>
+                        <Label>{t("appointments.selectDate")}</Label>
                         <div className="flex justify-center">
                             <Calendar
                                 mode="single"
@@ -185,7 +185,26 @@ export function EditAppointmentDialog({
                                 onSelect={handleDateSelect}
                                 disabled={(date) => date < new Date()}
                                 locale={currentLocale}
-                                className="rounded-md border"
+                                className="rounded-md border scale-110"
+                                classNames={{
+                                    months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                                    month: "space-y-4",
+                                    caption: "flex justify-center pt-1 relative items-center",
+                                    caption_label: "text-base font-medium",
+                                    nav: "space-x-1 flex items-center",
+                                    nav_button: "h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100",
+                                    table: "w-full border-collapse space-y-1",
+                                    head_row: "flex",
+                                    head_cell: "text-muted-foreground rounded-md w-10 font-normal text-[0.9rem]",
+                                    row: "flex w-full mt-2",
+                                    cell: "h-10 w-10 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                                    day: "h-10 w-10 p-0 font-normal aria-selected:opacity-100 hover:bg-accent hover:text-accent-foreground rounded-md",
+                                    day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                                    day_today: "bg-accent text-accent-foreground",
+                                    day_outside: "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
+                                    day_disabled: "text-muted-foreground opacity-50",
+                                    day_hidden: "invisible",
+                                }}
                             />
                         </div>
                     </div>
@@ -193,14 +212,14 @@ export function EditAppointmentDialog({
                     {/* Time Slots */}
                     {selectedDate && (
                         <div className="space-y-2">
-                            <Label>Select Time</Label>
+                            <Label>{t("appointments.selectTime")}</Label>
                             {isLoadingSlots ? (
                                 <div className="text-sm text-muted-foreground">
                                     {t("general.loading")}...
                                 </div>
                             ) : timeSlots.length === 0 ? (
                                 <div className="text-sm text-muted-foreground">
-                                    No available slots for this date
+                                    {t("appointments.noAvailableSlots")}
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-4 gap-2">
@@ -231,7 +250,7 @@ export function EditAppointmentDialog({
                         onClick={handleSave}
                         disabled={!selectedDate || !selectedTime || isSaving}
                     >
-                        {isSaving ? t("general.saving") : "Save Changes"}
+                        {isSaving ? t("general.saving") : t("appointments.saveChanges")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

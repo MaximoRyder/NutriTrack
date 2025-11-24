@@ -92,7 +92,7 @@ export default function AppointmentsPage() {
             if (res.ok) {
                 toast({
                     title: t("settings.success"),
-                    description: "Appointment cancelled successfully",
+                    description: t("appointments.cancelSuccess"),
                 });
                 mutate();
             } else {
@@ -103,7 +103,7 @@ export default function AppointmentsPage() {
             toast({
                 variant: "destructive",
                 title: t("settings.error"),
-                description: "Failed to cancel appointment",
+                description: t("appointments.cancelError"),
             });
         }
     };
@@ -121,19 +121,19 @@ export default function AppointmentsPage() {
         <div className="space-y-6">
             <div>
                 <h2 className="text-2xl font-bold tracking-tight">
-                    Appointments
+                    {t("appointments.title")}
                 </h2>
                 <p className="text-muted-foreground">
-                    Manage your patient appointments
+                    {t("appointments.subtitle")}
                 </p>
             </div>
 
             {/* Upcoming Appointments */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Upcoming Appointments</CardTitle>
+                    <CardTitle>{t("appointments.upcomingTitle")}</CardTitle>
                     <CardDescription>
-                        View and manage your scheduled appointments
+                        {t("appointments.upcomingDesc")}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -142,17 +142,17 @@ export default function AppointmentsPage() {
                     ) : upcomingAppointments.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
                             <Calendar className="h-12 w-12 mb-3 opacity-50" />
-                            <p className="text-sm">No upcoming appointments</p>
+                            <p className="text-sm">{t("appointments.noUpcoming")}</p>
                         </div>
                     ) : (
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Patient</TableHead>
-                                    <TableHead>Date & Time</TableHead>
-                                    <TableHead>Type</TableHead>
-                                    <TableHead>Status</TableHead>
-                                    <TableHead>Actions</TableHead>
+                                    <TableHead>{t("appointments.table.patient")}</TableHead>
+                                    <TableHead>{t("appointments.table.dateTime")}</TableHead>
+                                    <TableHead>{t("appointments.table.type")}</TableHead>
+                                    <TableHead>{t("appointments.table.status")}</TableHead>
+                                    <TableHead>{t("appointments.table.actions")}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -190,7 +190,7 @@ export default function AppointmentsPage() {
                                                     onClick={() => setEditingAppointment(appointment)}
                                                 >
                                                     <Edit className="h-4 w-4 mr-1" />
-                                                    Edit
+                                                    {t("journal.edit")}
                                                 </Button>
                                                 <Button
                                                     variant="ghost"
@@ -198,7 +198,7 @@ export default function AppointmentsPage() {
                                                     onClick={() => handleCancelAppointment(appointment._id)}
                                                 >
                                                     <X className="h-4 w-4 mr-1" />
-                                                    Cancel
+                                                    {t("appointments.cancel")}
                                                 </Button>
                                             </div>
                                         </TableCell>
@@ -213,8 +213,8 @@ export default function AppointmentsPage() {
             {/* Past Appointments */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Past Appointments</CardTitle>
-                    <CardDescription>History of completed appointments</CardDescription>
+                    <CardTitle>{t("appointments.pastTitle")}</CardTitle>
+                    <CardDescription>{t("appointments.pastDesc")}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {isLoadingAppointments ? (
@@ -222,16 +222,16 @@ export default function AppointmentsPage() {
                     ) : pastAppointments.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
                             <Calendar className="h-12 w-12 mb-3 opacity-50" />
-                            <p className="text-sm">No past appointments</p>
+                            <p className="text-sm">{t("appointments.noPast")}</p>
                         </div>
                     ) : (
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Patient</TableHead>
-                                    <TableHead>Date & Time</TableHead>
-                                    <TableHead>Type</TableHead>
-                                    <TableHead>Status</TableHead>
+                                    <TableHead>{t("appointments.table.patient")}</TableHead>
+                                    <TableHead>{t("appointments.table.dateTime")}</TableHead>
+                                    <TableHead>{t("appointments.table.type")}</TableHead>
+                                    <TableHead>{t("appointments.table.status")}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>

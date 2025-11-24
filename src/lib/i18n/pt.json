@@ -776,16 +776,45 @@
     "error": "Erro ao atribuir plano"
   },
   "appointments": {
+    "title": "Consultas",
+    "subtitle": "Gerencie as consultas dos seus pacientes",
+    "upcomingTitle": "Próximas Consultas",
+    "upcomingDesc": "Visualize e gerencie suas consultas agendadas",
+    "pastTitle": "Consultas Passadas",
+    "pastDesc": "Histórico de consultas concluídas",
+    "noUpcoming": "Nenhuma consulta agendada",
+    "noPast": "Nenhuma consulta passada",
     "book": "Agendar Consulta",
     "selectDateTimeDesc": "Selecione uma data e hora para sua consulta.",
     "selectDate": "Selecionar Data",
     "selectTime": "Selecionar Horário",
     "noAvailableSlots": "Não há horários disponíveis para esta data.",
     "appointmentType": "Tipo de Consulta",
+    "editTitle": "Editar Consulta",
+    "editDesc": "Altere a data ou hora desta consulta",
+    "saveChanges": "Salvar Alterações",
+    "updateSuccess": "Consulta atualizada com sucesso",
+    "updateError": "Falha ao atualizar consulta",
+    "selectDateTimeError": "Por favor selecione uma data e hora",
+    "cancelSuccess": "Consulta cancelada com sucesso",
+    "cancelError": "Falha ao cancelar consulta",
     "types": {
       "initial": "Consulta Inicial",
       "followup": "Acompanhamento",
       "checkup": "Check-up"
+    },
+    "status": {
+      "pending": "Pendente",
+      "confirmed": "Confirmada",
+      "cancelled": "Cancelada",
+      "completed": "Concluída"
+    },
+    "table": {
+      "patient": "Paciente",
+      "dateTime": "Data e Hora",
+      "type": "Tipo",
+      "status": "Status",
+      "actions": "Ações"
     },
     "notes": "Notas (Opcional)",
     "notesPlaceholder": "Adicione notas para seu nutricionista...",

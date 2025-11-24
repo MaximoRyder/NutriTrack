@@ -776,16 +776,45 @@
     "error": "Error assigning plan"
   },
   "appointments": {
+    "title": "Appointments",
+    "subtitle": "Manage your patient appointments",
+    "upcomingTitle": "Upcoming Appointments",
+    "upcomingDesc": "View and manage your scheduled appointments",
+    "pastTitle": "Past Appointments",
+    "pastDesc": "History of completed appointments",
+    "noUpcoming": "No upcoming appointments",
+    "noPast": "No past appointments",
     "book": "Book Appointment",
     "selectDateTimeDesc": "Select a date and time for your appointment.",
     "selectDate": "Select Date",
     "selectTime": "Select Time",
     "noAvailableSlots": "No available slots for this date.",
     "appointmentType": "Appointment Type",
+    "editTitle": "Edit Appointment",
+    "editDesc": "Change the date or time of this appointment",
+    "saveChanges": "Save Changes",
+    "updateSuccess": "Appointment updated successfully",
+    "updateError": "Failed to update appointment",
+    "selectDateTimeError": "Please select a date and time",
+    "cancelSuccess": "Appointment cancelled successfully",
+    "cancelError": "Failed to cancel appointment",
     "types": {
       "initial": "Initial Consultation",
       "followup": "Follow-up",
       "checkup": "Check-up"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "completed": "Completed"
+    },
+    "table": {
+      "patient": "Patient",
+      "dateTime": "Date & Time",
+      "type": "Type",
+      "status": "Status",
+      "actions": "Actions"
     },
     "notes": "Notes (Optional)",
     "notesPlaceholder": "Add any notes for your nutritionist...",
