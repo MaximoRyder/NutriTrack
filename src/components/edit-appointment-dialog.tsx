@@ -178,14 +178,14 @@ export function EditAppointmentDialog({
                     {/* Calendar */}
                     <div className="space-y-2">
                         <Label>{t("appointments.selectDate")}</Label>
-                        <div className="flex justify-center">
+                        <div className="flex justify-center mt-4 mb-4">
                             <Calendar
                                 mode="single"
                                 selected={selectedDate}
                                 onSelect={handleDateSelect}
                                 disabled={(date) => date < new Date()}
                                 locale={currentLocale}
-                                className="rounded-md border scale-110"
+                                className="rounded-md border"
                                 classNames={{
                                     months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                                     month: "space-y-4",
