@@ -116,13 +116,13 @@ export default function PlanPage() {
                       <div className="flex justify-between items-start gap-2">
                         <div className="flex-1 space-y-2">
                           <div className="flex items-center gap-2 mb-1">
-                            <Skeleton className="h-5 w-20" />
-                            <Skeleton className="h-4 w-16" />
+                            <Skeleton className="h-5 w-16" />
+                            <Skeleton className="h-4 w-12" />
                           </div>
-                          <Skeleton className="h-6 w-48" />
-                          <Skeleton className="h-4 w-32" />
+                          <Skeleton className="h-6 w-[70%]" />
+                          <Skeleton className="h-4 w-[40%]" />
                         </div>
-                        <Skeleton className="h-20 w-20 rounded-md" />
+                        <Skeleton className="h-16 w-16 sm:h-20 sm:w-20 rounded-md shrink-0" />
                       </div>
                     </CardHeader>
                     <CardContent className="pt-0">
