@@ -465,7 +465,7 @@ export default function PatientDetailPage() {
         </CardHeader>
         <CardContent className="space-y-4 p-4 sm:p-6 pt-0">
           <div className="flex flex-col lg:flex-row gap-4">
-            <div className="w-full lg:w-auto lg:shrink-0">
+            <div className="w-full lg:w-[30%] lg:shrink-0">
               <Calendar
                 mode="single"
                 selected={date}
