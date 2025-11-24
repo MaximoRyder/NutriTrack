@@ -1,6 +1,7 @@
 "use client";
 
 import { AddMealDialog } from "@/components/add-meal-dialog";
+import { BmiCard } from "@/components/bmi-card";
 import { QuickLogCard } from "@/components/quick-log-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -448,6 +449,8 @@ export default function DashboardPage() {
                 <Progress value={hydrationProgress} className="mt-2 h-2" />
               </CardContent>
             </Card>
+
+            <BmiCard userProfile={userProfile} />
 
 
             {/* Active Meal Plan Card */}

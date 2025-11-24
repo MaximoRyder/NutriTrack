@@ -80,11 +80,11 @@ export const BmiGauge: React.FC<BmiGaugeProps> = ({ bmi, className }) => {
             y1={centerY}
             x2={needleX}
             y2={needleY}
-            stroke="#1f2937"
+            stroke="hsl(var(--foreground))"
             strokeWidth={4}
             strokeLinecap="round"
           />
-          <circle cx={centerX} cy={centerY} r={6} fill="#1f2937" />
+          <circle cx={centerX} cy={centerY} r={6} fill="hsl(var(--foreground))" />
           {/* Labels (top) */}
           {segments.map((seg) => {
             const mid = seg.min + (seg.max - seg.min) / 2;
@@ -99,7 +99,7 @@ export const BmiGauge: React.FC<BmiGaugeProps> = ({ bmi, className }) => {
                 y={ly}
                 fontSize={10}
                 textAnchor="middle"
-                fill="#374151"
+                fill="hsl(var(--muted-foreground))"
               >
                 {t(`settings.bmiCategories.${seg.key}`)}
               </text>
