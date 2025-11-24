@@ -619,7 +619,11 @@
       "checkup": "Check-up",
       "online": "Online",
       "inperson": "Presencial"
-    }
+    },
+    "actions": "Ações",
+    "cancel": "Cancelar",
+    "cancelTooltip": "Cancelar consulta",
+    "cannotCancelTooltip": "Não é possível cancelar dentro de 24 horas da consulta"
   },
   "validation": {
     "required": "Obrigatório",

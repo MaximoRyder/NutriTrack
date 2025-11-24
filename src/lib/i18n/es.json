@@ -620,7 +620,11 @@
       "checkup": "Control",
       "online": "En Línea",
       "inperson": "Presencial"
-    }
+    },
+    "actions": "Acciones",
+    "cancel": "Cancelar",
+    "cancelTooltip": "Cancelar cita",
+    "cannotCancelTooltip": "No se puede cancelar dentro de las 24 horas de la cita"
   },
   "validation": {
     "required": "Requerido",

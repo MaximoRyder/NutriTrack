@@ -619,7 +619,11 @@
       "checkup": "Check-up",
       "online": "Online",
       "inperson": "In-person"
-    }
+    },
+    "actions": "Actions",
+    "cancel": "Cancel",
+    "cancelTooltip": "Cancel appointment",
+    "cannotCancelTooltip": "Cannot cancel within 24 hours of appointment"
   },
   "validation": {
     "required": "Required",

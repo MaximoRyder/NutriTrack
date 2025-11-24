@@ -37,11 +37,14 @@ import { useToast } from "@/hooks/use-toast";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { format } from "date-fns";
+import { enUS, es, pt } from "date-fns/locale";
 import { Calendar, Mail, MessageSquare, Phone, UserCheck } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
+
+const locales = { en: enUS, es, pt };
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -63,7 +66,7 @@ export default function NutritionistPage() {
     isLoading: isProfileLoading,
     mutate: mutateProfile,
   } = useUserProfile((user as any)?.id);
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const router = useRouter();
   const { toast } = useToast();
   const [invitationCode, setInvitationCode] = useState("");
@@ -333,13 +336,11 @@ export default function NutritionistPage() {
                 </p>
               </div>
             ) : (
-              <Table>
+              <Table className="border-separate border-spacing-y-2">
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>{t("nutritionist.sessionDate")}</TableHead>
-                    <TableHead>{t("nutritionist.sessionType")}</TableHead>
-                    <TableHead>{t("nutritionist.sessionDuration")}</TableHead>
-                    <TableHead>Actions</TableHead>
+                  <TableRow className="hover:bg-transparent border-none">
+                    <TableHead className="w-[70%] text-sm font-medium text-muted-foreground bg-secondary/30 rounded-l-lg pl-4">{t("nutritionist.sessionDate")}</TableHead>
+                    <TableHead className="text-sm font-medium text-muted-foreground bg-secondary/30 rounded-r-lg text-right pr-4">{t("nutritionist.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -351,25 +352,36 @@ export default function NutritionistPage() {
 
                     return (
                       <TableRow key={appointment._id}>
-                        <TableCell className="font-medium">
-                          {format(new Date(appointment.date), "PPp")}
+                        <TableCell className="font-medium pl-4 py-4">
+                          <div className="flex flex-col gap-1">
+                            <span className="text-base">
+                              {(() => {
+                                const d = format(new Date(appointment.date), "PPPPp", { locale: locales[locale as keyof typeof locales] });
+                                // Capitalize first letter
+                                let formatted = d.charAt(0).toUpperCase() + d.slice(1);
+                                // Capitalize months for ES/PT (words after "de ")
+                                if (locale === 'es' || locale === 'pt') {
+                                  formatted = formatted.replace(/ de ([a-z])/g, (match, p1) => ` de ${p1.toUpperCase()}`);
+                                }
+                                return formatted;
+                              })()}
+                            </span>
+                            <Badge variant="secondary" className="w-fit font-normal text-xs">
+                              {t(`appointments.types.${appointment.type}`)}
+                            </Badge>
+                          </div>
                         </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {t(`appointments.types.${appointment.type}`)}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{appointment.duration} min</TableCell>
-                        <TableCell>
+                        <TableCell className="text-right pr-4">
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button
                                 variant="ghost"
                                 size="sm"
                                 disabled={!canCancel}
-                                title={!canCancel ? "Cannot cancel within 24 hours of appointment" : "Cancel appointment"}
+                                title={!canCancel ? t("nutritionist.cannotCancelTooltip") : t("nutritionist.cancelTooltip")}
+                                className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                               >
-                                Cancel
+                                {t("nutritionist.cancel")}
                               </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
