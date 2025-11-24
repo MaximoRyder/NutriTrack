@@ -25,6 +25,7 @@ import { useToast } from "@/hooks/use-toast";
 import { addPatientRecord, usePatientRecords, useUser } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { format } from "date-fns";
+import { enUS, es, pt } from "date-fns/locale";
 import { Activity, Plus, Ruler, Scale } from "lucide-react";
 import { useState } from "react";
 
@@ -33,12 +34,15 @@ interface PatientRecordsProps {
 }
 
 export function PatientRecords({ patientId }: PatientRecordsProps) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { user } = useUser();
   const { toast } = useToast();
   const { records, isLoading, mutate } = usePatientRecords(patientId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Get the appropriate date-fns locale
+  const dateLocale = locale === 'es' ? es : locale === 'pt' ? pt : enUS;
 
   // Form state
   const [weight, setWeight] = useState("");
@@ -221,7 +225,7 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
               >
                 <div className="space-y-1">
                   <div className="font-medium">
-                    {format(new Date(record.date), "PPP")}
+                    {format(new Date(record.date), "PPP", { locale: dateLocale })}
                   </div>
                   <div className="text-sm text-muted-foreground">
                     {t("records.recordedBy")} {record.nutritionistId?.displayName}

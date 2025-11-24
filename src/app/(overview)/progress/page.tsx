@@ -16,6 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import { usePatientRecords, useUser, useWaterLogsRange } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { endOfDay, format, isSameDay, startOfDay, subDays } from "date-fns";
+import { enUS, es, pt } from "date-fns/locale";
 import { useMemo } from "react";
 import {
   Bar,
@@ -35,9 +36,12 @@ const chartConfig = {
 };
 
 export default function ProgressPage() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { user } = useUser();
   const { records } = usePatientRecords((user as any)?.id);
+
+  // Get the appropriate date-fns locale
+  const dateLocale = locale === 'es' ? es : locale === 'pt' ? pt : enUS;
 
   const today = useMemo(() => new Date(), []);
   const lastWeekStart = useMemo(() => startOfDay(subDays(today, 6)), [today]);
@@ -83,14 +87,14 @@ export default function ProgressPage() {
       const totalDrank = dayLogs.reduce((acc: number, log: any) => acc + log.quantityMl, 0);
 
       days.push({
-        date: format(date, "EEE"), // Mon, Tue, etc.
+        date: format(date, "EEE", { locale: dateLocale }), // Mon, Tue, etc.
         fullDate: date,
         goal: 2000, // Hardcoded goal for now, could be from user profile
         drank: totalDrank
       });
     }
     return days;
-  }, [waterLogs, today]);
+  }, [waterLogs, today, dateLocale]);
 
   return (
     <div className="space-y-6">
@@ -125,7 +129,7 @@ export default function ProgressPage() {
                 axisLine={false}
                 tickMargin={4}
                 tick={{ fontSize: 9 }}
-                tickFormatter={(val) => format(new Date(val), "MMM d")}
+                tickFormatter={(val) => format(new Date(val), "MMM d", { locale: dateLocale })}
               />
               <YAxis domain={["dataMin - 2", "dataMax + 2"]} hide />
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
@@ -164,7 +168,7 @@ export default function ProgressPage() {
                   axisLine={false}
                   tickMargin={4}
                   tick={{ fontSize: 9 }}
-                  tickFormatter={(val) => format(new Date(val), "MMM yyyy")}
+                  tickFormatter={(val) => format(new Date(val), "MMM yyyy", { locale: dateLocale })}
                 />
                 <YAxis hide />
                 <ChartTooltip
