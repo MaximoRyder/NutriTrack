@@ -2,20 +2,21 @@
 
 import { Badge } from "@/components/ui/badge";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { AssignedDayMealSlot, MealPlan, UserProfile } from "@/lib/types";
@@ -91,8 +92,49 @@ export default function PlanPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <p className="text-muted-foreground">{t("patientPlan.loading")}</p>
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-8 w-48 mb-2" />
+            <Skeleton className="h-4 w-full max-w-md mb-4" />
+            <div className="flex gap-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="w-full">
+              <div className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-7 h-auto gap-1 mb-4">
+                {Array.from({ length: 7 }).map((_, i) => (
+                  <Skeleton key={i} className="h-9 w-full" />
+                ))}
+              </div>
+              <div className="space-y-4">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <Card key={i}>
+                    <CardHeader className="pb-3">
+                      <div className="flex justify-between items-start gap-2">
+                        <div className="flex-1 space-y-2">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Skeleton className="h-5 w-20" />
+                            <Skeleton className="h-4 w-16" />
+                          </div>
+                          <Skeleton className="h-6 w-48" />
+                          <Skeleton className="h-4 w-32" />
+                        </div>
+                        <Skeleton className="h-20 w-20 rounded-md" />
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-3/4" />
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
