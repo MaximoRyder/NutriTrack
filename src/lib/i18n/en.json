@@ -461,7 +461,19 @@
     "updateAvatar": "Update Avatar",
     "change": "Cancel",
     "uploading": "Uploading...",
-    "avatarUpdated": "Avatar updated"
+    "avatarUpdated": "Avatar updated",
+    "preferences": "Preferences",
+    "preferencesDesc": "Customize your experience.",
+    "language": "Language",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Spanish",
+    "pt": "Portuguese"
   },
   "admin": {
     "title": "Admin Dashboard",

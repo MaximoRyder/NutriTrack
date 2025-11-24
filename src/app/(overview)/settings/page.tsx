@@ -7,34 +7,34 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
@@ -45,6 +45,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { enUS, es, ptBR } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -56,7 +57,8 @@ export default function SettingsPage() {
     isLoading: isProfileLoading,
     mutate: mutateProfile,
   } = useUserProfile((user as any)?.id);
-  const { t, locale } = useTranslation();
+  const { t, locale, setLocale } = useTranslation();
+  const { setTheme, theme } = useTheme();
   const { toast } = useToast();
 
   const [isAvatarDialogOpen, setAvatarDialogOpen] = React.useState(
@@ -305,6 +307,47 @@ export default function SettingsPage() {
       ) : (
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("settings.preferences")}</CardTitle>
+                <CardDescription>{t("settings.preferencesDesc")}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label>{t("settings.language")}</Label>
+                  <Select
+                    value={locale}
+                    onValueChange={(value: any) => setLocale(value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">{t("languages.en")}</SelectItem>
+                      <SelectItem value="es">{t("languages.es")}</SelectItem>
+                      <SelectItem value="pt">{t("languages.pt")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("settings.theme")}</Label>
+                  <Select
+                    value={theme}
+                    onValueChange={(value) => setTheme(value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="light">{t("settings.themeLight")}</SelectItem>
+                      <SelectItem value="dark">{t("settings.themeDark")}</SelectItem>
+                      <SelectItem value="system">{t("settings.themeSystem")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
                 <CardTitle>{t("settings.profile")}</CardTitle>

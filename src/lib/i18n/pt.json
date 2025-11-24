@@ -461,7 +461,19 @@
     "updateAvatar": "Atualizar Avatar",
     "change": "Cancelar",
     "uploading": "Enviando...",
-    "avatarUpdated": "Avatar atualizado"
+    "avatarUpdated": "Avatar atualizado",
+    "preferences": "Preferências",
+    "preferencesDesc": "Personalize sua experiência.",
+    "language": "Idioma",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
+    "themeSystem": "Sistema"
+  },
+  "languages": {
+    "en": "Inglês",
+    "es": "Espanhol",
+    "pt": "Português"
   },
   "admin": {
     "title": "Painel de Administração",

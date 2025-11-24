@@ -5,6 +5,8 @@ import en from './en.json';
 import es from './es.json';
 import pt from './pt.json';
 
+// Import translations
+
 type Locale = 'en' | 'es' | 'pt';
 
 interface I18nContextType {
@@ -21,11 +23,23 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
   const [locale, setLocale] = useState<Locale>('en');
 
   useEffect(() => {
-    const browserLang = navigator.language.split('-')[0];
-    if (['en', 'es', 'pt'].includes(browserLang)) {
-      setLocale(browserLang as Locale);
+    // Check localStorage first
+    const savedLocale = localStorage.getItem('nutritrack-locale') as Locale;
+    if (savedLocale && ['en', 'es', 'pt'].includes(savedLocale)) {
+      setLocale(savedLocale);
+    } else {
+      // Fallback to browser language
+      const browserLang = navigator.language.split('-')[0];
+      if (['en', 'es', 'pt'].includes(browserLang)) {
+        setLocale(browserLang as Locale);
+      }
     }
   }, []);
+
+  const handleSetLocale = (newLocale: Locale) => {
+    setLocale(newLocale);
+    localStorage.setItem('nutritrack-locale', newLocale);
+  };
 
   const t = (key: string, params?: any): string => {
     const keys = key.split('.');
@@ -58,9 +72,7 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
   
   const value = {
     locale,
-    setLocale: (newLocale: Locale) => {
-        setLocale(newLocale);
-    },
+    setLocale: handleSetLocale,
     t,
   };
 
