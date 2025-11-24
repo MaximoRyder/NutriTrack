@@ -1,26 +1,37 @@
 "use client";
 
 import { AppointmentBookingDialog } from "@/components/appointment-booking-dialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
@@ -350,34 +361,53 @@ export default function NutritionistPage() {
                         </TableCell>
                         <TableCell>{appointment.duration} min</TableCell>
                         <TableCell>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            disabled={!canCancel}
-                            onClick={async () => {
-                              try {
-                                const res = await fetch(`/api/appointments?id=${appointment._id}`, {
-                                  method: "DELETE",
-                                });
-                                if (res.ok) {
-                                  toast({
-                                    title: t("settings.success"),
-                                    description: "Appointment cancelled",
-                                  });
-                                  mutateAppointments();
-                                }
-                              } catch (error) {
-                                toast({
-                                  variant: "destructive",
-                                  title: t("settings.error"),
-                                  description: "Failed to cancel appointment",
-                                });
-                              }
-                            }}
-                            title={!canCancel ? "Cannot cancel within 24 hours of appointment" : "Cancel appointment"}
-                          >
-                            Cancel
-                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                disabled={!canCancel}
+                                title={!canCancel ? "Cannot cancel within 24 hours of appointment" : "Cancel appointment"}
+                              >
+                                Cancel
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>{t("appointments.deleteDialog.title")}</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  {t("appointments.deleteDialog.description")}
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>{t("appointments.deleteDialog.cancel")}</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={async () => {
+                                    try {
+                                      const res = await fetch(`/api/appointments?id=${appointment._id}`, {
+                                        method: "DELETE",
+                                      });
+                                      if (res.ok) {
+                                        toast({
+                                          title: t("settings.success"),
+                                          description: t("appointments.cancelSuccess"),
+                                        });
+                                        mutateAppointments();
+                                      }
+                                    } catch (error) {
+                                      toast({
+                                        variant: "destructive",
+                                        title: t("settings.error"),
+                                        description: t("appointments.cancelError"),
+                                      });
+                                    }
+                                  }}
+                                >
+                                  {t("appointments.deleteDialog.confirm")}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </TableCell>
                       </TableRow>
                     );

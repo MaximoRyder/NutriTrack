@@ -1,6 +1,17 @@
 "use client";
 
 import { EditAppointmentDialog } from "@/components/edit-appointment-dialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -192,14 +203,31 @@ export default function AppointmentsPage() {
                                                     <Edit className="h-4 w-4 mr-1" />
                                                     {t("journal.edit")}
                                                 </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleCancelAppointment(appointment._id)}
-                                                >
-                                                    <X className="h-4 w-4 mr-1" />
-                                                    {t("appointments.cancel")}
-                                                </Button>
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
+                                                            <X className="h-4 w-4 mr-1" />
+                                                            {t("appointments.cancel")}
+                                                        </Button>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>{t("appointments.deleteDialog.title")}</AlertDialogTitle>
+                                                            <AlertDialogDescription>
+                                                                {t("appointments.deleteDialog.description")}
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogCancel>{t("appointments.deleteDialog.cancel")}</AlertDialogCancel>
+                                                            <AlertDialogAction onClick={() => handleCancelAppointment(appointment._id)}>
+                                                                {t("appointments.deleteDialog.confirm")}
+                                                            </AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
                                             </div>
                                         </TableCell>
                                     </TableRow>

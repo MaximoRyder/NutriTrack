@@ -799,6 +799,12 @@
     "selectDateTimeError": "Por favor selecciona una fecha y hora",
     "cancelSuccess": "Cita cancelada exitosamente",
     "cancelError": "Error al cancelar la cita",
+    "deleteDialog": {
+      "title": "¿Cancelar Cita?",
+      "description": "¿Estás seguro de que deseas cancelar esta cita? Esta acción no se puede deshacer.",
+      "cancel": "No, Mantenerla",
+      "confirm": "Sí, Cancelar"
+    },
     "types": {
       "initial": "Consulta Inicial",
       "followup": "Seguimiento",

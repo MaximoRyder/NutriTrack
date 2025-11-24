@@ -798,6 +798,12 @@
     "selectDateTimeError": "Por favor selecione uma data e hora",
     "cancelSuccess": "Consulta cancelada com sucesso",
     "cancelError": "Falha ao cancelar consulta",
+    "deleteDialog": {
+      "title": "Cancelar Consulta?",
+      "description": "Tem certeza de que deseja cancelar esta consulta? Esta ação não pode ser desfeita.",
+      "cancel": "Não, Manter",
+      "confirm": "Sim, Cancelar"
+    },
     "types": {
       "initial": "Consulta Inicial",
       "followup": "Acompanhamento",
