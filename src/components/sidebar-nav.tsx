@@ -63,7 +63,13 @@ export function SidebarNav() {
                 <SidebarMenuButton
                   isActive={
                     pathname.startsWith(item.href) &&
-                    (item.href !== "/overview" || pathname === "/overview")
+                    (item.href !== "/overview" || pathname === "/overview") &&
+                    !navItems.some(
+                      (other) =>
+                        other.href !== item.href &&
+                        other.href.startsWith(item.href) &&
+                        pathname.startsWith(other.href)
+                    )
                   }
                   tooltip={item.name}
                 >
