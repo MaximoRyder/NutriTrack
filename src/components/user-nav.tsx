@@ -45,7 +45,7 @@ export function UserNav({ onLinkClick }: UserNavProps) {
 
   const renderMenuItems = () => {
     const { patientNav, nutritionistNav, adminNav } = getNavigation(t);
-    
+
     switch (userProfile?.role) {
       case "admin":
         return (
@@ -93,7 +93,7 @@ export function UserNav({ onLinkClick }: UserNavProps) {
               src={
                 userProfile?.photoUrl ||
                 (user as any)?.photoURL ||
-                "https://picsum.photos/seed/user-avatar/40/40"
+                "/default-avatar.png"
               }
               alt="User avatar"
               data-ai-hint="person portrait"
@@ -102,8 +102,8 @@ export function UserNav({ onLinkClick }: UserNavProps) {
               {userProfile?.displayName
                 ? userProfile.displayName.charAt(0)
                 : (user as any)?.name
-                ? (user as any).name.charAt(0)
-                : "P"}
+                  ? (user as any).name.charAt(0)
+                  : "P"}
             </AvatarFallback>
           </Avatar>
         </Button>
