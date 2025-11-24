@@ -1,4 +1,5 @@
 "use client";
+import { PatientRecords } from "@/components/patient-records";
 import {
     Card,
     CardContent,
@@ -12,6 +13,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Progress } from "@/components/ui/progress";
+import { useUser } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { format } from "date-fns";
 import {
