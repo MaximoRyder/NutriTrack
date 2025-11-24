@@ -132,7 +132,16 @@ export default function ProgressPage() {
                 tickFormatter={(val) => format(new Date(val), "MMM d", { locale: dateLocale })}
               />
               <YAxis domain={["dataMin - 2", "dataMax + 2"]} hide />
-              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+              <ChartTooltip
+                cursor={false}
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(value) => {
+                      return format(new Date(value), "P", { locale: dateLocale });
+                    }}
+                  />
+                }
+              />
               <Line
                 dataKey="weight"
                 type="monotone"
@@ -173,7 +182,14 @@ export default function ProgressPage() {
                 <YAxis hide />
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent />}
+                  content={
+                    <ChartTooltipContent
+                      labelFormatter={(value) => {
+                        return format(new Date(value), "P", { locale: dateLocale });
+                      }}
+                      valueFormatter={(value) => `${value}%`}
+                    />
+                  }
                 />
                 <Bar dataKey="bodyFat" fill="var(--color-waist)" radius={4} name={t("records.bodyFat")} />
                 <Bar dataKey="visceralFat" fill="var(--color-hips)" radius={4} name={t("records.visceralFat")} />
