@@ -276,9 +276,9 @@ export default function SettingsPage() {
       ) : (
         <Tabs defaultValue="general" className="w-full">
           <TabsList className="grid w-full max-w-md" style={{ gridTemplateColumns: userProfile.role === "patient" ? "1fr 1fr" : "1fr" }}>
-            <TabsTrigger value="general">General Settings</TabsTrigger>
+            <TabsTrigger value="general">{t("settings.tabs.general")}</TabsTrigger>
             {userProfile.role === "patient" && (
-              <TabsTrigger value="personal">Personal Data</TabsTrigger>
+              <TabsTrigger value="personal">{t("settings.tabs.personal")}</TabsTrigger>
             )}
           </TabsList>
 

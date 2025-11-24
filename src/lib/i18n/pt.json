@@ -468,7 +468,11 @@
     "theme": "Tema",
     "themeLight": "Claro",
     "themeDark": "Escuro",
-    "themeSystem": "Sistema"
+    "themeSystem": "Sistema",
+    "tabs": {
+      "general": "Configurações Gerais",
+      "personal": "Dados Pessoais"
+    }
   },
   "languages": {
     "en": "Inglês",
