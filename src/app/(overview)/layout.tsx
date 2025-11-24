@@ -4,13 +4,13 @@ import { DashboardHeaderWithSidebar } from "@/components/dashboard-header";
 import { Logo } from "@/components/logo";
 import { SidebarNav } from "@/components/sidebar-nav";
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarHeader,
-    SidebarInset,
-    SidebarProvider,
-    SidebarRail,
-    SidebarTrigger,
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarInset,
+  SidebarProvider,
+  SidebarRail,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/user-nav";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
@@ -109,7 +109,7 @@ export default function DashboardLayout({
           <SidebarTrigger className="md:hidden" />
           <DashboardHeaderWithSidebar />
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+        <main className="flex flex-1 flex-col gap-4 p-2 sm:p-4 md:gap-8 md:p-6">
           {children}
         </main>
       </SidebarInset>

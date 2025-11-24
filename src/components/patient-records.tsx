@@ -202,8 +202,8 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
                 className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg gap-4"
               >
                 <div className="space-y-2 w-full sm:w-1/3">
-                  <Skeleton className="h-5 w-32" />
-                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="h-5 w-24" />
+                  <Skeleton className="h-4 w-[90%]" />
                   <Skeleton className="h-16 w-full mt-2" />
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full sm:w-auto">

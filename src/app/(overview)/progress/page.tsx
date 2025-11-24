@@ -154,7 +154,7 @@ export default function ProgressPage() {
         </CardContent>
       </Card>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-6 overflow-hidden">
         <Card className="overflow-hidden">
           <CardHeader className="p-3 sm:p-4 md:p-6">
             <CardTitle className="text-sm sm:text-base md:text-lg">
