@@ -48,6 +48,7 @@
     }
   },
   "header": {
+    "appName": "NutriTrack Pro",
     "login": "Login",
     "signUp": "Sign Up"
   },
