@@ -1,5 +1,6 @@
 "use client";
 
+import { AppointmentDetailDialog } from "@/components/appointment-detail-dialog";
 import { EditAppointmentDialog } from "@/components/edit-appointment-dialog";
 import {
     AlertDialog,
@@ -9,10 +10,8 @@ import {
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
+    AlertDialogTitle
 } from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -21,6 +20,13 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
     Table,
     TableBody,
@@ -34,7 +40,7 @@ import { useUser, useUserProfile } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { format } from "date-fns";
 import { enUS, es, ptBR } from "date-fns/locale";
-import { Calendar, Edit, X } from "lucide-react";
+import { Calendar, Edit, Eye, MoreHorizontal, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
@@ -66,6 +72,8 @@ export default function AppointmentsPage() {
     const router = useRouter();
     const { toast } = useToast();
     const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
+    const [viewingAppointment, setViewingAppointment] = useState<Appointment | null>(null);
+    const [appointmentToCancel, setAppointmentToCancel] = useState<Appointment | null>(null);
 
     const dateLocales = { en: enUS, es: es, pt: ptBR };
     const currentLocale = dateLocales[locale as keyof typeof dateLocales] || enUS;
@@ -161,9 +169,7 @@ export default function AppointmentsPage() {
                                 <TableRow>
                                     <TableHead>{t("appointments.table.patient")}</TableHead>
                                     <TableHead>{t("appointments.table.dateTime")}</TableHead>
-                                    <TableHead>{t("appointments.table.type")}</TableHead>
-                                    <TableHead>{t("appointments.table.status")}</TableHead>
-                                    <TableHead>{t("appointments.table.actions")}</TableHead>
+                                    <TableHead className="text-right">{t("appointments.table.actions")}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -177,58 +183,37 @@ export default function AppointmentsPage() {
                                                 locale: currentLocale,
                                             })}
                                         </TableCell>
-                                        <TableCell>
-                                            <Badge variant="outline">
-                                                {t(`appointments.types.${appointment.type}`)}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge
-                                                variant={
-                                                    appointment.status === "confirmed"
-                                                        ? "default"
-                                                        : "secondary"
-                                                }
-                                            >
-                                                {t(`appointments.status.${appointment.status}`)}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="flex gap-2">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => setEditingAppointment(appointment)}
-                                                >
-                                                    <Edit className="h-4 w-4 mr-1" />
-                                                    {t("journal.edit")}
-                                                </Button>
-                                                <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                        >
-                                                            <X className="h-4 w-4 mr-1" />
-                                                            {t("appointments.cancel")}
-                                                        </Button>
-                                                    </AlertDialogTrigger>
-                                                    <AlertDialogContent>
-                                                        <AlertDialogHeader>
-                                                            <AlertDialogTitle>{t("appointments.deleteDialog.title")}</AlertDialogTitle>
-                                                            <AlertDialogDescription>
-                                                                {t("appointments.deleteDialog.description")}
-                                                            </AlertDialogDescription>
-                                                        </AlertDialogHeader>
-                                                        <AlertDialogFooter>
-                                                            <AlertDialogCancel>{t("appointments.deleteDialog.cancel")}</AlertDialogCancel>
-                                                            <AlertDialogAction onClick={() => handleCancelAppointment(appointment._id)}>
-                                                                {t("appointments.deleteDialog.confirm")}
-                                                            </AlertDialogAction>
-                                                        </AlertDialogFooter>
-                                                    </AlertDialogContent>
-                                                </AlertDialog>
-                                            </div>
+                                        <TableCell className="text-right">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <span className="sr-only">Open menu</span>
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>{t("appointments.table.actions")}</DropdownMenuLabel>
+                                                    <DropdownMenuItem
+                                                        onClick={() => setViewingAppointment(appointment)}
+                                                    >
+                                                        <Eye className="mr-2 h-4 w-4" />
+                                                        {t("journal.view")}
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => setEditingAppointment(appointment)}
+                                                    >
+                                                        <Edit className="mr-2 h-4 w-4" />
+                                                        {t("journal.edit")}
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => setAppointmentToCancel(appointment)}
+                                                        className="text-destructive"
+                                                    >
+                                                        <X className="mr-2 h-4 w-4" />
+                                                        {t("appointments.cancel")}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -258,8 +243,7 @@ export default function AppointmentsPage() {
                                 <TableRow>
                                     <TableHead>{t("appointments.table.patient")}</TableHead>
                                     <TableHead>{t("appointments.table.dateTime")}</TableHead>
-                                    <TableHead>{t("appointments.table.type")}</TableHead>
-                                    <TableHead>{t("appointments.table.status")}</TableHead>
+                                    <TableHead className="text-right">{t("appointments.table.actions")}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -273,15 +257,24 @@ export default function AppointmentsPage() {
                                                 locale: currentLocale,
                                             })}
                                         </TableCell>
-                                        <TableCell>
-                                            <Badge variant="outline">
-                                                {t(`appointments.types.${appointment.type}`)}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge variant="secondary">
-                                                {t(`appointments.status.${appointment.status}`)}
-                                            </Badge>
+                                        <TableCell className="text-right">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <span className="sr-only">Open menu</span>
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>{t("appointments.table.actions")}</DropdownMenuLabel>
+                                                    <DropdownMenuItem
+                                                        onClick={() => setViewingAppointment(appointment)}
+                                                    >
+                                                        <Eye className="mr-2 h-4 w-4" />
+                                                        {t("journal.view")}
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -292,6 +285,14 @@ export default function AppointmentsPage() {
             </Card>
 
             {/* Edit Dialog */}
+            {viewingAppointment && (
+                <AppointmentDetailDialog
+                    appointment={viewingAppointment}
+                    isOpen={!!viewingAppointment}
+                    onClose={() => setViewingAppointment(null)}
+                />
+            )}
+
             {editingAppointment && (
                 <EditAppointmentDialog
                     appointment={editingAppointment}
@@ -304,6 +305,30 @@ export default function AppointmentsPage() {
                     }}
                 />
             )}
+
+            <AlertDialog open={!!appointmentToCancel} onOpenChange={(open) => !open && setAppointmentToCancel(null)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{t("appointments.deleteDialog.title")}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("appointments.deleteDialog.description")}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>{t("appointments.deleteDialog.cancel")}</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={() => {
+                                if (appointmentToCancel) {
+                                    handleCancelAppointment(appointmentToCancel._id);
+                                    setAppointmentToCancel(null);
+                                }
+                            }}
+                        >
+                            {t("appointments.deleteDialog.confirm")}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }
