@@ -826,5 +826,23 @@
     "notesPlaceholder": "Adicione notas para seu nutricionista...",
     "actions": "Ações",
     "cancel": "Cancelar"
+  },
+  "availability": {
+    "title": "Disponibilidade",
+    "description": "Gerencie sua agenda semanal",
+    "weeklyHours": "Horário Semanal",
+    "weeklyHoursDesc": "Defina quando você costuma estar disponível para reuniões",
+    "appointmentDuration": "Duração da Consulta",
+    "appointmentDurationDesc": "Quanto tempo deve durar cada consulta?",
+    "addHours": "Adicionar horas",
+    "days": {
+      "sunday": "Domingo",
+      "monday": "Segunda-feira",
+      "tuesday": "Terça-feira",
+      "wednesday": "Quarta-feira",
+      "thursday": "Quinta-feira",
+      "friday": "Sexta-feira",
+      "saturday": "Sábado"
+    }
   }
 }

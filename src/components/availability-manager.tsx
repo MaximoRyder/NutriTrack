@@ -36,13 +36,13 @@ export function AvailabilityManager({ nutritionistId }: AvailabilityManagerProps
     const [isSaving, setIsSaving] = useState(false);
 
     const daysOfWeek = [
-        { value: 0, label: "Sunday", shortLabel: "Sun" },
-        { value: 1, label: "Monday", shortLabel: "Mon" },
-        { value: 2, label: "Tuesday", shortLabel: "Tue" },
-        { value: 3, label: "Wednesday", shortLabel: "Wed" },
-        { value: 4, label: "Thursday", shortLabel: "Thu" },
-        { value: 5, label: "Friday", shortLabel: "Fri" },
-        { value: 6, label: "Saturday", shortLabel: "Sat" },
+        { value: 0, label: t("availability.days.sunday"), shortLabel: "Sun" },
+        { value: 1, label: t("availability.days.monday"), shortLabel: "Mon" },
+        { value: 2, label: t("availability.days.tuesday"), shortLabel: "Tue" },
+        { value: 3, label: t("availability.days.wednesday"), shortLabel: "Wed" },
+        { value: 4, label: t("availability.days.thursday"), shortLabel: "Thu" },
+        { value: 5, label: t("availability.days.friday"), shortLabel: "Fri" },
+        { value: 6, label: t("availability.days.saturday"), shortLabel: "Sat" },
     ];
 
     const timeOptions = Array.from({ length: 24 * 2 }, (_, i) => {
@@ -213,18 +213,18 @@ export function AvailabilityManager({ nutritionistId }: AvailabilityManagerProps
         <div className="space-y-6">
             <Card>
                 <CardHeader>
-                    <CardTitle>Weekly Hours</CardTitle>
+                    <CardTitle>{t("availability.weeklyHours")}</CardTitle>
                     <CardDescription>
-                        Set when you are typically available for meetings
+                        {t("availability.weeklyHoursDesc")}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     {/* Slot Duration */}
                     <div className="flex items-center justify-between pb-4 border-b">
                         <div className="space-y-0.5">
-                            <Label>Appointment Duration</Label>
+                            <Label>{t("availability.appointmentDuration")}</Label>
                             <p className="text-sm text-muted-foreground">
-                                How long should each appointment last?
+                                {t("availability.appointmentDurationDesc")}
                             </p>
                         </div>
                         <Select
@@ -267,7 +267,7 @@ export function AvailabilityManager({ nutritionistId }: AvailabilityManagerProps
                                             onClick={() => addTimeRange(day.value)}
                                         >
                                             <Plus className="h-4 w-4 mr-1" />
-                                            Add hours
+                                            {t("availability.addHours")}
                                         </Button>
                                     )}
                                 </div>

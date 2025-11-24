@@ -827,5 +827,23 @@
     "notesPlaceholder": "Agrega cualquier nota para tu nutricionista...",
     "actions": "Acciones",
     "cancel": "Cancelar"
+  },
+  "availability": {
+    "title": "Disponibilidad",
+    "description": "Gestiona tu horario semanal",
+    "weeklyHours": "Horario Semanal",
+    "weeklyHoursDesc": "Establece cuándo sueles estar disponible para reuniones",
+    "appointmentDuration": "Duración de la Cita",
+    "appointmentDurationDesc": "¿Cuánto tiempo debe durar cada cita?",
+    "addHours": "Agregar horas",
+    "days": {
+      "sunday": "Domingo",
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado"
+    }
   }
 }

@@ -826,5 +826,23 @@
     "notesPlaceholder": "Add any notes for your nutritionist...",
     "actions": "Actions",
     "cancel": "Cancel"
+  },
+  "availability": {
+    "title": "Availability",
+    "description": "Manage your weekly schedule",
+    "weeklyHours": "Weekly Hours",
+    "weeklyHoursDesc": "Set when you are typically available for meetings",
+    "appointmentDuration": "Appointment Duration",
+    "appointmentDurationDesc": "How long should each appointment last?",
+    "addHours": "Add hours",
+    "days": {
+      "sunday": "Sunday",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday"
+    }
   }
 }
