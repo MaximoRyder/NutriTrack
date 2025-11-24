@@ -2,36 +2,36 @@
 
 import { AppointmentBookingDialog } from "@/components/appointment-booking-dialog";
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
@@ -39,7 +39,6 @@ import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { format } from "date-fns";
 import { enUS, es, pt } from "date-fns/locale";
 import { Calendar, Mail, MessageSquare, Phone, UserCheck } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
@@ -178,19 +177,14 @@ export default function NutritionistPage() {
                   disabled={isAssigning}
                 />
               </div>
-              <div className="flex gap-2">
-                <Button
-                  type="submit"
-                  disabled={isAssigning || !invitationCode.trim()}
-                >
-                  {isAssigning
-                    ? t("nutritionist.assigning")
-                    : t("nutritionist.assign")}
-                </Button>
-                <Button variant="outline" asChild>
-                  <Link href="/settings">{t("nutritionist.goToSettings")}</Link>
-                </Button>
-              </div>
+              <Button
+                type="submit"
+                disabled={isAssigning || !invitationCode.trim()}
+              >
+                {isAssigning
+                  ? t("nutritionist.assigning")
+                  : t("nutritionist.assign")}
+              </Button>
             </form>
           </CardContent>
         </Card>
