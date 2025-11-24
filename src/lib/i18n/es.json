@@ -4,7 +4,7 @@
       "title": "El Diario de Comidas Inteligente para Nutricionistas Modernos",
       "subtitle": "Potencia tu práctica con NutriTrack Pro. Una plataforma B2B perfecta para monitorear las comidas de los pacientes, brindar retroalimentación instantánea y rastrear el progreso como nunca antes.",
       "ctaNutritionist": "Empezar para Nutricionistas",
-      "ctaPatient": "Login Paciente"
+      "ctaPatient": "Iniciar sesión Paciente"
     },
     "features": {
       "tag": "Características Principales",
@@ -48,7 +48,7 @@
     }
   },
   "header": {
-    "login": "Entrar",
+    "login": "Iniciar Sesión",
     "signUp": "Registrarse"
   },
   "userNav": {

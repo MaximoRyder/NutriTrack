@@ -6,6 +6,7 @@ import { useUser } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import Link from "next/link";
 import { DashboardHeader } from "./dashboard-header";
+import { LanguageSwitcher } from "./language-switcher";
 
 export function Header() {
   const { t } = useTranslation();
@@ -25,6 +26,7 @@ export function Header() {
               <DashboardHeader />
             ) : (
               <>
+                <LanguageSwitcher />
                 {/* Desktop: show Login (primary) and Register (ghost) buttons */}
                 <Button asChild size="sm" className="hidden sm:inline-flex">
                   <Link href="/login">{t("header.login")}</Link>
