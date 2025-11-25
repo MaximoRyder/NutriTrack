@@ -27,7 +27,11 @@ export function NotificationBell() {
   const handleOpenNotification = async (n: Notification) => {
     await markNotificationRead(n.id);
     mutate();
-    router.push(`/journal/${n.mealId}?fromNotification=1`);
+    if (n.mealDate) {
+      router.push(`/journal?date=${n.mealDate}&mealId=${n.mealId}`);
+    } else {
+      router.push(`/journal/${n.mealId}?fromNotification=1`);
+    }
   };
 
   return (
@@ -65,7 +69,7 @@ export function NotificationBell() {
                 })}
               </span>
               <span className="text-sm">
-                <strong>{n.fromName}:</strong> {n.textPreview}
+                <strong>{n.fromName}</strong> {n.mealName ? `en ${n.mealName}` : ""}: {n.textPreview}
               </span>
             </DropdownMenuItem>
           ))}

@@ -135,6 +135,8 @@ export interface INotification extends Document {
   createdAt: Date;
   read: boolean;
   type: "meal-comment";
+  mealDate?: Date;
+  mealName?: string;
 }
 
 const NotificationSchema = new Schema<INotification>({
@@ -147,6 +149,8 @@ const NotificationSchema = new Schema<INotification>({
   createdAt: { type: Date, default: Date.now },
   read: { type: Boolean, default: false },
   type: { type: String, enum: ["meal-comment"], required: true },
+  mealDate: { type: Date },
+  mealName: { type: String },
 });
 
 export const Notification =

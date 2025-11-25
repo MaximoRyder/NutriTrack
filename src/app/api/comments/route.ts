@@ -69,6 +69,8 @@ export async function POST(request: NextRequest) {
           createdAt: new Date(),
           read: false,
           type: "meal-comment",
+          mealDate: meal.timestamp,
+          mealName: meal.name,
         });
       }
     }

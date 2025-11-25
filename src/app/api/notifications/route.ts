@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import connectDB from '@/lib/mongodb';
 import { Notification } from '@/lib/models';
+import connectDB from '@/lib/mongodb';
+import { getServerSession } from 'next-auth';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
@@ -24,6 +24,8 @@ export async function GET(request: NextRequest) {
       createdAt: n.createdAt.toISOString(),
       read: n.read,
       type: n.type,
+      mealDate: n.mealDate ? n.mealDate.toISOString() : undefined,
+      mealName: n.mealName,
     })));
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });

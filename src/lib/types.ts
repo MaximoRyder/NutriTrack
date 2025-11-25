@@ -172,4 +172,6 @@ export interface Notification {
   createdAt: string; // ISO
   read: boolean;
   type: "meal-comment";
+  mealDate?: string; // ISO
+  mealName?: string;
 }
