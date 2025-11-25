@@ -1,50 +1,49 @@
 "use client";
 
 import {
-    generateMealPlanSuggestions,
-    GenerateMealPlanSuggestionsOutput,
+  generateMealPlanSuggestions,
+  GenerateMealPlanSuggestionsOutput,
 } from "@/ai/flows/generate-meal-plan-suggestions";
 import { AssignMealPlanDialog } from "@/components/assign-meal-plan-dialog";
 import { PatientRecords } from "@/components/patient-records";
-import { QuickLogCard } from "@/components/quick-log-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import {
-    addComment,
-    useComments,
-    usePatientMealsByDate,
-    useUserProfile,
-    useWaterLogs,
-    useWeightLogs,
+  addComment,
+  useComments,
+  usePatientMealsByDate,
+  useUserProfile,
+  useWaterLogs,
+  useWeightLogs,
 } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { Comment, Meal, WeightLog } from "@/lib/types";
 import { format, formatDistanceToNow } from "date-fns";
 import {
-    Bot,
-    CalendarPlus,
-    Droplets,
-    FileText,
-    MessageSquare,
-    Scale,
-    Target,
-    UploadCloud,
+  Bot,
+  CalendarPlus,
+  Droplets,
+  FileText,
+  MessageSquare,
+  Scale,
+  Target,
+  UploadCloud,
 } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -162,11 +161,9 @@ export default function PatientDetailPage() {
       const patientFoodLog =
         meals?.map((m: Meal) => m.name).join(", ") ||
         t("patientDetail.noRecentMeals");
-      const patientGoals = `Goal weight: ${
-        patient.goalWeightKg
-      }kg, current weight: ${patient.currentWeightKg}kg. Dietary preferences: ${
-        patient.dietaryPreferences || "none"
-      }. Health conditions: ${patient.healthConditions || "none"}.`;
+      const patientGoals = `Goal weight: ${patient.goalWeightKg
+        }kg, current weight: ${patient.currentWeightKg}kg. Dietary preferences: ${patient.dietaryPreferences || "none"
+        }. Health conditions: ${patient.healthConditions || "none"}.`;
 
       const result = await generateMealPlanSuggestions({
         patientId: patient.id,
@@ -408,12 +405,8 @@ export default function PatientDetailPage() {
             </ChartContainer>
           </CardContent>
         </Card>
-        
-        <div className="lg:col-span-1">
-          <QuickLogCard patientId={patientId} />
-        </div>
 
-        <Card className="lg:col-span-1">
+        <Card className="lg:col-span-2">
           <CardHeader className="p-4 sm:p-6">
             <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
               <Bot className="h-4 w-4 sm:h-5 sm:w-5" />{" "}
@@ -482,49 +475,49 @@ export default function PatientDetailPage() {
               )}
               {!isLoadingMeals && meals && meals.length > 0
                 ? (meals as Meal[]).map((meal) => (
-                    <div
-                      key={meal.id}
-                      className="border rounded-lg overflow-hidden"
-                    >
-                      <div className="flex flex-col sm:flex-row">
-                        <div className="relative h-40 sm:h-32 sm:w-32 md:w-40 md:h-40 shrink-0">
-                          <Image
-                            src={meal.photoUrl}
-                            alt={meal.name}
-                            fill
-                            className="object-cover"
-                            data-ai-hint="healthy food"
-                          />
+                  <div
+                    key={meal.id}
+                    className="border rounded-lg overflow-hidden"
+                  >
+                    <div className="flex flex-col sm:flex-row">
+                      <div className="relative h-40 sm:h-32 sm:w-32 md:w-40 md:h-40 shrink-0">
+                        <Image
+                          src={meal.photoUrl}
+                          alt={meal.name}
+                          fill
+                          className="object-cover"
+                          data-ai-hint="healthy food"
+                        />
+                      </div>
+                      <div className="flex-1 p-3 sm:p-4 space-y-2 min-w-0">
+                        <div>
+                          <p className="font-semibold text-sm sm:text-base">
+                            {meal.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground capitalize">
+                            {t(`addMeal.${meal.mealType}` as any)} -{" "}
+                            {format(new Date(meal.timestamp), "p")}
+                          </p>
                         </div>
-                        <div className="flex-1 p-3 sm:p-4 space-y-2 min-w-0">
-                          <div>
-                            <p className="font-semibold text-sm sm:text-base">
-                              {meal.name}
-                            </p>
-                            <p className="text-xs text-muted-foreground capitalize">
-                              {t(`addMeal.${meal.mealType}` as any)} -{" "}
-                              {format(new Date(meal.timestamp), "p")}
-                            </p>
-                          </div>
-                          {meal.description && (
-                            <p className="text-xs sm:text-sm text-muted-foreground/80">
-                              {meal.description}
-                            </p>
-                          )}
-                          <CommentSection mealId={meal.id} />
-                        </div>
+                        {meal.description && (
+                          <p className="text-xs sm:text-sm text-muted-foreground/80">
+                            {meal.description}
+                          </p>
+                        )}
+                        <CommentSection mealId={meal.id} />
                       </div>
                     </div>
-                  ))
+                  </div>
+                ))
                 : !isLoadingMeals && (
-                    <div className="flex flex-col items-center justify-center text-center text-muted-foreground py-10 border-2 border-dashed rounded-lg">
-                      <UploadCloud className="h-12 w-12 mb-4" />
-                      <p>{t("journal.noMeals")}</p>
-                      <p className="text-sm mt-1">
-                        {t("patientDetail.selectDate")}
-                      </p>
-                    </div>
-                  )}
+                  <div className="flex flex-col items-center justify-center text-center text-muted-foreground py-10 border-2 border-dashed rounded-lg">
+                    <UploadCloud className="h-12 w-12 mb-4" />
+                    <p>{t("journal.noMeals")}</p>
+                    <p className="text-sm mt-1">
+                      {t("patientDetail.selectDate")}
+                    </p>
+                  </div>
+                )}
             </div>
           </div>
         </CardContent>
