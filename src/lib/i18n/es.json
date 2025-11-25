@@ -380,7 +380,7 @@
     "hydration": "Hidratación",
     "activityLevel": "Nivel de Actividad",
     "activityLevelDesc": "Nivel de actividad autodeclarado por el paciente.",
-    "weightProgress": "Progresso de Peso",
+    "weightProgress": "Progreso de Peso",
     "weightProgressDesc": "Tendencia de peso del paciente en el último mes.",
     "aiSuggestions": "Sugerencias de Plan de Comidas con IA",
     "aiSuggestionsDesc": "Genera ideas de comidas basadas en los registros y metas de este paciente.",
