@@ -504,17 +504,17 @@ export default function PatientDetailPage() {
                         key={`meal-${meal.id}`}
                         className="border rounded-lg overflow-hidden"
                       >
-                        <div className="flex flex-col sm:flex-row">
-                          <div className="relative h-40 sm:h-32 sm:w-32 md:w-40 md:h-40 shrink-0">
+                        <div className="flex flex-col sm:flex-row p-4 gap-4 items-start">
+                          <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-md bg-secondary/30 mx-auto sm:mx-0">
                             <Image
                               src={meal.photoUrl}
                               alt={meal.name}
                               fill
-                              className="object-cover"
+                              className="object-contain"
                               data-ai-hint="healthy food"
                             />
                           </div>
-                          <div className="flex-1 p-3 sm:p-4 space-y-2 min-w-0">
+                          <div className="flex-1 space-y-2 min-w-0">
                             <div>
                               <p className="font-semibold text-sm sm:text-base">
                                 {meal.name}
