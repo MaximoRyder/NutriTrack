@@ -12,14 +12,6 @@ interface BiometricsCardProps {
 export function BiometricsCard({ userProfile, className }: BiometricsCardProps) {
     const { t } = useTranslation();
 
-    const calculateBmi = (weight?: number, height?: number) => {
-        if (!weight || !height) return undefined;
-        const heightM = height / 100;
-        return Number((weight / (heightM * heightM)).toFixed(1));
-    };
-
-    const bmi = calculateBmi(userProfile.currentWeightKg, userProfile.heightCm);
-
     const metrics = [
         {
             key: "weight",
@@ -29,15 +21,6 @@ export function BiometricsCard({ userProfile, className }: BiometricsCardProps) 
             goalLabel: t("dashboard.goal"),
             unit: "kg",
             color: "bg-primary",
-        },
-        {
-            key: "bmi",
-            label: "BMI",
-            value: bmi,
-            goal: undefined,
-            goalLabel: undefined,
-            unit: "",
-            color: "bg-green-500",
         },
         {
             key: "bodyFat",
@@ -83,9 +66,9 @@ export function BiometricsCard({ userProfile, className }: BiometricsCardProps) 
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+                <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
                     {metrics.map((metric) => (
-                        <div key={metric.key} className="space-y-2">
+                        <div key={metric.key} className="space-y-2 flex flex-col justify-between">
                             <div className="flex items-center justify-between">
                                 <span className="text-sm font-medium text-muted-foreground">
                                     {metric.label}

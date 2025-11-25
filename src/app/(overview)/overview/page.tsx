@@ -1,6 +1,7 @@
 "use client";
 
 import { AddMealDialog } from "@/components/add-meal-dialog";
+import { BmiCard } from "@/components/bmi-card";
 import { BiometricsCard } from "@/components/dashboard/biometrics-card";
 import { QuickLogCard } from "@/components/quick-log-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -397,8 +398,9 @@ export default function DashboardPage() {
 
       <div className="space-y-6 w-full max-w-[1700px] mx-auto">
         {/* Top Stats Row */}
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
           <BiometricsCard userProfile={userProfile} className="col-span-1 md:col-span-2" />
+          <BmiCard userProfile={userProfile} />
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
