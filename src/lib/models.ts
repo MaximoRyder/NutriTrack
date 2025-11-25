@@ -296,11 +296,14 @@ export interface IPatientRecord extends Document {
   patientId: mongoose.Types.ObjectId;
   nutritionistId: mongoose.Types.ObjectId;
   date: Date;
-  weightKg: number;
-  heightCm: number;
+  weightKg?: number;
+  // heightCm: number; // Deprecated
   bodyFatPercentage?: number;
   visceralFatPercentage?: number;
   muscleMassPercentage?: number;
+  chestCm?: number;
+  waistCm?: number;
+  hipsCm?: number;
   notes?: string;
   createdAt: Date;
 }
@@ -309,11 +312,14 @@ const PatientRecordSchema = new Schema<IPatientRecord>({
   patientId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   nutritionistId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   date: { type: Date, required: true },
-  weightKg: { type: Number, required: true },
-  heightCm: { type: Number, required: true },
+  weightKg: Number,
+  // heightCm: Number, // Deprecated
   bodyFatPercentage: Number,
   visceralFatPercentage: Number,
   muscleMassPercentage: Number,
+  chestCm: Number,
+  waistCm: Number,
+  hipsCm: Number,
   notes: String,
   createdAt: { type: Date, default: Date.now },
 });

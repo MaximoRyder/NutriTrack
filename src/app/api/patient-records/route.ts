@@ -36,9 +36,13 @@ export async function POST(request: Request) {
       nutritionistId,
       date,
       weightKg,
-      heightCm,
+      // heightCm, // Removed
       bodyFatPercentage,
       visceralFatPercentage,
+      muscleMassPercentage,
+      chestCm,
+      waistCm,
+      hipsCm,
       notes,
     } = body;
 
@@ -48,35 +52,44 @@ export async function POST(request: Request) {
       nutritionistId,
       date,
       weightKg,
-      heightCm,
+      // heightCm,
       bodyFatPercentage,
       visceralFatPercentage,
+      muscleMassPercentage,
+      chestCm,
+      waistCm,
+      hipsCm,
       notes,
     });
 
     // Update patient profile with latest stats
-    await User.findByIdAndUpdate(patientId, {
-      currentWeightKg: weightKg,
-      heightCm,
-      bodyFatPercentage,
-      visceralFatPercentage,
-    });
+    const updateData: any = {};
+    if (bodyFatPercentage !== undefined) updateData.bodyFatPercentage = bodyFatPercentage;
+    if (visceralFatPercentage !== undefined) updateData.visceralFatPercentage = visceralFatPercentage;
+    if (muscleMassPercentage !== undefined) updateData.muscleMassPercentage = muscleMassPercentage;
+    if (chestCm !== undefined) updateData["bodyMeasurements.chest"] = chestCm;
+    if (waistCm !== undefined) updateData["bodyMeasurements.waist"] = waistCm;
+    if (hipsCm !== undefined) updateData["bodyMeasurements.hips"] = hipsCm;
+    if (weightKg) updateData.currentWeightKg = weightKg;
+
+    if (Object.keys(updateData).length > 0) {
+      await User.findByIdAndUpdate(patientId, updateData);
+    }
 
     // Also create a WeightLog entry to keep the weight chart consistent
-    // Check if a weight log already exists for this date to avoid duplicates?
-    // For simplicity, we'll just add a new one or update if we want to be stricter.
-    // Let's just create one.
-    await WeightLog.create({
-      userId: patientId,
-      date: date,
-      weightKg: weightKg,
-    });
+    if (weightKg) {
+      await WeightLog.create({
+        userId: patientId,
+        date: date,
+        weightKg: weightKg,
+      });
+    }
 
     return NextResponse.json(record, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating patient record:", error);
     return NextResponse.json(
-      { error: "Failed to create record" },
+      { error: error.message || "Failed to create record" },
       { status: 500 }
     );
   }

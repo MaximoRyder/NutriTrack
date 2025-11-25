@@ -245,10 +245,14 @@ export async function addPatientRecord(payload: {
   patientId: string;
   nutritionistId: string;
   date: Date;
-  weightKg: number;
-  heightCm: number;
+  weightKg?: number;
+  // heightCm?: number;
   bodyFatPercentage?: number;
   visceralFatPercentage?: number;
+  muscleMassPercentage?: number;
+  chestCm?: number;
+  waistCm?: number;
+  hipsCm?: number;
   notes?: string;
 }) {
   const res = await fetch("/api/patient-records", {

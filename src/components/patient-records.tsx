@@ -45,10 +45,15 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
   const dateLocale = locale === 'es' ? es : locale === 'pt' ? pt : enUS;
 
   // Form state
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [weight, setWeight] = useState("");
-  const [height, setHeight] = useState("");
+  // const [height, setHeight] = useState(""); // Removed
   const [bodyFat, setBodyFat] = useState("");
   const [visceralFat, setVisceralFat] = useState("");
+  const [muscleMass, setMuscleMass] = useState("");
+  const [chest, setChest] = useState("");
+  const [waist, setWaist] = useState("");
+  const [hips, setHips] = useState("");
   const [notes, setNotes] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -60,11 +65,15 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
       await addPatientRecord({
         patientId,
         nutritionistId: (user as any).id,
-        date: new Date(),
-        weightKg: parseFloat(weight),
-        heightCm: parseFloat(height),
+        date: new Date(date),
+        weightKg: weight ? parseFloat(weight) : undefined,
+        // heightCm: parseFloat(height),
         bodyFatPercentage: bodyFat ? parseFloat(bodyFat) : undefined,
         visceralFatPercentage: visceralFat ? parseFloat(visceralFat) : undefined,
+        muscleMassPercentage: muscleMass ? parseFloat(muscleMass) : undefined,
+        chestCm: chest ? parseFloat(chest) : undefined,
+        waistCm: waist ? parseFloat(waist) : undefined,
+        hipsCm: hips ? parseFloat(hips) : undefined,
         notes,
       });
 
@@ -89,10 +98,15 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
   };
 
   const resetForm = () => {
+    setDate(new Date().toISOString().split('T')[0]);
     setWeight("");
-    setHeight("");
+    // setHeight("");
     setBodyFat("");
     setVisceralFat("");
+    setMuscleMass("");
+    setChest("");
+    setWaist("");
+    setHips("");
     setNotes("");
   };
 
@@ -112,7 +126,7 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
                 {t("records.addRecord")}
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
               <form onSubmit={handleSubmit}>
                 <DialogHeader>
                   <DialogTitle>{t("records.addRecord")}</DialogTitle>
@@ -121,6 +135,17 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="date">{t("nutritionist.sessionDate")}</Label>
+                    <Input
+                      id="date"
+                      type="date"
+                      required
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                    />
+                  </div>
+
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="weight">{t("records.weight")} (kg)</Label>
@@ -128,25 +153,24 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
                         id="weight"
                         type="number"
                         step="0.1"
-                        required
                         value={weight}
                         onChange={(e) => setWeight(e.target.value)}
                         placeholder="0.0"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="height">{t("records.height")} (cm)</Label>
+                      <Label htmlFor="muscleMass">{t("dashboard.muscleMass")} (%)</Label>
                       <Input
-                        id="height"
+                        id="muscleMass"
                         type="number"
-                        step="1"
-                        required
-                        value={height}
-                        onChange={(e) => setHeight(e.target.value)}
-                        placeholder="0"
+                        step="0.1"
+                        value={muscleMass}
+                        onChange={(e) => setMuscleMass(e.target.value)}
+                        placeholder="0.0"
                       />
                     </div>
                   </div>
+
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="bodyFat">{t("records.bodyFat")} (%)</Label>
@@ -173,6 +197,43 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
                       />
                     </div>
                   </div>
+
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="chest">{t("settings.chest")} (cm)</Label>
+                      <Input
+                        id="chest"
+                        type="number"
+                        step="0.1"
+                        value={chest}
+                        onChange={(e) => setChest(e.target.value)}
+                        placeholder="0.0"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="waist">{t("settings.waist")} (cm)</Label>
+                      <Input
+                        id="waist"
+                        type="number"
+                        step="0.1"
+                        value={waist}
+                        onChange={(e) => setWaist(e.target.value)}
+                        placeholder="0.0"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="hips">{t("settings.hips")} (cm)</Label>
+                      <Input
+                        id="hips"
+                        type="number"
+                        step="0.1"
+                        value={hips}
+                        onChange={(e) => setHips(e.target.value)}
+                        placeholder="0.0"
+                      />
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="notes">{t("records.notes")}</Label>
                     <Textarea
@@ -221,9 +282,9 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
             records.map((record: any) => (
               <div
                 key={record._id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg gap-4"
+                className="flex flex-col sm:flex-row justify-between p-4 border rounded-lg gap-4"
               >
-                <div className="space-y-1">
+                <div className="space-y-1 sm:w-1/4">
                   <div className="font-medium">
                     {format(new Date(record.date), "PPP", { locale: dateLocale })}
                   </div>
@@ -236,39 +297,76 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
                     </div>
                   )}
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-                  <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
-                    <Scale className="h-4 w-4 mb-1 text-muted-foreground" />
-                    <span className="font-semibold">{record.weightKg} kg</span>
-                    <span className="text-xs text-muted-foreground">
-                      {t("records.weight")}
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
-                    <Ruler className="h-4 w-4 mb-1 text-muted-foreground" />
-                    <span className="font-semibold">{record.heightCm} cm</span>
-                    <span className="text-xs text-muted-foreground">
-                      {t("records.height")}
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
-                    <Activity className="h-4 w-4 mb-1 text-muted-foreground" />
-                    <span className="font-semibold">
-                      {record.bodyFatPercentage || "-"}%
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {t("records.bodyFatShort")}
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
-                    <Activity className="h-4 w-4 mb-1 text-muted-foreground" />
-                    <span className="font-semibold">
-                      {record.visceralFatPercentage || "-"}%
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {t("records.visceralFatShort")}
-                    </span>
-                  </div>
+                <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-sm">
+                  {record.weightKg && (
+                    <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
+                      <Scale className="h-4 w-4 mb-1 text-muted-foreground" />
+                      <span className="font-semibold">{record.weightKg} kg</span>
+                      <span className="text-xs text-muted-foreground text-center">
+                        {t("records.weight")}
+                      </span>
+                    </div>
+                  )}
+                  {record.bodyFatPercentage && (
+                    <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
+                      <Activity className="h-4 w-4 mb-1 text-muted-foreground" />
+                      <span className="font-semibold">
+                        {record.bodyFatPercentage}%
+                      </span>
+                      <span className="text-xs text-muted-foreground text-center">
+                        {t("records.bodyFatShort")}
+                      </span>
+                    </div>
+                  )}
+                  {record.visceralFatPercentage && (
+                    <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
+                      <Activity className="h-4 w-4 mb-1 text-muted-foreground" />
+                      <span className="font-semibold">
+                        {record.visceralFatPercentage}%
+                      </span>
+                      <span className="text-xs text-muted-foreground text-center">
+                        {t("records.visceralFatShort")}
+                      </span>
+                    </div>
+                  )}
+                  {record.muscleMassPercentage && (
+                    <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
+                      <Activity className="h-4 w-4 mb-1 text-muted-foreground" />
+                      <span className="font-semibold">
+                        {record.muscleMassPercentage}%
+                      </span>
+                      <span className="text-xs text-muted-foreground text-center">
+                        {t("dashboard.muscleMass")}
+                      </span>
+                    </div>
+                  )}
+                  {record.chestCm && (
+                    <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
+                      <Ruler className="h-4 w-4 mb-1 text-muted-foreground" />
+                      <span className="font-semibold">{record.chestCm} cm</span>
+                      <span className="text-xs text-muted-foreground text-center">
+                        {t("settings.chest")}
+                      </span>
+                    </div>
+                  )}
+                  {record.waistCm && (
+                    <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
+                      <Ruler className="h-4 w-4 mb-1 text-muted-foreground" />
+                      <span className="font-semibold">{record.waistCm} cm</span>
+                      <span className="text-xs text-muted-foreground text-center">
+                        {t("settings.waist")}
+                      </span>
+                    </div>
+                  )}
+                  {record.hipsCm && (
+                    <div className="flex flex-col items-center p-2 bg-secondary/20 rounded">
+                      <Ruler className="h-4 w-4 mb-1 text-muted-foreground" />
+                      <span className="font-semibold">{record.hipsCm} cm</span>
+                      <span className="text-xs text-muted-foreground text-center">
+                        {t("settings.hips")}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             ))
