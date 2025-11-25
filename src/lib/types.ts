@@ -28,6 +28,9 @@ export interface UserProfile {
   bodyFatPercentage?: number;
   visceralFatPercentage?: number;
   muscleMassPercentage?: number;
+  goalBodyFatPercentage?: number;
+  goalVisceralFatPercentage?: number;
+  goalMuscleMassPercentage?: number;
 
   // Nutritionist-specific fields
   subscriptionStatus?: "active" | "inactive" | "trial" | "pending";

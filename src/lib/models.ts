@@ -25,6 +25,9 @@ export interface IUser extends Document {
   bodyFatPercentage?: number;
   visceralFatPercentage?: number;
   muscleMassPercentage?: number;
+  goalBodyFatPercentage?: number;
+  goalVisceralFatPercentage?: number;
+  goalMuscleMassPercentage?: number;
   // Nutritionist fields
   subscriptionStatus?: "active" | "inactive" | "trial" | "pending";
   invitationCode?: string;
@@ -64,6 +67,9 @@ const UserSchema = new Schema<IUser>({
   bodyFatPercentage: Number,
   visceralFatPercentage: Number,
   muscleMassPercentage: Number,
+  goalBodyFatPercentage: Number,
+  goalVisceralFatPercentage: Number,
+  goalMuscleMassPercentage: Number,
   subscriptionStatus: {
     type: String,
     enum: ["active", "inactive", "trial", "pending"],

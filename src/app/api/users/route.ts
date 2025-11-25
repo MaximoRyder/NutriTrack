@@ -39,6 +39,9 @@ export async function GET(request: NextRequest) {
         bodyFatPercentage: user.bodyFatPercentage || null,
         visceralFatPercentage: user.visceralFatPercentage || null,
         muscleMassPercentage: user.muscleMassPercentage || null,
+        goalBodyFatPercentage: user.goalBodyFatPercentage || null,
+        goalVisceralFatPercentage: user.goalVisceralFatPercentage || null,
+        goalMuscleMassPercentage: user.goalMuscleMassPercentage || null,
       });
     }
     // Admin: List all users

@@ -1,7 +1,7 @@
 "use client";
 
 import { AddMealDialog } from "@/components/add-meal-dialog";
-import { BmiCard } from "@/components/bmi-card";
+import { BiometricsCard } from "@/components/dashboard/biometrics-card";
 import { QuickLogCard } from "@/components/quick-log-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -34,14 +34,11 @@ import type { Meal } from "@/lib/types";
 import { format } from "date-fns";
 import { enUS, es, pt } from "date-fns/locale";
 import {
-  Activity,
   ArrowUpRight,
   BookOpen,
   CalendarDays,
   Droplets,
-  Percent,
   PlusCircle,
-  Scale,
   Stethoscope,
   Users,
   Utensils
@@ -401,24 +398,7 @@ export default function DashboardPage() {
       <div className="space-y-6 w-full max-w-[1700px] mx-auto">
         {/* Top Stats Row */}
         <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {t("dashboard.currentWeight")}
-              </CardTitle>
-              <Scale className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {userProfile?.currentWeightKg || t("general.na")} kg
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {t("dashboard.goal", {
-                  value: userProfile?.goalWeightKg || t("general.na"),
-                })}
-              </p>
-            </CardContent>
-          </Card>
+          <BiometricsCard userProfile={userProfile} className="col-span-1 md:col-span-2" />
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -433,39 +413,6 @@ export default function DashboardPage() {
                 {t("dashboard.hydrationGoal", { value: 2000 })}
               </p>
               <Progress value={hydrationProgress} className="mt-2 h-2" />
-            </CardContent>
-          </Card>
-
-          <BmiCard userProfile={userProfile} />
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {t("dashboard.bodyFat")}
-              </CardTitle>
-              <Percent className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {userProfile?.bodyFatPercentage || t("general.na")} %
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {t("dashboard.visceralFat")}: {userProfile?.visceralFatPercentage || t("general.na")} %
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {t("dashboard.muscleMass")}
-              </CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {userProfile?.muscleMassPercentage || t("general.na")} %
-              </div>
             </CardContent>
           </Card>
         </div>
