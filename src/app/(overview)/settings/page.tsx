@@ -86,6 +86,30 @@ export default function SettingsPage() {
               .optional(),
           })
           .optional(),
+        bodyFatPercentage: z.coerce
+          .number()
+          .positive(t("validation.positiveNumber"))
+          .optional(),
+        goalBodyFatPercentage: z.coerce
+          .number()
+          .positive(t("validation.positiveNumber"))
+          .optional(),
+        visceralFatPercentage: z.coerce
+          .number()
+          .positive(t("validation.positiveNumber"))
+          .optional(),
+        goalVisceralFatPercentage: z.coerce
+          .number()
+          .positive(t("validation.positiveNumber"))
+          .optional(),
+        muscleMassPercentage: z.coerce
+          .number()
+          .positive(t("validation.positiveNumber"))
+          .optional(),
+        goalMuscleMassPercentage: z.coerce
+          .number()
+          .positive(t("validation.positiveNumber"))
+          .optional(),
       }),
     [t]
   );
@@ -127,6 +151,12 @@ export default function SettingsPage() {
         hips: undefined,
         chest: undefined,
       },
+      bodyFatPercentage: undefined,
+      goalBodyFatPercentage: undefined,
+      visceralFatPercentage: undefined,
+      goalVisceralFatPercentage: undefined,
+      muscleMassPercentage: undefined,
+      goalMuscleMassPercentage: undefined,
     },
   });
   const passwordForm = useForm<z.infer<typeof passwordSchema>>({
@@ -165,6 +195,12 @@ export default function SettingsPage() {
             hips: undefined,
             chest: undefined,
           },
+          bodyFatPercentage: userProfile.bodyFatPercentage,
+          goalBodyFatPercentage: userProfile.goalBodyFatPercentage,
+          visceralFatPercentage: userProfile.visceralFatPercentage,
+          goalVisceralFatPercentage: userProfile.goalVisceralFatPercentage,
+          muscleMassPercentage: userProfile.muscleMassPercentage,
+          goalMuscleMassPercentage: userProfile.goalMuscleMassPercentage,
         });
       }
     }

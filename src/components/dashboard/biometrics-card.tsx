@@ -92,7 +92,7 @@ export function BiometricsCard({ userProfile, className }: BiometricsCardProps) 
                                 </span>
                                 {metric.goal && (
                                     <span className="text-xs text-muted-foreground">
-                                        {t("dashboard.goal", { value: metric.goal, unit: metric.unit })}
+                                        {t("dashboard.goal", { value: metric.goal }).replace("kg", metric.unit)}
                                     </span>
                                 )}
                             </div>

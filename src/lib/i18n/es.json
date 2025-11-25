@@ -151,7 +151,8 @@
     "weightKg": "Peso (kg)",
     "bodyFat": "Grasa Corporal",
     "visceralFat": "Grasa Visceral",
-    "muscleMass": "Masa Muscular"
+    "muscleMass": "Masa Muscular",
+    "bodyComposition": "Composición Corporal"
   },
   "addMeal": {
     "title": "Agregar Nueva Comida",
