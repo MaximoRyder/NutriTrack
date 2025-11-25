@@ -42,6 +42,7 @@ import {
   CalendarPlus,
   Droplets,
   FileText,
+  Loader2,
   MessageSquare,
   Scale,
   Target,
@@ -59,16 +60,20 @@ const weightChartConfig = {
 function CommentSection({ mealId }: { mealId: string }) {
   const { t } = useTranslation();
   const [newComment, setNewComment] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const { comments, isLoading, mutate } = useComments(mealId);
 
   const handleAddComment = async () => {
     if (!newComment.trim()) return;
+    setIsSending(true);
     try {
       await addComment({ mealId, text: newComment });
       setNewComment("");
       mutate();
     } catch (e) {
       console.error("Error adding comment", e);
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -108,8 +113,8 @@ function CommentSection({ mealId }: { mealId: string }) {
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
         />
-        <Button onClick={handleAddComment} size="sm" className="sm:self-start">
-          {t("patientDetail.send")}
+        <Button onClick={handleAddComment} size="sm" className="sm:self-start" disabled={!newComment.trim() || isSending}>
+          {isSending ? <Loader2 className="h-4 w-4 animate-spin" /> : t("patientDetail.send")}
         </Button>
       </div>
     </div>
