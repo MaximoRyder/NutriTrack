@@ -881,7 +881,9 @@
     "recordedBy": "Registrado por",
     "noRecords": "Nenhum registro encontrado",
     "addSuccess": "Registro adicionado com sucesso",
-    "addError": "Falha ao adicionar registro"
+    "addError": "Falha ao adicionar registro",
+    "updateSuccess": "Registro atualizado com sucesso",
+    "updateError": "Falha ao atualizar registro"
   },
   "availability": {
     "title": "Disponibilidade",

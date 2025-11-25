@@ -882,7 +882,9 @@
     "recordedBy": "Registrado por",
     "noRecords": "No se encontraron registros",
     "addSuccess": "Registro agregado exitosamente",
-    "addError": "Error al agregar el registro"
+    "addError": "Error al agregar el registro",
+    "updateSuccess": "Registro actualizado correctamente",
+    "updateError": "Error al actualizar el registro"
   },
   "availability": {
     "title": "Disponibilidad",

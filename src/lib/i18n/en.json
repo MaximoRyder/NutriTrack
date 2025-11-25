@@ -881,7 +881,9 @@
     "recordedBy": "Recorded by",
     "noRecords": "No records found",
     "addSuccess": "Record added successfully",
-    "addError": "Failed to add record"
+    "addError": "Failed to add record",
+    "updateSuccess": "Record updated successfully",
+    "updateError": "Error updating record"
   },
   "availability": {
     "title": "Availability",
