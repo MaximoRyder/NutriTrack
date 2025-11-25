@@ -25,6 +25,9 @@ export interface UserProfile {
     hips?: number;
     chest?: number;
   };
+  bodyFatPercentage?: number;
+  visceralFatPercentage?: number;
+  muscleMassPercentage?: number;
 
   // Nutritionist-specific fields
   subscriptionStatus?: "active" | "inactive" | "trial" | "pending";

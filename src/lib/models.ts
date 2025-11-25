@@ -24,6 +24,7 @@ export interface IUser extends Document {
   };
   bodyFatPercentage?: number;
   visceralFatPercentage?: number;
+  muscleMassPercentage?: number;
   // Nutritionist fields
   subscriptionStatus?: "active" | "inactive" | "trial" | "pending";
   invitationCode?: string;
@@ -62,6 +63,7 @@ const UserSchema = new Schema<IUser>({
   },
   bodyFatPercentage: Number,
   visceralFatPercentage: Number,
+  muscleMassPercentage: Number,
   subscriptionStatus: {
     type: String,
     enum: ["active", "inactive", "trial", "pending"],
@@ -292,6 +294,7 @@ export interface IPatientRecord extends Document {
   heightCm: number;
   bodyFatPercentage?: number;
   visceralFatPercentage?: number;
+  muscleMassPercentage?: number;
   notes?: string;
   createdAt: Date;
 }
@@ -304,6 +307,7 @@ const PatientRecordSchema = new Schema<IPatientRecord>({
   heightCm: { type: Number, required: true },
   bodyFatPercentage: Number,
   visceralFatPercentage: Number,
+  muscleMassPercentage: Number,
   notes: String,
   createdAt: { type: Date, default: Date.now },
 });

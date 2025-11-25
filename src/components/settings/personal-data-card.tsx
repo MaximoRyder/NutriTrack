@@ -345,6 +345,88 @@ export function PersonalDataCard({
                                 />
                             </div>
                         </div>
+                        <div>
+                            <Label className="mb-2 block">
+                                {t("settings.bodyComposition")}
+                            </Label>
+                            <div className="grid grid-cols-3 gap-4">
+                                <FormField
+                                    control={patientForm.control}
+                                    name="bodyFatPercentage"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-xs text-muted-foreground">
+                                                {t("settings.bodyFat")} (%)
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="20"
+                                                    value={field.value === undefined ? "" : field.value}
+                                                    onChange={(e) =>
+                                                        field.onChange(
+                                                            e.target.value === ""
+                                                                ? undefined
+                                                                : Number(e.target.value)
+                                                        )
+                                                    }
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={patientForm.control}
+                                    name="visceralFatPercentage"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-xs text-muted-foreground">
+                                                {t("settings.visceralFat")} (%)
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="10"
+                                                    value={field.value === undefined ? "" : field.value}
+                                                    onChange={(e) =>
+                                                        field.onChange(
+                                                            e.target.value === ""
+                                                                ? undefined
+                                                                : Number(e.target.value)
+                                                        )
+                                                    }
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={patientForm.control}
+                                    name="muscleMassPercentage"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-xs text-muted-foreground">
+                                                {t("settings.muscleMass")} (%)
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="35"
+                                                    value={field.value === undefined ? "" : field.value}
+                                                    onChange={(e) =>
+                                                        field.onChange(
+                                                            e.target.value === ""
+                                                                ? undefined
+                                                                : Number(e.target.value)
+                                                        )
+                                                    }
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
                         <FormField
                             control={patientForm.control}
                             name="activityLevel"

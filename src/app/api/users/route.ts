@@ -36,6 +36,9 @@ export async function GET(request: NextRequest) {
         specialty: user.specialty || null,
         dateOfBirth: user.dateOfBirth || null,
         bodyMeasurements: user.bodyMeasurements || null,
+        bodyFatPercentage: user.bodyFatPercentage || null,
+        visceralFatPercentage: user.visceralFatPercentage || null,
+        muscleMassPercentage: user.muscleMassPercentage || null,
       });
     }
     // Admin: List all users

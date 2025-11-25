@@ -147,7 +147,10 @@
     "quickStats": "Estatísticas Rápidas",
     "totalPatients": "Total de Pacientes",
     "quickStatsDesc": "Mais estatísticas em breve.",
-    "weightKg": "Peso (kg)"
+    "weightKg": "Peso (kg)",
+    "bodyFat": "Gordura corporal",
+    "visceralFat": "Gordura visceral",
+    "muscleMass": "Massa muscular"
   },
   "addMeal": {
     "title": "Adicionar Nova Refeição",
@@ -437,6 +440,10 @@
       "obese": "Obesidade",
       "obeseSevere": "Obesidade Severa"
     },
+    "bodyComposition": "Composição Corporal",
+    "bodyFat": "Gordura Corporal",
+    "visceralFat": "Gordura Visceral",
+    "muscleMass": "Massa Muscular",
     "bodyMeasurements": "Medidas Corporais (cm)",
     "chest": "Peito",
     "waist": "Cintura",

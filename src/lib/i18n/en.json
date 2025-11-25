@@ -147,7 +147,10 @@
     "quickStats": "Quick Stats",
     "totalPatients": "Total Patients",
     "quickStatsDesc": "More stats coming soon.",
-    "weightKg": "Weight (kg)"
+    "weightKg": "Weight (kg)",
+    "bodyFat": "Body Fat",
+    "visceralFat": "Visceral Fat",
+    "muscleMass": "Muscle Mass"
   },
   "addMeal": {
     "title": "Add New Meal",
@@ -437,6 +440,10 @@
       "obese": "Obesity",
       "obeseSevere": "Severe Obesity"
     },
+    "bodyComposition": "Body Composition",
+    "bodyFat": "Body Fat",
+    "visceralFat": "Visceral Fat",
+    "muscleMass": "Muscle Mass",
     "bodyMeasurements": "Body Measurements (cm)",
     "chest": "Chest",
     "waist": "Waist",
