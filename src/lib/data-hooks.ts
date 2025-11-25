@@ -264,6 +264,27 @@ export async function addPatientRecord(payload: {
   return res.json();
 }
 
+export async function updatePatientRecord(payload: {
+  _id: string;
+  date?: Date;
+  weightKg?: number;
+  bodyFatPercentage?: number;
+  visceralFatPercentage?: number;
+  muscleMassPercentage?: number;
+  chestCm?: number;
+  waistCm?: number;
+  hipsCm?: number;
+  notes?: string;
+}) {
+  const res = await fetch("/api/patient-records", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
 // List patients for nutritionist
 export function usePatients() {
   const { user } = useUser();

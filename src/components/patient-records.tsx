@@ -22,11 +22,11 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { addPatientRecord, usePatientRecords, useUser } from "@/lib/data-hooks";
+import { addPatientRecord, updatePatientRecord, usePatientRecords, useUser } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { format } from "date-fns";
 import { enUS, es, pt } from "date-fns/locale";
-import { Activity, Plus, Ruler, Scale } from "lucide-react";
+import { Activity, Pencil, Plus, Ruler, Scale } from "lucide-react";
 import { useState } from "react";
 
 interface PatientRecordsProps {
@@ -40,6 +40,7 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
   const { records, isLoading, mutate } = usePatientRecords(patientId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingRecord, setEditingRecord] = useState<any>(null);
 
   // Get the appropriate date-fns locale
   const dateLocale = locale === 'es' ? es : locale === 'pt' ? pt : enUS;
@@ -62,12 +63,9 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
 
     setIsSubmitting(true);
     try {
-      await addPatientRecord({
-        patientId,
-        nutritionistId: (user as any).id,
+      const payload = {
         date: new Date(date),
         weightKg: weight ? parseFloat(weight) : undefined,
-        // heightCm: parseFloat(height),
         bodyFatPercentage: bodyFat ? parseFloat(bodyFat) : undefined,
         visceralFatPercentage: visceralFat ? parseFloat(visceralFat) : undefined,
         muscleMassPercentage: muscleMass ? parseFloat(muscleMass) : undefined,
@@ -75,22 +73,38 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
         waistCm: waist ? parseFloat(waist) : undefined,
         hipsCm: hips ? parseFloat(hips) : undefined,
         notes,
-      });
+      };
 
-      toast({
-        title: t("settings.success"),
-        description: t("records.addSuccess"),
-      });
+      if (editingRecord) {
+        await updatePatientRecord({
+          _id: editingRecord._id,
+          ...payload,
+        });
+        toast({
+          title: t("settings.success"),
+          description: t("records.updateSuccess") || "Record updated successfully",
+        });
+      } else {
+        await addPatientRecord({
+          patientId,
+          nutritionistId: (user as any).id,
+          ...payload,
+        });
+        toast({
+          title: t("settings.success"),
+          description: t("records.addSuccess"),
+        });
+      }
 
       setIsDialogOpen(false);
       resetForm();
       mutate();
     } catch (error) {
-      console.error("Error adding record:", error);
+      console.error("Error saving record:", error);
       toast({
         variant: "destructive",
         title: t("settings.error"),
-        description: t("records.addError"),
+        description: editingRecord ? t("records.updateError") || "Error updating record" : t("records.addError"),
       });
     } finally {
       setIsSubmitting(false);
@@ -98,9 +112,9 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
   };
 
   const resetForm = () => {
+    setEditingRecord(null);
     setDate(new Date().toISOString().split('T')[0]);
     setWeight("");
-    // setHeight("");
     setBodyFat("");
     setVisceralFat("");
     setMuscleMass("");
@@ -108,6 +122,20 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
     setWaist("");
     setHips("");
     setNotes("");
+  };
+
+  const handleEdit = (record: any) => {
+    setEditingRecord(record);
+    setDate(new Date(record.date).toISOString().split('T')[0]);
+    setWeight(record.weightKg?.toString() || "");
+    setBodyFat(record.bodyFatPercentage?.toString() || "");
+    setVisceralFat(record.visceralFatPercentage?.toString() || "");
+    setMuscleMass(record.muscleMassPercentage?.toString() || "");
+    setChest(record.chestCm?.toString() || "");
+    setWaist(record.waistCm?.toString() || "");
+    setHips(record.hipsCm?.toString() || "");
+    setNotes(record.notes || "");
+    setIsDialogOpen(true);
   };
 
   return (
@@ -119,7 +147,10 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
         </div>
 
         {(user as any)?.role === "nutritionist" && (
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <Dialog open={isDialogOpen} onOpenChange={(open) => {
+            setIsDialogOpen(open);
+            if (!open) resetForm();
+          }}>
             <DialogTrigger asChild>
               <Button size="sm">
                 <Plus className="mr-2 h-4 w-4" />
@@ -129,9 +160,9 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
             <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
               <form onSubmit={handleSubmit}>
                 <DialogHeader>
-                  <DialogTitle>{t("records.addRecord")}</DialogTitle>
+                  <DialogTitle>{editingRecord ? t("records.editRecord") || "Edit Record" : t("records.addRecord")}</DialogTitle>
                   <DialogDescription>
-                    {t("records.addRecordDesc")}
+                    {editingRecord ? t("records.editRecordDesc") || "Update the consultation details." : t("records.addRecordDesc")}
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
@@ -282,8 +313,18 @@ export function PatientRecords({ patientId }: PatientRecordsProps) {
             records.map((record: any) => (
               <div
                 key={record._id}
-                className="flex flex-col sm:flex-row justify-between p-4 border rounded-lg gap-4"
+                className="flex flex-col sm:flex-row justify-between p-4 border rounded-lg gap-4 relative group"
               >
+                {(user as any)?.role === "nutritionist" && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-2 right-2"
+                    onClick={() => handleEdit(record)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                )}
                 <div className="space-y-1 sm:w-1/4">
                   <div className="font-medium">
                     {format(new Date(record.date), "PPP", { locale: dateLocale })}
