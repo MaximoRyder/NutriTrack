@@ -21,7 +21,7 @@ interface QuickLogCardProps {
 
 export function QuickLogCard({ patientId, date }: QuickLogCardProps) {
   const { t } = useTranslation();
-  
+
   // Water Logic
   const { waterLogs, mutate: mutateWater } = useWaterLogs(patientId, date);
   const totalWater = waterLogs?.reduce((acc: number, log: any) => acc + log.quantityMl, 0) || 0;
@@ -132,10 +132,10 @@ export function QuickLogCard({ patientId, date }: QuickLogCardProps) {
               </Button>
             </div>
             <div className="flex justify-center">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => handleAddWater(-250)} 
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleAddWater(-250)}
                 disabled={isAddingWater || totalWater <= 0}
                 className="text-muted-foreground hover:text-destructive h-8"
               >
@@ -157,7 +157,7 @@ export function QuickLogCard({ patientId, date }: QuickLogCardProps) {
                         <div>
                           <p className="font-medium text-sm">
                             {["Running", "Walking", "Cycling", "Swimming", "Gym", "Yoga"].includes(log.activityType)
-                              ? t(`quickLog.activities.${log.activityType.toLowerCase()}`)
+                              ? t(`quickLog.activities.${log.activityType.toLowerCase()}` as any)
                               : log.activityType}
                           </p>
                           <p className="text-xs text-muted-foreground capitalize">
@@ -174,7 +174,7 @@ export function QuickLogCard({ patientId, date }: QuickLogCardProps) {
                   {t("quickLog.noActivity") || "No activity logged today"}
                 </div>
               )}
-              
+
               <Dialog open={isActivityDialogOpen} onOpenChange={setIsActivityDialogOpen}>
                 <DialogTrigger asChild>
                   <Button className="w-full" size="sm">
@@ -220,21 +220,21 @@ export function QuickLogCard({ patientId, date }: QuickLogCardProps) {
                     )}
                     <div className="grid gap-2">
                       <Label htmlFor="duration">{t("quickLog.duration") || "Duration (minutes)"}</Label>
-                      <Input 
-                        id="duration" 
-                        type="number" 
-                        placeholder="30" 
-                        value={duration} 
-                        onChange={(e) => setDuration(e.target.value)} 
+                      <Input
+                        id="duration"
+                        type="number"
+                        placeholder="30"
+                        value={duration}
+                        onChange={(e) => setDuration(e.target.value)}
                       />
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="time">{t("quickLog.time") || "Time"}</Label>
-                      <Input 
-                        id="time" 
-                        type="time" 
-                        value={time} 
-                        onChange={(e) => setTime(e.target.value)} 
+                      <Input
+                        id="time"
+                        type="time"
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
                       />
                     </div>
                     <div className="grid gap-2">

@@ -548,7 +548,9 @@ export default function PatientDetailPage() {
                           <div className="flex justify-between items-start">
                             <div>
                               <p className="font-semibold text-sm sm:text-base capitalize">
-                                {t(`quickLog.activities.${activity.activityType}` as any)}
+                                {["Running", "Walking", "Cycling", "Swimming", "Gym", "Yoga", "Elliptical"].includes(activity.activityType)
+                                  ? t(`quickLog.activities.${activity.activityType.toLowerCase()}` as any)
+                                  : activity.activityType}
                               </p>
                               <p className="text-xs text-muted-foreground">
                                 {format(new Date(activity.date), "p")}
