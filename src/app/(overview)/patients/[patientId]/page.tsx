@@ -26,6 +26,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import {
   addComment,
+  useActivityLogs,
   useComments,
   usePatientMealsByDate,
   useUserProfile,
@@ -33,9 +34,10 @@ import {
   useWeightLogs,
 } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
-import { Comment, Meal, WeightLog } from "@/lib/types";
+import { ActivityLog, Comment, Meal, WeightLog } from "@/lib/types";
 import { format, formatDistanceToNow } from "date-fns";
 import {
+  Activity,
   Bot,
   CalendarPlus,
   Droplets,
@@ -136,6 +138,12 @@ export default function PatientDetailPage() {
     date
   );
 
+  // Activity logs for date
+  const { activityLogs, isLoading: isLoadingActivities } = useActivityLogs(
+    patientId,
+    date
+  );
+
   // Weight logs
   const { weightLogs, isLoading: isLoadingWeightLogs } =
     useWeightLogs(patientId);
@@ -152,6 +160,20 @@ export default function PatientDetailPage() {
       weight: log.weightKg,
     }));
   }, [weightLogs]);
+
+  const dailyLogItems = useMemo(() => {
+    const mealItems = (meals || []).map((m) => ({ ...m, type: "meal" as const }));
+    const activityItems = (activityLogs || []).map((a) => ({
+      ...a,
+      type: "activity" as const,
+    }));
+
+    return [...mealItems, ...activityItems].sort((a, b) => {
+      const dateA = new Date(a.type === "meal" ? (a as Meal).timestamp : (a as ActivityLog).date);
+      const dateB = new Date(b.type === "meal" ? (b as Meal).timestamp : (b as ActivityLog).date);
+      return dateB.getTime() - dateA.getTime();
+    });
+  }, [meals, activityLogs]);
 
   const handleGenerateSuggestions = async () => {
     if (!patient) return;
@@ -444,14 +466,14 @@ export default function PatientDetailPage() {
         </Card>
       </div>
 
-      {/* SECCIÓN 3: MEAL LOG */}
+      {/* SECCIÓN 3: DAILY LOG (MEALS + ACTIVITIES) */}
       <Card>
         <CardHeader className="p-4 sm:p-6">
           <CardTitle className="text-base sm:text-lg">
-            {t("patientDetail.recentMealLog")}
+            {t("patientDetail.dailyLog")}
           </CardTitle>
           <CardDescription className="text-xs sm:text-sm">
-            {t("patientDetail.recentMealLogDesc", {
+            {t("patientDetail.dailyLogDesc", {
               date: date ? format(date, "PPP") : "",
             })}
           </CardDescription>
@@ -467,49 +489,88 @@ export default function PatientDetailPage() {
               />
             </div>
             <div className="flex-1 space-y-3 min-w-0">
-              {isLoadingMeals && (
+              {(isLoadingMeals || isLoadingActivities) && (
                 <div className="space-y-4">
                   <Skeleton className="h-40 w-full" />
                   <Skeleton className="h-40 w-full" />
                 </div>
               )}
-              {!isLoadingMeals && meals && meals.length > 0
-                ? (meals as Meal[]).map((meal) => (
-                  <div
-                    key={meal.id}
-                    className="border rounded-lg overflow-hidden"
-                  >
-                    <div className="flex flex-col sm:flex-row">
-                      <div className="relative h-40 sm:h-32 sm:w-32 md:w-40 md:h-40 shrink-0">
-                        <Image
-                          src={meal.photoUrl}
-                          alt={meal.name}
-                          fill
-                          className="object-cover"
-                          data-ai-hint="healthy food"
-                        />
-                      </div>
-                      <div className="flex-1 p-3 sm:p-4 space-y-2 min-w-0">
-                        <div>
-                          <p className="font-semibold text-sm sm:text-base">
-                            {meal.name}
-                          </p>
-                          <p className="text-xs text-muted-foreground capitalize">
-                            {t(`addMeal.${meal.mealType}` as any)} -{" "}
-                            {format(new Date(meal.timestamp), "p")}
-                          </p>
+              {!isLoadingMeals && !isLoadingActivities && dailyLogItems.length > 0
+                ? dailyLogItems.map((item) => {
+                  if (item.type === "meal") {
+                    const meal = item as Meal;
+                    return (
+                      <div
+                        key={`meal-${meal.id}`}
+                        className="border rounded-lg overflow-hidden"
+                      >
+                        <div className="flex flex-col sm:flex-row">
+                          <div className="relative h-40 sm:h-32 sm:w-32 md:w-40 md:h-40 shrink-0">
+                            <Image
+                              src={meal.photoUrl}
+                              alt={meal.name}
+                              fill
+                              className="object-cover"
+                              data-ai-hint="healthy food"
+                            />
+                          </div>
+                          <div className="flex-1 p-3 sm:p-4 space-y-2 min-w-0">
+                            <div>
+                              <p className="font-semibold text-sm sm:text-base">
+                                {meal.name}
+                              </p>
+                              <p className="text-xs text-muted-foreground capitalize">
+                                {t(`addMeal.${meal.mealType}` as any)} -{" "}
+                                {format(new Date(meal.timestamp), "p")}
+                              </p>
+                            </div>
+                            {meal.description && (
+                              <p className="text-xs sm:text-sm text-muted-foreground/80">
+                                {meal.description}
+                              </p>
+                            )}
+                            <CommentSection mealId={meal.id} />
+                          </div>
                         </div>
-                        {meal.description && (
-                          <p className="text-xs sm:text-sm text-muted-foreground/80">
-                            {meal.description}
-                          </p>
-                        )}
-                        <CommentSection mealId={meal.id} />
                       </div>
-                    </div>
-                  </div>
-                ))
-                : !isLoadingMeals && (
+                    );
+                  } else {
+                    const activity = item as ActivityLog;
+                    return (
+                      <div
+                        key={`activity-${activity.id}`}
+                        className="border rounded-lg overflow-hidden p-4 flex items-start gap-4"
+                      >
+                        <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                          <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <p className="font-semibold text-sm sm:text-base capitalize">
+                                {t(`quickLog.activities.${activity.activityType}` as any)}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {format(new Date(activity.date), "p")}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
+                                {activity.durationMinutes} min
+                              </span>
+                            </div>
+                          </div>
+                          {activity.intensity && (
+                            <p className="text-xs sm:text-sm text-muted-foreground/80 mt-1">
+                              {t("quickLog.intensity")}: {t(`quickLog.intensities.${activity.intensity}` as any)}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  }
+                })
+                : !isLoadingMeals && !isLoadingActivities && (
                   <div className="flex flex-col items-center justify-center text-center text-muted-foreground py-10 border-2 border-dashed rounded-lg">
                     <UploadCloud className="h-12 w-12 mb-4" />
                     <p>{t("journal.noMeals")}</p>
