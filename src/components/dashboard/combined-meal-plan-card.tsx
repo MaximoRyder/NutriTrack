@@ -39,7 +39,7 @@ export function CombinedMealPlanCard({
 
     if (isLoading) {
         return (
-            <Card className="h-full">
+            <Card className="max-h-fit">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
                         {t("dashboard.activeMealPlan")}
@@ -93,7 +93,7 @@ export function CombinedMealPlanCard({
         ] || [];
 
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col h-[350px] md:h-[400px]">
             <CardHeader className="pb-2">
                 <CardTitle className="text-base sm:text-lg flex items-center gap-2">
                     <Utensils className="h-4 w-4" />
@@ -149,7 +149,7 @@ export function CombinedMealPlanCard({
                                 {date ? format(date, "EEEE", { locale: dateLocale }) : ""}
                             </span>
                         </div>
-                        <ScrollArea className="h-[150px] pr-4">
+                        <ScrollArea className="flex-1 pr-4 -mr-4">
                             {dayMeals.length > 0 ? (
                                 <div className="space-y-4">
                                     {dayMeals.map((slot, index) => (

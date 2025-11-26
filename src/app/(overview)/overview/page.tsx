@@ -424,7 +424,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Right Column: Meal Plan, Meals, Chart */}
-          <div className="space-y-6">
+          <div className="space-y-6 max-h-fit">
             <CombinedMealPlanCard
               activeMealPlan={activeMealPlan}
               date={date}
