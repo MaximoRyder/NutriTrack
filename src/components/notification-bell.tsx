@@ -14,15 +14,23 @@ import {
 } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { Notification } from "@/lib/types";
-import { Bell, CheckCircle, MessageSquare } from "lucide-react";
+import { Bell, CheckCircle, Loader2, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { UIEvent } from "react";
 
 export function NotificationBell() {
   const { user } = useUser();
   const router = useRouter();
   const { locale } = useTranslation();
 
-  const { notifications, mutate } = useNotifications();
+  const {
+    notifications,
+    mutate,
+    size,
+    setSize,
+    isLoadingMore,
+    isReachingEnd,
+  } = useNotifications();
 
   const unreadCount =
     notifications?.filter((n: Notification) => !n.read).length || 0;
@@ -34,6 +42,15 @@ export function NotificationBell() {
       router.push(`/journal?date=${n.mealDate}&mealId=${n.mealId}`);
     } else {
       router.push(`/journal/${n.mealId}?fromNotification=1`);
+    }
+  };
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+    if (scrollHeight - scrollTop <= clientHeight + 50) {
+      if (!isLoadingMore && !isReachingEnd) {
+        setSize(size + 1);
+      }
     }
   };
 
@@ -52,12 +69,13 @@ export function NotificationBell() {
       <DropdownMenuContent
         align="end"
         sideOffset={0}
-        className="w-screen h-[calc(100vh-4rem)] sm:w-80 sm:h-auto overflow-y-auto rounded-none border-0 sm:rounded-md sm:border p-0"
+        className="w-screen h-[calc(100vh-4rem)] sm:w-80 sm:max-h-[50vh] overflow-y-auto rounded-none border-0 sm:rounded-md sm:border p-0"
+        onScroll={handleScroll}
       >
         <div className="px-4 py-3 text-sm font-semibold flex items-center gap-2 border-b bg-muted/30 sticky top-0 z-10 backdrop-blur-sm">
           <MessageSquare className="h-4 w-4" /> Notificaciones
         </div>
-        {notifications?.length === 0 && (
+        {notifications?.length === 0 && !isLoadingMore && (
           <div className="px-4 py-8 text-sm text-muted-foreground flex flex-col items-center justify-center gap-2 text-center">
             <CheckCircle className="h-8 w-8 text-green-500/50" />
             <p>No tienes notificaciones pendientes</p>
@@ -115,6 +133,11 @@ export function NotificationBell() {
               )}
             </DropdownMenuItem>
           ))}
+        {isLoadingMore && (
+          <div className="p-4 flex justify-center">
+            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+          </div>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -12,8 +12,15 @@ export async function GET(request: NextRequest) {
     const readParam = searchParams.get('read');
     const filter: any = { userId: (session.user as any).id };
     if (readParam === 'false') filter.read = false;
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '15');
+    const skip = (page - 1) * limit;
+
     await connectDB();
-    const notifications = await Notification.find(filter).sort({ createdAt: -1 }).limit(50);
+    const notifications = await Notification.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
     return NextResponse.json(notifications.map(n => ({
       id: n._id.toString(),
       mealId: n.mealId.toString(),

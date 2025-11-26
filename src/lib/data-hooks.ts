@@ -70,16 +70,40 @@ export async function addComment(payload: any) {
   return res.json();
 }
 
+import useSWRInfinite from "swr/infinite";
+
 export function useNotifications() {
   const { user } = useUser();
-  const { data, error, mutate } = useSWR(
-    user ? "/api/notifications" : null,
+  const limit = 15;
+
+  const getKey = (pageIndex: number, previousPageData: any) => {
+    if (!user) return null;
+    if (previousPageData && !previousPageData.length) return null; // reached the end
+    return `/api/notifications?page=${pageIndex + 1}&limit=${limit}`;
+  };
+
+  const { data, error, size, setSize, mutate, isValidating } = useSWRInfinite(
+    getKey,
     fetcher,
     { refreshInterval: 10000 }
   );
+
+  const notifications = data ? [].concat(...data) : [];
+  const isLoadingInitialData = !data && !error;
+  const isLoadingMore =
+    isLoadingInitialData ||
+    (size > 0 && data && typeof data[size - 1] === "undefined");
+  const isEmpty = data?.[0]?.length === 0;
+  const isReachingEnd =
+    isEmpty || (data && data[data.length - 1]?.length < limit);
+
   return {
-    notifications: data || [],
-    isLoading: !data && !error,
+    notifications,
+    isLoading: isLoadingInitialData,
+    isLoadingMore,
+    isReachingEnd,
+    size,
+    setSize,
     error,
     mutate,
   };
