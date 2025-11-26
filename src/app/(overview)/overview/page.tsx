@@ -3,6 +3,7 @@
 import { AddMealDialog } from "@/components/add-meal-dialog";
 import { BmiCard } from "@/components/bmi-card";
 import { BiometricsCard } from "@/components/dashboard/biometrics-card";
+import { CombinedMealPlanCard } from "@/components/dashboard/combined-meal-plan-card";
 import { QuickLogCard } from "@/components/quick-log-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -31,8 +32,6 @@ import { format } from "date-fns";
 import { enUS, es, pt } from "date-fns/locale";
 import {
   ArrowUpRight,
-  BookOpen,
-  CalendarDays,
   Droplets,
   PlusCircle,
   Stethoscope,
@@ -112,15 +111,7 @@ export default function DashboardPage() {
     fetcher
   );
 
-  // Calculate current week of the plan
-  const getCurrentWeek = () => {
-    if (!activeMealPlan?.startDate) return 1;
-    const start = new Date(activeMealPlan.startDate);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - start.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return Math.ceil(diffDays / 7);
-  };
+
 
   // Nutritionist queries
   const { patients, isLoading: isLoadingPatients } = usePatients();
@@ -434,67 +425,12 @@ export default function DashboardPage() {
 
           {/* Right Column: Meal Plan, Meals, Chart */}
           <div className="space-y-6">
-            {/* Active Meal Plan Card */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Plan de Comidas Activo
-                </CardTitle>
-                <CalendarDays className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                {isLoadingMealPlan ? (
-                  <div className="space-y-3">
-                    <Skeleton className="h-7 w-3/4" />
-                    <Skeleton className="h-4 w-full" />
-                    <div className="flex items-center gap-2">
-                      <Skeleton className="h-4 w-16" />
-                      <Skeleton className="h-4 w-8" />
-                    </div>
-                    <Skeleton className="h-9 w-full mt-2" />
-                  </div>
-                ) : activeMealPlan ? (
-                  <div className="space-y-3">
-                    <div>
-                      <div className="text-xl font-bold">{activeMealPlan.name}</div>
-                      {activeMealPlan.description && (
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {activeMealPlan.description}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="flex items-center gap-2 text-sm">
-                      <span className="text-muted-foreground">Semana:</span>
-                      <span className="font-semibold">{getCurrentWeek()}</span>
-                    </div>
-
-                    {nutritionistInfo && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className="text-muted-foreground">Asignado por:</span>
-                        <span className="font-medium">{nutritionistInfo.displayName}</span>
-                      </div>
-                    )}
-
-                    <Link href="/plan">
-                      <Button className="w-full mt-2" size="sm">
-                        <BookOpen className="mr-2 h-4 w-4" />
-                        Ver Plan Completo
-                      </Button>
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-4 text-center space-y-3">
-                    <p className="text-sm text-muted-foreground">
-                      No tienes un plan de comidas asignado actualmente.
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Tu nutricionista te asignará uno pronto.
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <CombinedMealPlanCard
+              activeMealPlan={activeMealPlan}
+              date={date}
+              nutritionistInfo={nutritionistInfo}
+              isLoading={isLoadingMealPlan}
+            />
 
             <Card>
               <CardHeader className="flex flex-row items-center">
@@ -559,45 +495,6 @@ export default function DashboardPage() {
                 </Table>
               </CardContent>
             </Card>
-
-            {/* <Card className="overflow-hidden">
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-base sm:text-lg">
-                  {t("dashboard.weightProgress")}
-                </CardTitle>
-                <CardDescription className="text-xs sm:text-sm">
-                  {t("dashboard.weightProgressDesc")}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-2 sm:p-4 lg:p-6 pt-0">
-                <ChartContainer
-                  config={weightChartConfig}
-                  className="h-[200px] sm:h-[250px] w-full"
-                >
-                  <BarChart accessibilityLayer data={weightChartData}>
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                      dataKey="date"
-                      tickLine={false}
-                      tickMargin={10}
-                      axisLine={false}
-                      tick={{ fontSize: 10 }}
-                      tickFormatter={(value) =>
-                        new Date(value).toLocaleDateString(locale, {
-                          month: "short",
-                          day: "numeric",
-                        })
-                      }
-                    />
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent indicator="dot" />}
-                    />
-                    <Bar dataKey="weight" fill="var(--color-weight)" radius={4} />
-                  </BarChart>
-                </ChartContainer>
-              </CardContent>
-            </Card> */}
           </div>
         </div>
       </div>
