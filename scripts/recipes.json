@@ -1,0 +1,407 @@
+[
+    /* ---------------------- DESAYUNOS ---------------------- */
+    {
+        "titulo": "Avena cremosa con frutas y nueces",
+        "descripcion": "1 taza de avena cocida en 200 ml de leche descremada o vegetal; al servir, agregar rodajas de banana, arándanos y nueces. Endulzar con miel o stevia.",
+        "porciones": "1 porción",
+        "tipo": "Desayuno",
+        "horario_recomendado": "08:00",
+        "imagen_url": "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg"
+    },
+    {
+        "titulo": "Yogur con granola y miel",
+        "descripcion": "1 pote de yogur natural, 3 cucharadas de granola y un chorrito de miel. Agregar frutas frescas opcionales.",
+        "porciones": "1 porción",
+        "tipo": "Desayuno",
+        "horario_recomendado": "08:00",
+        "imagen_url": "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg"
+    },
+    {
+        "titulo": "Tostadas integrales con palta y tomate",
+        "descripcion": "2 tostadas integrales cubiertas con palta pisada y rodajas de tomate. Condimentar con sal y pimienta.",
+        "porciones": "1 porción",
+        "tipo": "Desayuno",
+        "horario_recomendado": "08:00",
+        "imagen_url": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg"
+    },
+    {
+        "titulo": "Smoothie de frutos rojos",
+        "descripcion": "Licuado de frutillas, arándanos, yogurt descremado y hielo. Endulzar con stevia si se desea.",
+        "porciones": "1 porción",
+        "tipo": "Desayuno",
+        "horario_recomendado": "08:30",
+        "imagen_url": "https://images.pexels.com/photos/414548/pexels-photo-414548.jpeg"
+    },
+    {
+        "titulo": "Omelette de claras con espinaca",
+        "descripcion": "Claras batidas con espinaca picada cocidas a fuego lento. Acompañar con una tostada integral.",
+        "porciones": "1 porción",
+        "tipo": "Desayuno",
+        "horario_recomendado": "09:00",
+        "imagen_url": "https://images.pexels.com/photos/1435895/pexels-photo-1435895.jpeg"
+    },
+    {
+        "titulo": "Panqueques de avena y banana",
+        "descripcion": "Mezcla de avena, banana y claras cocida en sartén. Servir con fruta fresca.",
+        "porciones": "1 porción",
+        "tipo": "Desayuno",
+        "horario_recomendado": "09:00",
+        "imagen_url": "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg"
+    },
+    {
+        "titulo": "Chía pudding con mango",
+        "descripcion": "Semillas de chía hidratadas en leche vegetal durante la noche. Servir con compota o trozos de mango.",
+        "porciones": "1 porción",
+        "tipo": "Desayuno",
+        "horario_recomendado": "08:00",
+        "imagen_url": "https://images.pexels.com/photos/4194624/pexels-photo-4194624.jpeg"
+    },
+    {
+        "titulo": "Batido verde detox",
+        "descripcion": "Licuado de espinaca, manzana, pepino, jengibre y agua fría.",
+        "porciones": "1 porción",
+        "tipo": "Desayuno",
+        "horario_recomendado": "08:15",
+        "imagen_url": "https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg"
+    },
+    {
+        "titulo": "Huevos revueltos saludables",
+        "descripcion": "Huevos cocidos lentamente con aceite de oliva y cebolla picada. Servir con tostada integral.",
+        "porciones": "1 porción",
+        "tipo": "Desayuno",
+        "horario_recomendado": "09:00",
+        "imagen_url": "https://images.pexels.com/photos/76093/pexels-photo-76093.jpeg"
+    },
+    {
+        "titulo": "Fruta fresca con frutos secos",
+        "descripcion": "Mix de frutas de estación con almendras, nueces y pasas.",
+        "porciones": "1 porción",
+        "tipo": "Desayuno",
+        "horario_recomendado": "08:30",
+        "imagen_url": "https://images.pexels.com/photos/4198029/pexels-photo-4198029.jpeg"
+    },
+    /* ---------------------- ALMUERZOS ---------------------- */
+    {
+        "titulo": "Ensalada mediterránea",
+        "descripcion": "Mix de hojas verdes con tomate, pepino, aceitunas y queso feta.",
+        "porciones": "1 porción",
+        "tipo": "Almuerzo",
+        "horario_recomendado": "13:00",
+        "imagen_url": "https://images.pexels.com/photos/1435895/pexels-photo-1435895.jpeg"
+    },
+    {
+        "titulo": "Pechuga de pollo grillada con verduras",
+        "descripcion": "Pollo grillado acompañado de vegetales al vapor.",
+        "porciones": "1 porción",
+        "tipo": "Almuerzo",
+        "horario_recomendado": "13:30",
+        "imagen_url": "https://images.pexels.com/photos/410648/pexels-photo-410648.jpeg"
+    },
+    {
+        "titulo": "Wrap integral de atún",
+        "descripcion": "Tortilla integral rellena de atún, tomate, lechuga y palta.",
+        "porciones": "1 porción",
+        "tipo": "Almuerzo",
+        "horario_recomendado": "13:00",
+        "imagen_url": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg"
+    },
+    {
+        "titulo": "Arroz integral con vegetales",
+        "descripcion": "Arroz integral salteado con calabaza, brócoli y zanahoria.",
+        "porciones": "1 porción",
+        "tipo": "Almuerzo",
+        "horario_recomendado": "13:00",
+        "imagen_url": "https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg"
+    },
+    {
+        "titulo": "Pasta con pesto liviano",
+        "descripcion": "Pasta integral con salsa de albahaca, aceite de oliva y nueces.",
+        "porciones": "1 porción",
+        "tipo": "Almuerzo",
+        "horario_recomendado": "13:30",
+        "imagen_url": "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg"
+    },
+    {
+        "titulo": "Salmón al horno con limón",
+        "descripcion": "Salmón cocido con limón, ajo y eneldo. Acompañar con ensalada.",
+        "porciones": "1 porción",
+        "tipo": "Almuerzo",
+        "horario_recomendado": "13:00",
+        "imagen_url": "https://images.pexels.com/photos/3296273/pexels-photo-3296273.jpeg"
+    },
+    {
+        "titulo": "Pollo salteado con arroz",
+        "descripcion": "Pollo en cubos salteado con vegetales y arroz integral.",
+        "porciones": "1 porción",
+        "tipo": "Almuerzo",
+        "horario_recomendado": "13:00",
+        "imagen_url": "https://images.pexels.com/photos/616353/pexels-photo-616353.jpeg"
+    },
+    {
+        "titulo": "Tacos saludables",
+        "descripcion": "Tacos de carne magra o pollo con verduras frescas y palta.",
+        "porciones": "1 porción",
+        "tipo": "Almuerzo",
+        "horario_recomendado": "13:30",
+        "imagen_url": "https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg"
+    },
+    {
+        "titulo": "Sopa de verduras casera",
+        "descripcion": "Sopa a base de zapallo, zanahoria, cebolla y apio.",
+        "porciones": "1 porción",
+        "tipo": "Almuerzo",
+        "horario_recomendado": "12:45",
+        "imagen_url": "https://images.pexels.com/photos/6287761/pexels-photo-6287761.jpeg"
+    },
+    {
+        "titulo": "Bowl de quinoa con verduras",
+        "descripcion": "Quinoa cocida con mix de vegetales frescos y semillas.",
+        "porciones": "1 porción",
+        "tipo": "Almuerzo",
+        "horario_recomendado": "13:00",
+        "imagen_url": "https://images.pexels.com/photos/5938/food-salad-healthy-lunch.jpg"
+    },
+    /* ---------------------- MERIENDAS ---------------------- */
+    {
+        "titulo": "Lic shake de banana y cacao",
+        "descripcion": "Banana, cacao amargo y leche descremada licuados.",
+        "porciones": "1 porción",
+        "tipo": "Merienda",
+        "horario_recomendado": "17:00",
+        "imagen_url": "https://images.pexels.com/photos/414645/pexels-photo-414645.jpeg"
+    },
+    {
+        "titulo": "Tostadas con queso crema",
+        "descripcion": "2 tostadas integrales con queso crema light.",
+        "porciones": "1 porción",
+        "tipo": "Merienda",
+        "horario_recomendado": "17:00",
+        "imagen_url": "https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg"
+    },
+    {
+        "titulo": "Mix de frutos secos",
+        "descripcion": "Almendras, nueces, castañas y pasas.",
+        "porciones": "1 porción",
+        "tipo": "Merienda",
+        "horario_recomendado": "16:30",
+        "imagen_url": "https://images.pexels.com/photos/4198029/pexels-photo-4198029.jpeg"
+    },
+    {
+        "titulo": "Budín de banana saludable",
+        "descripcion": "Porción de budín hecho con harina integral y banana.",
+        "porciones": "1 porción",
+        "tipo": "Merienda",
+        "horario_recomendado": "17:00",
+        "imagen_url": "https://images.pexels.com/photos/4194843/pexels-photo-4194843.jpeg"
+    },
+    {
+        "titulo": "Yogur griego con miel",
+        "descripcion": "Una taza de yogur griego con un toque de miel natural.",
+        "porciones": "1 porción",
+        "tipo": "Merienda",
+        "horario_recomendado": "17:00",
+        "imagen_url": "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg"
+    },
+    {
+        "titulo": "Barrita de cereal casera",
+        "descripcion": "Barra de avena, miel y frutos secos.",
+        "porciones": "1 porción",
+        "tipo": "Merienda",
+        "horario_recomendado": "16:45",
+        "imagen_url": "https://images.pexels.com/photos/635627/pexels-photo-635627.jpeg"
+    },
+    {
+        "titulo": "Frutas con crema light",
+        "descripcion": "Frutillas y kiwi con crema reducida en grasas.",
+        "porciones": "1 porción",
+        "tipo": "Merienda",
+        "horario_recomendado": "17:30",
+        "imagen_url": "https://images.pexels.com/photos/4198029/pexels-photo-4198029.jpeg"
+    },
+    {
+        "titulo": "Galletas integrales",
+        "descripcion": "Porción de galletas integrales bajas en azúcar.",
+        "porciones": "1 porción",
+        "tipo": "Merienda",
+        "horario_recomendado": "16:30",
+        "imagen_url": "https://images.pexels.com/photos/890577/pexels-photo-890577.jpeg"
+    },
+    {
+        "titulo": "Té verde con limón",
+        "descripcion": "Té verde caliente con rodajas de limón.",
+        "porciones": "1 porción",
+        "tipo": "Merienda",
+        "horario_recomendado": "17:30",
+        "imagen_url": "https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg"
+    },
+    {
+        "titulo": "Café latte con leche vegetal",
+        "descripcion": "Café suave con leche de almendras o avena.",
+        "porciones": "1 porción",
+        "tipo": "Merienda",
+        "horario_recomendado": "17:00",
+        "imagen_url": "https://images.pexels.com/photos/2396220/pexels-photo-2396220.jpeg"
+    },
+    /* ---------------------- CENAS ---------------------- */
+    {
+        "titulo": "Pollo al horno con calabaza",
+        "descripcion": "Pechuga de pollo al horno con cubos de calabaza asada.",
+        "porciones": "1 porción",
+        "tipo": "Cena",
+        "horario_recomendado": "21:00",
+        "imagen_url": "https://images.pexels.com/photos/410648/pexels-photo-410648.jpeg"
+    },
+    {
+        "titulo": "Ensalada proteica",
+        "descripcion": "Mix de hojas verdes con huevo duro, pollo y palta.",
+        "porciones": "1 porción",
+        "tipo": "Cena",
+        "horario_recomendado": "20:30",
+        "imagen_url": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg"
+    },
+    {
+        "titulo": "Bowl de vegetales grillados",
+        "descripcion": "Calabacín, berenjena y morrón grillados con aceite de oliva.",
+        "porciones": "1 porción",
+        "tipo": "Cena",
+        "horario_recomendado": "21:00",
+        "imagen_url": "https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg"
+    },
+    {
+        "titulo": "Revuelto de vegetales",
+        "descripcion": "Huevos revueltos con cebolla, espinaca y morrones.",
+        "porciones": "1 porción",
+        "tipo": "Cena",
+        "horario_recomendado": "20:30",
+        "imagen_url": "https://images.pexels.com/photos/76093/pexels-photo-76093.jpeg"
+    },
+    {
+        "titulo": "Pescado blanco con limón",
+        "descripcion": "Filet de merluza al horno con limón y ajo.",
+        "porciones": "1 porción",
+        "tipo": "Cena",
+        "horario_recomendado": "21:00",
+        "imagen_url": "https://images.pexels.com/photos/3296273/pexels-photo-3296273.jpeg"
+    },
+    {
+        "titulo": "Sopa liviana de pollo",
+        "descripcion": "Caldo casero con pollo desmenuzado y verduras.",
+        "porciones": "1 porción",
+        "tipo": "Cena",
+        "horario_recomendado": "20:00",
+        "imagen_url": "https://images.pexels.com/photos/6287761/pexels-photo-6287761.jpeg"
+    },
+    {
+        "titulo": "Tortilla de espinaca",
+        "descripcion": "Tortilla baja en aceite con espinaca fresca.",
+        "porciones": "1 porción",
+        "tipo": "Cena",
+        "horario_recomendado": "21:00",
+        "imagen_url": "https://images.pexels.com/photos/1435895/pexels-photo-1435895.jpeg"
+    },
+    {
+        "titulo": "Vegetales al vapor",
+        "descripcion": "Brócoli, zanahoria y arvejas al vapor.",
+        "porciones": "1 porción",
+        "tipo": "Cena",
+        "horario_recomendado": "20:30",
+        "imagen_url": "https://images.pexels.com/photos/1426716/pexels-photo-1426716.jpeg"
+    },
+    {
+        "titulo": "Tofu salteado con verduras",
+        "descripcion": "Tofu firme salteado con verduras y salsa de soja ligera.",
+        "porciones": "1 porción",
+        "tipo": "Cena",
+        "horario_recomendado": "21:00",
+        "imagen_url": "https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg"
+    },
+    {
+        "titulo": "Puré de calabaza con pollo",
+        "descripcion": "Puré suave de calabaza acompañado de pollo grillado.",
+        "porciones": "1 porción",
+        "tipo": "Cena",
+        "horario_recomendado": "20:45",
+        "imagen_url": "https://images.pexels.com/photos/410648/pexels-photo-410648.jpeg"
+    },
+    /* ---------------------- OTROS ---------------------- */
+    {
+        "titulo": "Gelatina light",
+        "descripcion": "Gelatina sin azúcar servida con frutas.",
+        "porciones": "1 porción",
+        "tipo": "Otros",
+        "horario_recomendado": "Cualquier horario",
+        "imagen_url": "https://images.pexels.com/photos/4198029/pexels-photo-4198029.jpeg"
+    },
+    {
+        "titulo": "Agua detox de limón y pepino",
+        "descripcion": "Agua fría con rodajas de limón, pepino y menta.",
+        "porciones": "1 porción",
+        "tipo": "Otros",
+        "horario_recomendado": "Todo el día",
+        "imagen_url": "https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg"
+    },
+    {
+        "titulo": "Fruta fresca",
+        "descripcion": "Porción de frutas de estación.",
+        "porciones": "1 porción",
+        "tipo": "Otros",
+        "horario_recomendado": "Cualquier momento",
+        "imagen_url": "https://images.pexels.com/photos/4198029/pexels-photo-4198029.jpeg"
+    },
+    {
+        "titulo": "Barra de cereal proteica",
+        "descripcion": "Barra alta en proteínas y baja en azúcar.",
+        "porciones": "1 porción",
+        "tipo": "Otros",
+        "horario_recomendado": "Durante el día",
+        "imagen_url": "https://images.pexels.com/photos/896363/pexels-photo-896363.jpeg"
+    },
+    {
+        "titulo": "Infusión de hierbas",
+        "descripcion": "Té de manzanilla o tilo.",
+        "porciones": "1 porción",
+        "tipo": "Otros",
+        "horario_recomendado": "Cualquier momento",
+        "imagen_url": "https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg"
+    },
+    {
+        "titulo": "Rolls de pepino y queso",
+        "descripcion": "Rodajas de pepino enrolladas con queso untable light.",
+        "porciones": "1 porción",
+        "tipo": "Otros",
+        "horario_recomendado": "Entre comidas",
+        "imagen_url": "https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg"
+    },
+    {
+        "titulo": "Hummus con bastones",
+        "descripcion": "Hummus casero acompañado con zanahoria y apio.",
+        "porciones": "1 porción",
+        "tipo": "Otros",
+        "horario_recomendado": "Snack",
+        "imagen_url": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg"
+    },
+    {
+        "titulo": "Café negro",
+        "descripcion": "Taza de café sin azúcar.",
+        "porciones": "1 porción",
+        "tipo": "Otros",
+        "horario_recomendado": "Mañana o tarde",
+        "imagen_url": "https://images.pexels.com/photos/2396220/pexels-photo-2396220.jpeg"
+    },
+    {
+        "titulo": "Licuado detox simple",
+        "descripcion": "Pepino, limón, jengibre y agua.",
+        "porciones": "1 porción",
+        "tipo": "Otros",
+        "horario_recomendado": "Mañanas",
+        "imagen_url": "https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg"
+    },
+    {
+        "titulo": "Compota de manzana",
+        "descripcion": "Manzana cocida sin azúcar, triturada.",
+        "porciones": "1 porción",
+        "tipo": "Otros",
+        "horario_recomendado": "Cualquier momento",
+        "imagen_url": "https://images.pexels.com/photos/5945902/pexels-photo-5945902.jpeg"
+    }
+]
