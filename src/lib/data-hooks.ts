@@ -73,7 +73,7 @@ export async function addComment(payload: any) {
 export function useNotifications() {
   const { user } = useUser();
   const { data, error, mutate } = useSWR(
-    user ? "/api/notifications?read=false" : null,
+    user ? "/api/notifications" : null,
     fetcher,
     { refreshInterval: 10000 }
   );
