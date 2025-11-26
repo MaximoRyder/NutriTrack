@@ -12,7 +12,6 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { UserNav } from "@/components/user-nav";
 import { useUser, useUserProfile } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { usePathname, useRouter } from "next/navigation";
@@ -88,9 +87,6 @@ export default function DashboardLayout({
         <p className="mt-2 text-muted-foreground">
           {t("admin.pending.description")}
         </p>
-        <div className="mt-6">
-          <UserNav />
-        </div>
       </div>
     );
   }
