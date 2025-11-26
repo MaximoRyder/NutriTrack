@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
           commentId: comment._id,
           fromId: authorId,
           fromName: authorName,
-          textPreview: text.slice(0, 100),
+          textPreview: text.slice(0, 220),
           createdAt: new Date(),
           read: false,
           type: "meal-comment",
