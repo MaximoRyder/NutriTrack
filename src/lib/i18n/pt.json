@@ -151,7 +151,13 @@
     "bodyFat": "Gordura corporal",
     "visceralFat": "Gordura visceral",
     "muscleMass": "Massa muscular",
-    "bodyComposition": "Composição Corporal"
+    "bodyComposition": "Composição Corporal",
+    "summary": "Resumo",
+    "dailyMeals": "Refeições Diárias",
+    "week": "Semana",
+    "viewFullPlan": "Ver Plano Completo",
+    "noMealDetails": "Sem detalhes disponíveis",
+    "noMealsScheduled": "Nenhuma refeição programada para este dia"
   },
   "addMeal": {
     "title": "Adicionar Nova Refeição",

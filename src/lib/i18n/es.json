@@ -152,7 +152,13 @@
     "bodyFat": "Grasa Corporal",
     "visceralFat": "Grasa Visceral",
     "muscleMass": "Masa Muscular",
-    "bodyComposition": "Composición Corporal"
+    "bodyComposition": "Composición Corporal",
+    "summary": "Resumen",
+    "dailyMeals": "Comidas Diarias",
+    "week": "Semana",
+    "viewFullPlan": "Ver Plan Completo",
+    "noMealDetails": "No hay detalles disponibles",
+    "noMealsScheduled": "No hay comidas programadas para este día"
   },
   "addMeal": {
     "title": "Agregar Nueva Comida",
