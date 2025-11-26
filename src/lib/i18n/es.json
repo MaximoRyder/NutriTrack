@@ -910,5 +910,10 @@
       "friday": "Viernes",
       "saturday": "Sábado"
     }
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "empty": "No tienes notificaciones pendientes",
+    "in": "En"
   }
 }

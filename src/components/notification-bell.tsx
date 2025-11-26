@@ -21,7 +21,7 @@ import { UIEvent } from "react";
 export function NotificationBell() {
   const { user } = useUser();
   const router = useRouter();
-  const { locale } = useTranslation();
+  const { t, locale } = useTranslation();
 
   const {
     notifications,
@@ -73,12 +73,12 @@ export function NotificationBell() {
         onScroll={handleScroll}
       >
         <div className="px-4 py-3 text-sm font-semibold flex items-center gap-2 border-b bg-muted/30 sticky top-0 z-10 backdrop-blur-sm">
-          <MessageSquare className="h-4 w-4" /> Notificaciones
+          <MessageSquare className="h-4 w-4" /> {t('notifications.title')}
         </div>
         {notifications?.length === 0 && !isLoadingMore && (
           <div className="px-4 py-8 text-sm text-muted-foreground flex flex-col items-center justify-center gap-2 text-center">
             <CheckCircle className="h-8 w-8 text-green-500/50" />
-            <p>No tienes notificaciones pendientes</p>
+            <p>{t('notifications.empty')}</p>
           </div>
         )}
         {notifications &&
@@ -122,7 +122,7 @@ export function NotificationBell() {
                 >
                   {n.mealName && (
                     <span className="font-medium text-foreground/80">
-                      En <strong>{n.mealName}</strong>:{" "}
+                      {t('notifications.in')} <strong>{n.mealName}</strong>:{" "}
                     </span>
                   )}
                   {n.textPreview}

@@ -909,5 +909,10 @@
       "friday": "Friday",
       "saturday": "Saturday"
     }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications pending",
+    "in": "In"
   }
 }
