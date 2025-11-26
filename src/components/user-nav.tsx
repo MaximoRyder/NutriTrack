@@ -116,7 +116,10 @@ export function UserNav({ onLinkClick }: UserNavProps) {
                 (user as any)?.name ||
                 t("userNav.patientName")}
             </p>
-            <p className="text-xs leading-none text-muted-foreground">
+            <p
+              className="truncate text-xs leading-none text-muted-foreground"
+              title={(user as any)?.email}
+            >
               {(user as any)?.email || t("userNav.patientEmail")}
             </p>
           </div>

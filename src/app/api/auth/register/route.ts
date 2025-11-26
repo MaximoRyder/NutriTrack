@@ -1,5 +1,10 @@
 import { User } from "@/lib/models";
 import connectDB from "@/lib/mongodb";
+import {
+    EMAIL_MAX_LENGTH,
+    EMAIL_REGEX,
+    NAME_MAX_LENGTH,
+} from "@/lib/validation";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -11,6 +16,17 @@ export async function POST(request: NextRequest) {
     if (!email || !password || !displayName || !role) {
       return NextResponse.json(
         { error: "Faltan campos requeridos" },
+        { status: 400 }
+      );
+    }
+
+    if (
+      !EMAIL_REGEX.test(email) ||
+      email.length > EMAIL_MAX_LENGTH ||
+      displayName.length > NAME_MAX_LENGTH
+    ) {
+      return NextResponse.json(
+        { error: "Datos de entrada inválidos" },
         { status: 400 }
       );
     }

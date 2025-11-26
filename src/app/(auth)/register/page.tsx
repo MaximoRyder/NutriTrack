@@ -21,6 +21,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/lib/data-hooks";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
+import {
+  EMAIL_MAX_LENGTH,
+  EMAIL_REGEX,
+  NAME_MAX_LENGTH,
+} from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
@@ -37,8 +42,17 @@ export default function RegisterPage() {
       z.object({
         displayName: z
           .string()
-          .min(1, { message: t("validation.nameRequired") }),
-        email: z.string().email({ message: t("validation.emailInvalid") }),
+          .min(1, { message: t("validation.nameRequired") })
+          .max(NAME_MAX_LENGTH, {
+            message: t("validation.maxLength", { max: NAME_MAX_LENGTH }),
+          }),
+        email: z
+          .string()
+          .email({ message: t("validation.emailInvalid") })
+          .regex(EMAIL_REGEX, { message: t("validation.emailInvalid") })
+          .max(EMAIL_MAX_LENGTH, {
+            message: t("validation.maxLength", { max: EMAIL_MAX_LENGTH }),
+          }),
         password: z.string().min(6, { message: t("validation.passwordMin") }),
         role: z.enum(["patient", "nutritionist"], {
           required_error: t("validation.roleRequired"),
@@ -190,6 +204,7 @@ export default function RegisterPage() {
                   <FormLabel>{t("register.name")}</FormLabel>
                   <FormControl>
                     <Input
+                      maxLength={NAME_MAX_LENGTH}
                       placeholder={
                         selectedRole === "patient"
                           ? t("register.namePlaceholder")
@@ -210,6 +225,7 @@ export default function RegisterPage() {
                   <FormLabel>{t("register.email")}</FormLabel>
                   <FormControl>
                     <Input
+                      maxLength={EMAIL_MAX_LENGTH}
                       placeholder={
                         selectedRole === "patient"
                           ? "patient@example.com"
