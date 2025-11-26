@@ -143,7 +143,7 @@ export function CombinedMealPlanCard({
                         </Link>
                     </TabsContent>
 
-                    <TabsContent value="daily" className="flex-1 min-h-0">
+                    <TabsContent value="daily" className="flex-1 min-h-0 flex flex-col">
                         <div className="mb-2 flex items-center justify-between">
                             <span className="text-sm font-medium text-muted-foreground capitalize">
                                 {date ? format(date, "EEEE", { locale: dateLocale }) : ""}
