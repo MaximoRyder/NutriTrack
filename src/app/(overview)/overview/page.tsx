@@ -14,11 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -46,7 +41,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import useSWR from "swr";
 
 const weightChartData = [
@@ -566,7 +560,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="overflow-hidden">
+            {/* <Card className="overflow-hidden">
               <CardHeader className="p-4 sm:p-6">
                 <CardTitle className="text-base sm:text-lg">
                   {t("dashboard.weightProgress")}
@@ -603,7 +597,7 @@ export default function DashboardPage() {
                   </BarChart>
                 </ChartContainer>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>
