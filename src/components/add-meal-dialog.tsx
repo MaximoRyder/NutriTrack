@@ -44,6 +44,7 @@ interface AddMealDialogProps {
     mealData: Omit<Meal, "id" | "timestamp" | "userId"> & { mealTime?: string }
   ) => void;
   mealToEdit?: Meal | null;
+  isLoading?: boolean;
 }
 
 const MAX_NAME_LENGTH = 50;
@@ -54,6 +55,7 @@ export function AddMealDialog({
   onOpenChange,
   onAddMeal,
   mealToEdit,
+  isLoading = false,
 }: AddMealDialogProps) {
   const { t } = useTranslation();
   const [imagePreview, setImagePreview] = useState<string | null>(null);

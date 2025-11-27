@@ -1,8 +1,8 @@
+import { User } from "@/lib/models";
+import connectDB from "@/lib/mongodb";
+import bcrypt from "bcryptjs";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import connectDB from "@/lib/mongodb";
-import { User } from "@/lib/models";
-import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -77,4 +77,13 @@ export const authOptions: NextAuthOptions = {
 };
 
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+
+export async function GET(req: any, props: any) {
+  const params = await props.params;
+  return handler(req, { params });
+}
+
+export async function POST(req: any, props: any) {
+  const params = await props.params;
+  return handler(req, { params });
+}

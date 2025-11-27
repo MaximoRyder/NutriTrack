@@ -40,15 +40,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import useSWR from "swr";
-
-const weightChartData = [
-  { date: "2024-06-01", weight: 85 },
-  { date: "2024-06-08", weight: 84.5 },
-  { date: "2024-06-15", weight: 84 },
-  { date: "2024-06-22", weight: 83 },
-  { date: "2024-06-29", weight: 82.5 },
-];
+import useSWR, { useSWRConfig } from "swr";
 
 
 
@@ -58,7 +50,9 @@ export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [isAddMealDialogOpen, setAddMealDialogOpen] = useState(false);
+  const [isAddingMeal, setIsAddingMeal] = useState(false);
   const { t, locale } = useTranslation();
+  const { mutate } = useSWRConfig();
 
   // Get the appropriate date-fns locale
   const dateLocale = locale === 'es' ? es : locale === 'pt' ? pt : enUS;
@@ -146,28 +140,34 @@ export default function DashboardPage() {
     mealData: Omit<Meal, "id" | "timestamp" | "userId">
   ) => {
     if (!user) return;
-    const response = await fetch("/api/meals", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...mealData,
-        userId: (user as any).id,
-        timestamp: new Date().toISOString(),
-      }),
-    });
-    if (response.ok) {
-      setAddMealDialogOpen(false);
+    setIsAddingMeal(true);
+    try {
+      const response = await fetch("/api/meals", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...mealData,
+          userId: (user as any).id,
+          timestamp: new Date().toISOString(),
+        }),
+      });
+      if (response.ok) {
+        // Revalidate meals cache
+        const startDate = new Date(date || new Date());
+        startDate.setHours(0, 0, 0, 0);
+        const endDate = new Date(date || new Date());
+        endDate.setHours(23, 59, 59, 999);
+        const key = `/api/meals?userId=${(user as any).id}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+        await mutate(key);
+
+        setAddMealDialogOpen(false);
+      }
+    } catch (error) {
+      console.error("Error adding meal:", error);
+    } finally {
+      setIsAddingMeal(false);
     }
   };
-
-  if (isUserLoading || isProfileLoading) {
-    return (
-      <div className="flex min-h-[calc(100vh-10rem)] items-center justify-center">
-        <p>{t("general.loading")}</p>
-      </div>
-    );
-  }
-
   // Admin Dashboard
   if (userProfile?.role === "admin") {
     const isLoading = isLoadingAllUsers || isLoadingAllMeals;
@@ -379,6 +379,7 @@ export default function DashboardPage() {
         isOpen={isAddMealDialogOpen}
         onOpenChange={setAddMealDialogOpen}
         onAddMeal={handleAddMeal}
+        isLoading={isAddingMeal}
       />
 
       <div className="space-y-6 w-full max-w-[1700px] mx-auto">
