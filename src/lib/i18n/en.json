@@ -186,6 +186,7 @@
     "large": "Large",
     "half": "Half",
     "save": "Save Meal",
+    "saving": "Saving...",
     "saveChanges": "Save Changes",
     "charCounter": "{current} / {max}",
     "validation": {

@@ -368,8 +368,12 @@ export function AddMealDialog({
               </div>
             </ScrollArea>
             <DialogFooter className="p-6 pt-4 border-t">
-              <Button type="submit">
-                {isEditing ? t("addMeal.saveChanges") : t("addMeal.save")}
+              <Button type="submit" disabled={isLoading}>
+                {isLoading
+                  ? t("addMeal.saving")
+                  : isEditing
+                    ? t("addMeal.saveChanges")
+                    : t("addMeal.save")}
               </Button>
             </DialogFooter>
           </form>
