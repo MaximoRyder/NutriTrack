@@ -406,7 +406,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid gap-6 grid-cols-1 lg:grid-cols-[minmax(400px,1fr)_minmax(600px,2fr)]">
+        <div className="grid gap-6 grid-cols-1 lg:grid-cols-[auto_1fr]">
           {/* Left Column: Calendar & Quick Log */}
           <div className="space-y-6">
             <Card className="max-h-fit">
@@ -425,7 +425,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Right Column: Meal Plan, Meals, Chart */}
-          <div className="space-y-6 max-h-fit">
+          <div className="space-y-6 max-h-fit min-w-0">
             <CombinedMealPlanCard
               activeMealPlan={activeMealPlan}
               date={date}
