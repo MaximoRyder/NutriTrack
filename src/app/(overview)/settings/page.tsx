@@ -1,17 +1,10 @@
 "use client";
 
-import { BmiGauge } from "@/components/bmi-gauge";
+
 import { PersonalDataCard } from "@/components/settings/personal-data-card";
 import { PreferencesCard } from "@/components/settings/preferences-card";
 import { ProfileCard } from "@/components/settings/profile-card";
 import { SecurityCard } from "@/components/settings/security-card";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
@@ -206,13 +199,7 @@ export default function SettingsPage() {
     }
   }, [userProfile, profileForm, patientForm]);
 
-  const calculatedBMI = useMemo(() => {
-    if (userProfile?.currentWeightKg && userProfile?.heightCm) {
-      const h = userProfile.heightCm / 100;
-      return (userProfile.currentWeightKg / (h * h)).toFixed(1);
-    }
-    return null;
-  }, [userProfile]);
+
 
   const handleProfileSubmit = async (values: z.infer<typeof profileSchema>) => {
     if (!userProfile) return;
@@ -341,21 +328,7 @@ export default function SettingsPage() {
                 handlePatientSubmit={handlePatientSubmit}
               />
 
-              {calculatedBMI && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{t("settings.calculatedBmi")}</CardTitle>
-                    <CardDescription>{t("settings.bmiDesc")}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold">{calculatedBMI}</div>
-                    <div className="mt-4">
-                      {/* @ts-expect-error client component */}
-                      <BmiGauge bmi={Number(calculatedBMI)} />
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+
             </TabsContent>
           )}
         </Tabs>

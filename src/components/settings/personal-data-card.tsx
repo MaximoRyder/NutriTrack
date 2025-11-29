@@ -365,7 +365,7 @@ export function PersonalDataCard({
                                                         <Input
                                                             type="number"
                                                             placeholder="20"
-                                                            value={field.value === undefined ? "" : field.value}
+                                                            value={field.value ?? ""}
                                                             onChange={(e) =>
                                                                 field.onChange(
                                                                     e.target.value === ""
@@ -390,7 +390,7 @@ export function PersonalDataCard({
                                                         <Input
                                                             type="number"
                                                             placeholder="15"
-                                                            value={field.value === undefined ? "" : field.value}
+                                                            value={field.value ?? ""}
                                                             onChange={(e) =>
                                                                 field.onChange(
                                                                     e.target.value === ""
@@ -421,7 +421,7 @@ export function PersonalDataCard({
                                                         <Input
                                                             type="number"
                                                             placeholder="10"
-                                                            value={field.value === undefined ? "" : field.value}
+                                                            value={field.value ?? ""}
                                                             onChange={(e) =>
                                                                 field.onChange(
                                                                     e.target.value === ""
@@ -446,7 +446,7 @@ export function PersonalDataCard({
                                                         <Input
                                                             type="number"
                                                             placeholder="8"
-                                                            value={field.value === undefined ? "" : field.value}
+                                                            value={field.value ?? ""}
                                                             onChange={(e) =>
                                                                 field.onChange(
                                                                     e.target.value === ""
@@ -477,7 +477,7 @@ export function PersonalDataCard({
                                                         <Input
                                                             type="number"
                                                             placeholder="35"
-                                                            value={field.value === undefined ? "" : field.value}
+                                                            value={field.value ?? ""}
                                                             onChange={(e) =>
                                                                 field.onChange(
                                                                     e.target.value === ""
@@ -502,7 +502,7 @@ export function PersonalDataCard({
                                                         <Input
                                                             type="number"
                                                             placeholder="40"
-                                                            value={field.value === undefined ? "" : field.value}
+                                                            value={field.value ?? ""}
                                                             onChange={(e) =>
                                                                 field.onChange(
                                                                     e.target.value === ""
@@ -610,6 +610,7 @@ export function PersonalDataCard({
                                         <Textarea
                                             placeholder={t("settings.healthConditionsPlaceholder")}
                                             {...field}
+                                            value={field.value ?? ""}
                                         />
                                     </FormControl>
                                 </FormItem>
