@@ -114,7 +114,7 @@ export function QuickLogCard({ patientId, date }: QuickLogCardProps) {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="water" className="space-y-4">
+          <TabsContent value="water" className="space-y-4 min-w-[200px] lg:min-w-[340px] min-h-[160px]">
             <div className="flex items-center justify-between">
               <div className="text-2xl font-bold">{totalWater} <span className="text-sm font-normal text-muted-foreground">/ {waterGoal} ml</span></div>
               <div className="text-sm text-muted-foreground">{Math.round(waterProgress)}%</div>
@@ -144,7 +144,7 @@ export function QuickLogCard({ patientId, date }: QuickLogCardProps) {
             </div>
           </TabsContent>
 
-          <TabsContent value="activity" className="space-y-4">
+          <TabsContent value="activity" className="space-y-4 min-w-[200px] lg:min-w-[340px] min-h-[160px]">
             <div className="space-y-2">
               {activityLogs && activityLogs.length > 0 ? (
                 <div className="space-y-2 max-h-[150px] overflow-y-auto pr-1">
