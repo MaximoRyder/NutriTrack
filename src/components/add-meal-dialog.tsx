@@ -1,5 +1,6 @@
 "use client";
 
+import { ImageUpload } from "@/components/image-upload";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -30,9 +31,7 @@ import { useTranslation } from "@/lib/i18n/i18n-provider";
 import type { Meal } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { UploadCloud } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { ScrollArea } from "./ui/scroll-area";
@@ -58,8 +57,6 @@ export function AddMealDialog({
   isLoading = false,
 }: AddMealDialogProps) {
   const { t } = useTranslation();
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isEditing = !!mealToEdit;
 
@@ -118,7 +115,6 @@ export function AddMealDialog({
             ? format(new Date(mealToEdit.timestamp), "HH:mm")
             : format(new Date(), "HH:mm"),
         });
-        setImagePreview(mealToEdit.photoUrl);
       } else {
         // Reset form for adding new meal
         form.reset({
@@ -129,23 +125,11 @@ export function AddMealDialog({
           portionSize: undefined,
           mealTime: format(new Date(), "HH:mm"),
         });
-        setImagePreview(null);
       }
     }
   }, [isOpen, mealToEdit, form]);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const dataUrl = reader.result as string;
-        setImagePreview(dataUrl);
-        form.setValue("photoUrl", dataUrl, { shouldValidate: true });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+
 
   const handleOpenChange = (open: boolean) => {
     onOpenChange(open);
@@ -182,35 +166,10 @@ export function AddMealDialog({
                     <FormItem>
                       <FormLabel>{t("addMeal.photo")}</FormLabel>
                       <FormControl>
-                        <div
-                          className="relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted bg-secondary/50 p-6 text-center transition-colors hover:border-primary"
-                          onClick={() => fileInputRef.current?.click()}
-                        >
-                          {imagePreview ? (
-                            <Image
-                              src={imagePreview}
-                              alt="Meal preview"
-                              width={400}
-                              height={300}
-                              className="h-auto w-full max-h-48 rounded-md object-cover"
-                            />
-                          ) : (
-                            <div className="space-y-2 text-muted-foreground">
-                              <UploadCloud className="mx-auto h-10 w-10" />
-                              <p className="text-sm">
-                                {t("addMeal.uploadPrompt")}
-                              </p>
-                            </div>
-                          )}
-                          <Input
-                            ref={fileInputRef}
-                            type="file"
-                            className="hidden"
-                            accept="image/*"
-                            capture="environment"
-                            onChange={handleImageChange}
-                          />
-                        </div>
+                        <ImageUpload
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

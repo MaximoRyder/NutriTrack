@@ -128,6 +128,8 @@
     "goal": "Meta: {value} kg",
     "dailyHydration": "Hidratação Diária",
     "hydrationGoal": "Meta: {value} ml",
+    "noActivePlan": "Nenhum plano ativo",
+    "nutritionistWillAssign": "Seu nutricionista atribuirá um plano em breve.",
     "activeMealPlan": "Plano Alimentar Ativo",
     "assignedBy": "Atribuído por",
     "recentMeals": "Refeições Recentes",
@@ -909,7 +911,10 @@
       "thursday": "Quinta-feira",
       "friday": "Sexta-feira",
       "saturday": "Sábado"
-    }
+    },
+    "fileTooLarge": "O arquivo é muito grande. O tamanho máximo é {max}MB.",
+    "imageProcessError": "Falha ao processar a imagem. Por favor, tente outra.",
+    "processing": "Processando..."
   },
   "notifications": {
     "title": "Notificações",
