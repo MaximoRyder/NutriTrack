@@ -34,6 +34,7 @@ export async function GET(request: NextRequest) {
       nutritionistId: template.nutritionistId,
       name: template.name,
       description: template.description,
+      type: template.type,
       weekStructure: template.weekStructure,
       createdAt: template.createdAt,
       updatedAt: template.updatedAt,
@@ -72,7 +73,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, description, weekStructure } = body;
+    const { name, description, type, weekStructure } = body;
 
     // Validation
     if (!name || !weekStructure) {
@@ -106,6 +107,7 @@ export async function POST(request: NextRequest) {
       nutritionistId: userProfile._id.toString(),
       name,
       description: description || null,
+      type: type || "specific",
       weekStructure,
       createdAt: now,
       updatedAt: now,
@@ -197,6 +199,7 @@ export async function PATCH(request: NextRequest) {
       nutritionistId: updated!.nutritionistId,
       name: updated!.name,
       description: updated!.description,
+      type: updated!.type,
       weekStructure: updated!.weekStructure,
       createdAt: updated!.createdAt,
       updatedAt: updated!.updatedAt,

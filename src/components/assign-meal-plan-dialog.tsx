@@ -1,24 +1,25 @@
 "use client";
 
+import { FlexibleWeekPlanBuilder } from "@/components/flexible-week-plan-builder";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -57,13 +58,14 @@ export function AssignMealPlanDialog({
   // Form state
   const [useTemplate, setUseTemplate] = useState(true);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
+  const [planType, setPlanType] = useState<"specific" | "flexible">("specific");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState(
     new Date().toISOString().split("T")[0]
   );
   const [endDate, setEndDate] = useState("");
-  const [weekStructure, setWeekStructure] = useState(EMPTY_WEEK_STRUCTURE);
+  const [weekStructure, setWeekStructure] = useState<MealPlanTemplate["weekStructure"]>(EMPTY_WEEK_STRUCTURE);
   const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
@@ -102,6 +104,7 @@ export function AssignMealPlanDialog({
         setName(template.name);
         setDescription(template.description || "");
         setWeekStructure(template.weekStructure);
+        setPlanType(template.type || "specific");
       }
     }
   }, [selectedTemplateId, templates]);
@@ -218,6 +221,24 @@ export function AssignMealPlanDialog({
                   Crea un plan personalizado desde cero usando el constructor
                   semanal abajo.
                 </p>
+                <div className="mt-4">
+                  <Label>Tipo de Plan</Label>
+                  <Select
+                    value={planType}
+                    onValueChange={(val: "specific" | "flexible") => {
+                      setPlanType(val);
+                      setWeekStructure(EMPTY_WEEK_STRUCTURE);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="specific">Recetas Específicas</SelectItem>
+                      <SelectItem value="flexible">Flexible / Por Grupos</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </TabsContent>
             </Tabs>
 
@@ -290,11 +311,18 @@ export function AssignMealPlanDialog({
                   : "Construye el plan semanal agregando comidas para cada día"}
               </p>
               <div className="mt-2">
-                <WeekPlanBuilder
-                  mealItems={mealItems}
-                  weekStructure={weekStructure}
-                  onChange={setWeekStructure}
-                />
+                {planType === "flexible" ? (
+                  <FlexibleWeekPlanBuilder
+                    weekStructure={weekStructure}
+                    onChange={setWeekStructure}
+                  />
+                ) : (
+                  <WeekPlanBuilder
+                    mealItems={mealItems}
+                    weekStructure={weekStructure}
+                    onChange={setWeekStructure}
+                  />
+                )}
               </div>
             </div>
           </div>
