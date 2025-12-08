@@ -1,5 +1,11 @@
 "use client";
 
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -9,7 +15,7 @@ import { useTranslation } from "@/lib/i18n/i18n-provider";
 import { MealPlan } from "@/lib/types";
 import { format } from "date-fns";
 import { enUS, es, pt } from "date-fns/locale";
-import { BookOpen, CalendarDays, Utensils } from "lucide-react";
+import { BookOpen, CalendarDays, Clock, Utensils } from "lucide-react";
 import Link from "next/link";
 
 interface CombinedMealPlanCardProps {
@@ -152,33 +158,78 @@ export function CombinedMealPlanCard({
                         <ScrollArea className="flex-1 pr-4 -mr-4">
                             {dayMeals.length > 0 ? (
                                 <div className="space-y-4">
-                                    {dayMeals.map((slot, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex flex-col gap-1 pb-3 border-b last:border-0 last:pb-0"
-                                        >
-                                            <div className="flex items-center justify-between">
-                                                <span className="font-medium capitalize text-sm">
-                                                    {t(`addMeal.${slot.mealType}`)}
-                                                </span>
-                                                {slot.mealItem?.recommendedTime && (
-                                                    <span className="text-xs text-muted-foreground">
-                                                        {slot.mealItem.recommendedTime}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <p className="text-sm text-muted-foreground">
-                                                {slot.mealItem?.title ||
-                                                    slot.notes ||
-                                                    t("dashboard.noMealDetails")}
-                                            </p>
-                                            {slot.mealItem?.portionInfo && (
-                                                <p className="text-xs text-muted-foreground italic">
-                                                    {slot.mealItem.portionInfo}
-                                                </p>
-                                            )}
-                                        </div>
-                                    ))}
+                                    <Accordion type="single" collapsible className="w-full">
+                                        {dayMeals.map((slot, index) => (
+                                            <AccordionItem key={index} value={`item-${index}`} className="border-b last:border-0">
+                                                <AccordionTrigger className="hover:no-underline py-3">
+                                                    <div className="flex flex-1 items-center justify-between mr-4">
+                                                        <div className="flex flex-col items-start gap-1 text-left">
+                                                            <span className="font-semibold capitalize text-sm text-primary">
+                                                                {t(`addMeal.${slot.mealType}`)}
+                                                            </span>
+                                                            <span className="text-sm font-medium text-muted-foreground w-full truncate max-w-[180px]">
+                                                                {slot.isFlexible
+                                                                    ? (slot.customName || t("addMeal.flexible"))
+                                                                    : (slot.mealItem?.title || t("dashboard.noMealDetails"))}
+                                                            </span>
+                                                        </div>
+                                                        {slot.mealItem?.recommendedTime && (
+                                                            <div className="flex items-center text-xs text-muted-foreground bg-secondary/50 px-2 py-1 rounded-full">
+                                                                <Clock className="h-3 w-3 mr-1" />
+                                                                {slot.mealItem.recommendedTime}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </AccordionTrigger>
+                                                <AccordionContent>
+                                                    <div className="pt-1 pb-2 space-y-3">
+                                                        {slot.isFlexible ? (
+                                                            <div className="space-y-2">
+                                                                {slot.components?.map((comp, i) => (
+                                                                    <div key={i} className="flex items-center justify-between text-sm p-2 bg-secondary/20 rounded-md">
+                                                                        <div className="flex items-center gap-2">
+                                                                            <span className="w-2 h-2 rounded-full bg-primary/70" />
+                                                                            <span className="font-medium">{comp.group}</span>
+                                                                        </div>
+                                                                        <span className="font-bold text-muted-foreground">{comp.percentage}%</span>
+                                                                    </div>
+                                                                ))}
+                                                                {(!slot.components || slot.components.length === 0) && (
+                                                                    <p className="text-sm text-muted-foreground italic">{t("dashboard.noMealDetails")}</p>
+                                                                )}
+                                                                {slot.notes && (
+                                                                    <div className="mt-2 text-xs text-muted-foreground bg-yellow-50/50 p-2 rounded border border-yellow-100 dark:border-yellow-900/30 dark:bg-yellow-900/10">
+                                                                        <span className="font-semibold text-yellow-600 dark:text-yellow-500 mr-1">Nota:</span>
+                                                                        {slot.notes}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        ) : (
+                                                            <div className="space-y-2 text-sm">
+                                                                {slot.mealItem?.description && (
+                                                                    <p className="text-muted-foreground leading-relaxed">
+                                                                        {slot.mealItem.description}
+                                                                    </p>
+                                                                )}
+                                                                {slot.mealItem?.portionInfo && (
+                                                                    <div className="flex items-center gap-2 text-xs text-muted-foreground bg-secondary/30 p-2 rounded">
+                                                                        <Utensils className="h-3 w-3" />
+                                                                        <span className="font-medium">{t("patientPlan.portion")}:</span>
+                                                                        {slot.mealItem.portionInfo}
+                                                                    </div>
+                                                                )}
+                                                                {slot.notes && (
+                                                                    <div className="text-xs text-primary italic mt-2">
+                                                                        {t("patientPlan.nutritionistNotes")}: {slot.notes}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        ))}
+                                    </Accordion>
                                 </div>
                             ) : (
                                 <div className="flex flex-col items-center justify-center h-full py-8 text-center space-y-2">

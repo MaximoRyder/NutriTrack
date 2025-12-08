@@ -179,6 +179,7 @@
     "dinner": "Dinner",
     "snack": "Snack",
     "other": "Other",
+    "flexible": "Flexible Meal",
     "descriptionField": "Description",
     "descriptionPlaceholder": "Any details about your meal...",
     "portionSize": "Portion Size",

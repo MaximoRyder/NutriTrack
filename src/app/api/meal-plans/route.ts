@@ -154,10 +154,13 @@ export async function POST(request: NextRequest) {
     for (const day of Object.keys(weekStructure)) {
       denormalizedWeekStructure[day] = [];
       for (const slot of weekStructure[day]) {
-        const denormalizedSlot: any = {
+          const denormalizedSlot: any = {
           mealItemId: slot.mealItemId,
           mealType: slot.mealType,
           notes: slot.notes || null,
+          isFlexible: slot.isFlexible,
+          customName: slot.customName,
+          components: slot.components,
         };
 
         // If there's a meal item, fetch and denormalize its data

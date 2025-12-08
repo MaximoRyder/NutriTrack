@@ -1,5 +1,6 @@
 "use client";
 
+import { FlexibleMealCard } from "@/components/flexible-meal-card";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -24,6 +25,7 @@ import { Calendar as CalendarIcon, Clock, ImageIcon, Stethoscope, Video } from "
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Cell, Pie, PieChart, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
 
 export default function PlanPage() {
   const { t } = useTranslation();
@@ -221,75 +223,83 @@ export default function PlanPage() {
                   </p>
                 ) : (
                   activePlan.weekStructure[key].map((slot, index) => (
-                    <Card
-                      key={index}
-                      className="cursor-pointer hover:bg-accent/50 transition-colors"
-                      onClick={() =>
-                        slot.mealItem && setSelectedMeal({ slot, day: label })
-                      }
-                    >
-                      <CardHeader className="pb-3">
-                        <div className="flex justify-between items-start gap-2">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <Badge variant="secondary">
-                                {MEAL_TYPE_LABELS[slot.mealType]}
-                              </Badge>
-                              {slot.mealItem?.recommendedTime && (
-                                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                  <Clock className="h-3 w-3" />
-                                  {slot.mealItem.recommendedTime}
-                                </div>
+                    slot.isFlexible ? (
+                      <FlexibleMealCard
+                        key={index}
+                        slot={slot}
+                        onClick={() => setSelectedMeal({ slot, day: label })}
+                      />
+                    ) : (
+                      <Card
+                        key={index}
+                        className="cursor-pointer hover:bg-accent/50 transition-colors"
+                        onClick={() =>
+                          slot.mealItem && setSelectedMeal({ slot, day: label })
+                        }
+                      >
+                        <CardHeader className="pb-3">
+                          <div className="flex justify-between items-start gap-2">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <Badge variant="secondary">
+                                  {MEAL_TYPE_LABELS[slot.mealType]}
+                                </Badge>
+                                {slot.mealItem?.recommendedTime && (
+                                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                    <Clock className="h-3 w-3" />
+                                    {slot.mealItem.recommendedTime}
+                                  </div>
+                                )}
+                              </div>
+                              <CardTitle className="text-lg">
+                                {slot.mealItem?.title || t("patientPlan.freeSlot")}
+                              </CardTitle>
+                              {slot.mealItem?.portionInfo && (
+                                <CardDescription className="text-xs">
+                                  {t("patientPlan.portion")}: {slot.mealItem.portionInfo}
+                                </CardDescription>
                               )}
                             </div>
-                            <CardTitle className="text-lg">
-                              {slot.mealItem?.title || t("patientPlan.freeSlot")}
-                            </CardTitle>
-                            {slot.mealItem?.portionInfo && (
-                              <CardDescription className="text-xs">
-                                {t("patientPlan.portion")}: {slot.mealItem.portionInfo}
-                              </CardDescription>
+                            {slot.mealItem?.photoUrl && (
+                              <div className="relative w-20 h-20 rounded-md overflow-hidden shrink-0">
+                                <Image
+                                  src={slot.mealItem.photoUrl}
+                                  alt={slot.mealItem.title}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
                             )}
                           </div>
-                          {slot.mealItem?.photoUrl && (
-                            <div className="relative w-20 h-20 rounded-md overflow-hidden shrink-0">
-                              <Image
-                                src={slot.mealItem.photoUrl}
-                                alt={slot.mealItem.title}
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </CardHeader>
-                      {slot.mealItem && (
-                        <CardContent className="pt-0">
-                          <p className="text-sm text-muted-foreground line-clamp-2">
-                            {slot.mealItem.description}
-                          </p>
-                          {slot.notes && (
-                            <p className="text-sm text-primary mt-2 italic">
-                              {t("patientPlan.nutritionistNotes")}: {slot.notes}
+                        </CardHeader>
+                        {slot.mealItem && (
+                          <CardContent className="pt-0">
+                            <p className="text-sm text-muted-foreground line-clamp-2">
+                              {slot.mealItem.description}
                             </p>
-                          )}
-                          <div className="flex gap-2 mt-3">
-                            {slot.mealItem.photoUrl && (
-                              <Badge variant="outline" className="text-xs">
-                                <ImageIcon className="h-3 w-3 mr-1" />
-                                {t("patientPlan.photo")}
-                              </Badge>
+                            {slot.notes && (
+                              <p className="text-sm text-primary mt-2 italic">
+                                {t("patientPlan.nutritionistNotes")}: {slot.notes}
+                              </p>
                             )}
-                            {slot.mealItem.videoUrl && (
-                              <Badge variant="outline" className="text-xs">
-                                <Video className="h-3 w-3 mr-1" />
-                                {t("patientPlan.video")}
-                              </Badge>
-                            )}
-                          </div>
-                        </CardContent>
-                      )}
-                    </Card>
+                            <div className="flex gap-2 mt-3">
+                              {slot.mealItem.photoUrl && (
+                                <Badge variant="outline" className="text-xs">
+                                  <ImageIcon className="h-3 w-3 mr-1" />
+                                  {t("patientPlan.photo")}
+                                </Badge>
+                              )}
+                              {slot.mealItem.videoUrl && (
+                                <Badge variant="outline" className="text-xs">
+                                  <Video className="h-3 w-3 mr-1" />
+                                  {t("patientPlan.video")}
+                                </Badge>
+                              )}
+                            </div>
+                          </CardContent>
+                        )}
+                      </Card>
+                    )
                   ))
                 )}
               </TabsContent>
@@ -305,78 +315,136 @@ export default function PlanPage() {
       >
         <DialogContent className="max-w-3xl max-h-[90vh] grid-rows-[auto,1fr] p-0">
           <DialogHeader className="p-6 pb-0">
-            <DialogTitle>{selectedMeal?.slot.mealItem?.title}</DialogTitle>
+            <DialogTitle>{selectedMeal?.slot.isFlexible ? (selectedMeal.slot.customName || "Comida Flexible") : selectedMeal?.slot.mealItem?.title}</DialogTitle>
             <DialogDescription>
               {selectedMeal?.day} •{" "}
               {selectedMeal?.slot.mealType &&
                 MEAL_TYPE_LABELS[selectedMeal.slot.mealType]}
             </DialogDescription>
           </DialogHeader>
-          <ScrollArea className="h-full px-6 pb-6">
-            <div className="space-y-4">
-              {selectedMeal?.slot.mealItem?.photoUrl && (
-                <div className="relative w-full h-64 rounded-lg overflow-hidden">
-                  <Image
-                    src={selectedMeal.slot.mealItem.photoUrl}
-                    alt={selectedMeal.slot.mealItem.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
-
-              {selectedMeal?.slot.mealItem?.videoUrl && (
-                <div className="space-y-2">
-                  <h3 className="font-semibold">{t("patientPlan.preparationVideo")}</h3>
-                  <div className="aspect-video rounded-lg overflow-hidden bg-secondary">
-                    <iframe
-                      src={selectedMeal.slot.mealItem.videoUrl.replace(
-                        "watch?v=",
-                        "embed/"
-                      )}
-                      className="w-full h-full"
-                      allowFullScreen
+          {!selectedMeal?.slot.isFlexible ? (
+            <ScrollArea className="h-full px-6 pb-6">
+              <div className="space-y-4">
+                {selectedMeal?.slot.mealItem?.photoUrl && (
+                  <div className="relative w-full h-64 rounded-lg overflow-hidden">
+                    <Image
+                      src={selectedMeal.slot.mealItem.photoUrl}
+                      alt={selectedMeal.slot.mealItem.title}
+                      fill
+                      className="object-cover"
                     />
                   </div>
-                </div>
-              )}
+                )}
 
-              <div className="space-y-2">
-                <h3 className="font-semibold">{t("patientPlan.recipe")}</h3>
-                <p className="text-sm whitespace-pre-wrap">
-                  {selectedMeal?.slot.mealItem?.description}
-                </p>
+                {selectedMeal?.slot.mealItem?.videoUrl && (
+                  <div className="space-y-2">
+                    <h3 className="font-semibold">{t("patientPlan.preparationVideo")}</h3>
+                    <div className="aspect-video rounded-lg overflow-hidden bg-secondary">
+                      <iframe
+                        src={selectedMeal.slot.mealItem.videoUrl.replace(
+                          "watch?v=",
+                          "embed/"
+                        )}
+                        className="w-full h-full"
+                        allowFullScreen
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <h3 className="font-semibold">{t("patientPlan.recipe")}</h3>
+                  <p className="text-sm whitespace-pre-wrap">
+                    {selectedMeal?.slot.mealItem?.description}
+                  </p>
+                </div>
+
+                {selectedMeal?.slot.mealItem?.portionInfo && (
+                  <div className="space-y-2">
+                    <h3 className="font-semibold">{t("patientPlan.recommendedPortion")}</h3>
+                    <p className="text-sm">
+                      {selectedMeal.slot.mealItem.portionInfo}
+                    </p>
+                  </div>
+                )}
+
+                {selectedMeal?.slot.mealItem?.recommendedTime && (
+                  <div className="space-y-2">
+                    <h3 className="font-semibold">{t("patientPlan.recommendedTime")}</h3>
+                    <p className="text-sm flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      {selectedMeal.slot.mealItem.recommendedTime}
+                    </p>
+                  </div>
+                )}
+
+                {selectedMeal?.slot.notes && (
+                  <div className="space-y-2">
+                    <h3 className="font-semibold">{t("patientPlan.nutritionistNotes")}</h3>
+                    <p className="text-sm text-primary italic">
+                      {selectedMeal.slot.notes}
+                    </p>
+                  </div>
+                )}
               </div>
-
-              {selectedMeal?.slot.mealItem?.portionInfo && (
-                <div className="space-y-2">
-                  <h3 className="font-semibold">{t("patientPlan.recommendedPortion")}</h3>
-                  <p className="text-sm">
-                    {selectedMeal.slot.mealItem.portionInfo}
-                  </p>
+            </ScrollArea>
+          ) : (
+            /* Flexible Meal Detail */
+            <ScrollArea className="h-full px-6 pb-6">
+              <div className="space-y-6 pt-6">
+                <div className="flex items-center justify-center p-4 bg-gray-50 rounded-full w-48 h-48 mx-auto">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={selectedMeal?.slot.components?.map(c => ({
+                          name: c.group,
+                          value: c.percentage || 0,
+                          fill: ["#FF6B6B", "#FFE66D", "#1A535C", "#4ECDC4", "#FF9F1C", "#2EC4B6", "#A2D2FF"][["Proteína", "Carbohidratos", "Grasas", "Verduras/Hortalizas", "Frutas", "Lácteos", "Otro"].indexOf(c.group)] || "#8884d8"
+                        })).filter(d => d.value > 0)}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={0}
+                        outerRadius={80}
+                        paddingAngle={0}
+                        dataKey="value"
+                      >
+                        {selectedMeal?.slot.components?.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={["#FF6B6B", "#FFE66D", "#1A535C", "#4ECDC4", "#FF9F1C", "#2EC4B6", "#A2D2FF"][["Proteína", "Carbohidratos", "Grasas", "Verduras/Hortalizas", "Frutas", "Lácteos", "Otro"].indexOf(entry.group)]} />
+                        ))}
+                      </Pie>
+                      <RechartsTooltip formatter={(val) => `${val}%`} />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
-              )}
 
-              {selectedMeal?.slot.mealItem?.recommendedTime && (
-                <div className="space-y-2">
-                  <h3 className="font-semibold">{t("patientPlan.recommendedTime")}</h3>
-                  <p className="text-sm flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    {selectedMeal.slot.mealItem.recommendedTime}
-                  </p>
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg border-b pb-2">Distribución Nutricional</h3>
+                  <div className="space-y-4">
+                    {selectedMeal?.slot.components?.map((comp, idx) => (
+                      <div key={idx} className="flex gap-4 p-3 bg-secondary/20 rounded-lg">
+                        <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-full bg-background border text-sm font-bold shadow-sm">
+                          {comp.percentage}%
+                        </div>
+                        <div className="space-y-1">
+                          <p className="font-medium text-primary">{comp.group}</p>
+                          {comp.description && (
+                            <p className="text-sm text-muted-foreground">{comp.description}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              )}
 
-              {selectedMeal?.slot.notes && (
-                <div className="space-y-2">
-                  <h3 className="font-semibold">{t("patientPlan.nutritionistNotes")}</h3>
-                  <p className="text-sm text-primary italic">
-                    {selectedMeal.slot.notes}
-                  </p>
-                </div>
-              )}
-            </div>
-          </ScrollArea>
+                {selectedMeal?.slot.notes && (
+                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+                    <h3 className="font-semibold text-primary mb-1">{t("patientPlan.nutritionistNotes")}</h3>
+                    <p className="text-sm italic">{selectedMeal.slot.notes}</p>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+          )}
         </DialogContent>
       </Dialog>
     </div>
