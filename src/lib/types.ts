@@ -95,10 +95,21 @@ export interface MealItem {
   updatedAt: string;
 }
 
+export interface FlexibleMealComponent {
+  group: string;
+  portion: string;
+  percentage?: number; // 0-100
+  description: string;
+}
+
 export interface DayMealSlot {
   mealItemId: string | null;
   mealType: "breakfast" | "lunch" | "snack" | "dinner" | "other";
   notes?: string;
+  // Flexible meal fields
+  isFlexible?: boolean;
+  customName?: string;
+  components?: FlexibleMealComponent[];
 }
 
 export interface MealPlanTemplate {
@@ -106,6 +117,7 @@ export interface MealPlanTemplate {
   nutritionistId: string;
   name: string;
   description?: string;
+  type?: "specific" | "flexible";
   weekStructure: {
     monday: DayMealSlot[];
     tuesday: DayMealSlot[];

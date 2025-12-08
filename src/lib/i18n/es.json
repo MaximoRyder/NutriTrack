@@ -758,6 +758,11 @@
       "noMeals": "No hay comidas programadas para este día",
       "mealLabel": "Comida",
       "freeSlot": "Espacio libre",
+      "customName": "Nombre personalizado (Opcional)",
+      "group": "Grupo",
+      "portion": "Porción",
+      "description": "Descripción",
+      "addComponent": "Agregar grupo/ingrediente",
       "days": {
         "monday": "Lunes",
         "tuesday": "Martes",
@@ -767,6 +772,11 @@
         "saturday": "Sábado",
         "sunday": "Domingo"
       }
+    },
+    "typeLabel": "Tipo de Plantilla",
+    "types": {
+      "specific": "Recetas Específicas",
+      "flexible": "Flexible / Por Grupos"
     }
   },
   "patientPlan": {

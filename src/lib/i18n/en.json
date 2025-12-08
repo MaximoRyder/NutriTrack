@@ -757,6 +757,11 @@
       "noMeals": "No meals scheduled for this day",
       "mealLabel": "Meal",
       "freeSlot": "Free slot",
+      "customName": "Custom Name (Optional)",
+      "group": "Group",
+      "portion": "Portion",
+      "description": "Description",
+      "addComponent": "Add group/ingredient",
       "days": {
         "monday": "Monday",
         "tuesday": "Tuesday",
@@ -766,6 +771,11 @@
         "saturday": "Saturday",
         "sunday": "Sunday"
       }
+    },
+    "typeLabel": "Template Type",
+    "types": {
+      "specific": "Specific Recipes",
+      "flexible": "Flexible / By Groups"
     }
   },
   "patientPlan": {

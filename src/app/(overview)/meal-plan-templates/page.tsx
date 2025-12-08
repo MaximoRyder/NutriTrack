@@ -1,34 +1,42 @@
 "use client";
 
+import { FlexibleWeekPlanBuilder } from "@/components/flexible-week-plan-builder";
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { WeekPlanBuilder } from "@/components/week-plan-builder";
 import { useTranslation } from "@/lib/i18n/i18n-provider";
@@ -45,7 +53,7 @@ const EMPTY_WEEK_STRUCTURE = {
   friday: [],
   saturday: [],
   sunday: [],
-  };
+};
 
 export default function MealPlanTemplatesPage() {
   const { t } = useTranslation();
@@ -64,6 +72,7 @@ export default function MealPlanTemplatesPage() {
   // Form state
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [templateType, setTemplateType] = useState<"specific" | "flexible">("specific");
   const [weekStructure, setWeekStructure] = useState(EMPTY_WEEK_STRUCTURE);
 
   const fetchTemplates = async () => {
@@ -104,11 +113,13 @@ export default function MealPlanTemplatesPage() {
       setTemplateToEdit(template);
       setName(template.name);
       setDescription(template.description || "");
+      setTemplateType(template.type || "specific");
       setWeekStructure(template.weekStructure);
     } else {
       setTemplateToEdit(null);
       setName("");
       setDescription("");
+      setTemplateType("specific");
       setWeekStructure(EMPTY_WEEK_STRUCTURE);
     }
     setIsDialogOpen(true);
@@ -125,6 +136,7 @@ export default function MealPlanTemplatesPage() {
       const templateData = {
         name,
         description,
+        type: templateType,
         weekStructure,
       };
 
@@ -271,8 +283,8 @@ export default function MealPlanTemplatesPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <ScrollArea className="h-full px-6">
-            <div className="space-y-4 pb-4">
+          <ScrollArea className="h-full">
+            <div className="space-y-4 px-6 pb-4">
               <div>
                 <Label htmlFor="name">{t("mealTemplates.dialog.nameLabel")}</Label>
                 <Input
@@ -295,13 +307,44 @@ export default function MealPlanTemplatesPage() {
               </div>
 
               <div>
+                <Label>{t("mealTemplates.typeLabel")}</Label>
+                <div className="mt-2">
+                  <Select
+                    value={templateType}
+                    onValueChange={(value: "specific" | "flexible") =>
+                      setTemplateType(value)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="specific">
+                        {t("mealTemplates.types.specific")}
+                      </SelectItem>
+                      <SelectItem value="flexible">
+                        {t("mealTemplates.types.flexible")}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div>
                 <Label>{t("mealTemplates.dialog.weekPlanLabel")}</Label>
                 <div className="mt-2">
-                  <WeekPlanBuilder
-                    mealItems={mealItems}
-                    weekStructure={weekStructure}
-                    onChange={setWeekStructure}
-                  />
+                  {templateType === "specific" ? (
+                    <WeekPlanBuilder
+                      mealItems={mealItems}
+                      weekStructure={weekStructure}
+                      onChange={setWeekStructure}
+                    />
+                  ) : (
+                    <FlexibleWeekPlanBuilder
+                      weekStructure={weekStructure}
+                      onChange={setWeekStructure}
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -319,8 +362,8 @@ export default function MealPlanTemplatesPage() {
               {isSaving
                 ? t("mealTemplates.dialog.saving")
                 : templateToEdit
-                ? t("mealTemplates.dialog.save")
-                : t("mealTemplates.dialog.create")}
+                  ? t("mealTemplates.dialog.save")
+                  : t("mealTemplates.dialog.create")}
             </Button>
           </DialogFooter>
         </DialogContent>
